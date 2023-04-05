@@ -1,7 +1,5 @@
 package pt.isec.pa.tinypac.model.fsm;
 
-import pt.isec.pa.tinypac.ui.gui.Game;
-
 public class PacMan {
 
     private int x; // posição horizontal
@@ -17,16 +15,11 @@ public class PacMan {
     }
 
     public void move() {
-        // atualiza a posição do Pac-Man de acordo com a direção atual
-        switch (direction) {
-            case Game.LEFT -> x -= speed;
-            case Game.RIGHT -> x += speed;
-            case Game.UP -> y -= speed;
-            case Game.DOWN -> y += speed;
-        }
+
     }
 
     // getters e setters
+
     public int getX() {
         return x;
     }

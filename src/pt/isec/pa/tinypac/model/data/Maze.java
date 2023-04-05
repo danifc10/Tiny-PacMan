@@ -1,16 +1,17 @@
 package pt.isec.pa.tinypac.model.data;
-
 import java.io.*;
 import java.util.Scanner;
+
 public final class Maze {
     private final int width;
     private final int height;
     private final IMazeElement[][] board;
+
     public Maze(int height, int width, String File) {
         this.width = width;
         this.height = height;
         this.board = new IMazeElement[height][width];
-        File arquivo = new File("src/pt/isec/pa/tinypac/model/data/Level101.txt");
+        File arquivo = new File("src\\pt\\isec\\pa\\tinypac\\model\\data\\levels\\" + File );
         try {
             // Criar um objeto Scanner para ler o conteúdo do arquivo
             Scanner leitor = new Scanner(arquivo);
@@ -33,7 +34,6 @@ public final class Maze {
                 }
                 row++;
             }
-            // Fechar o objeto Scanner
             leitor.close();
         } catch (FileNotFoundException e) {
             System.out.println("O arquivo não foi encontrado.");
@@ -70,4 +70,5 @@ public final class Maze {
     public int getHeight() {
         return this.height;
     }
+
 }
