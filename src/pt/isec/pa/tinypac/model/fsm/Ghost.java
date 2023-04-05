@@ -7,9 +7,10 @@ public abstract class Ghost {
     protected int vulnerabilityTimer; // tempo restante de vulnerabilidade do fantasma
     protected int targetX, targetY; // posição de destino do fantasma
     protected boolean isDead; // se o fantasma está morto ou não
+    protected int speed;
 
 
-    public Ghost(int x, int y, int direction) {
+    public Ghost(int x, int y, int direction, int speed) {
         this.x = x;
         this.y = y;
         this.direction = direction;
@@ -18,8 +19,11 @@ public abstract class Ghost {
         this.targetX = x;
         this.targetY = y;
         this.isDead = false;
+        this.speed = speed;
     }
+
     public abstract void move();
+
     public int getX() {
         return x;
     }
@@ -82,5 +86,13 @@ public abstract class Ghost {
 
     public void setDead(boolean dead) {
         isDead = dead;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
     }
 }

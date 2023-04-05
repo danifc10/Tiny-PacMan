@@ -1,4 +1,6 @@
-package pt.isec.pa.tinypac.model.fsm;
+package pt.isec.pa.tinypac.ui.gui;
+
+import pt.isec.pa.tinypac.model.fsm.*;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -30,13 +32,14 @@ public class Game extends JPanel implements KeyListener {
         setFocusable(true);
         addKeyListener(this);
 
-        pacMan = new PacMan(WIDTH / 2, HEIGHT / 2, LEFT, 5);
+        pacMan = new PacMan(WIDTH / 2, HEIGHT / 2, LEFT, 1);
         ghosts = new Ghost[]{
-                new Blinky(0, 0, RIGHT),
-                new Pinky(WIDTH - TILE_SIZE, 0, UP),
-                new Inky(0, HEIGHT - TILE_SIZE, DOWN),
-                new Clyde(WIDTH - TILE_SIZE, HEIGHT - TILE_SIZE, LEFT)
+                new Blinky(0, 0, RIGHT,1),
+                new Pinky(WIDTH - TILE_SIZE, 0, UP,1),
+                new Inky(0, HEIGHT - TILE_SIZE, DOWN, 1),
+                new Clyde(WIDTH - TILE_SIZE, HEIGHT - TILE_SIZE, LEFT, 1)
         };
+
     }
 
     public void start() {
@@ -56,11 +59,11 @@ public class Game extends JPanel implements KeyListener {
     private void update() {
         // atualiza a posição do Pac-Man
         pacMan.move();
-/*
+
         // atualiza a posição dos fantasmas
         for (Ghost ghost : ghosts) {
             ghost.move();
-        }*/
+        }
     }
 
     @Override
