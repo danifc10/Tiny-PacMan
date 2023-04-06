@@ -1,8 +1,8 @@
 package pt.isec.pa.tinypac.model.fsm;
 
 import pt.isec.pa.tinypac.model.data.Maze;
-import pt.isec.pa.tinypac.model.fsm.elements.Ghost;
-import pt.isec.pa.tinypac.model.fsm.elements.PacMan;
+import pt.isec.pa.tinypac.model.data.elements.Ghost;
+import pt.isec.pa.tinypac.model.data.elements.PacMan;
 
 public class GameAdapter implements IGameStates{
 
@@ -20,12 +20,18 @@ public class GameAdapter implements IGameStates{
     }
 
     protected void changeState(IGameStates newState){
+        System.out.println("ola");
         context.changeState(newState);
     }
 
     @Override
     public GameStates getState() {
         return null;
+    }
+
+    @Override
+    public void update() {
+        return;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package pt.isec.pa.tinypac.model.fsm.elements;
+package pt.isec.pa.tinypac.model.data.elements;
 
 public abstract class Ghost {
     protected int x, y; // posição do fantasma no labirinto

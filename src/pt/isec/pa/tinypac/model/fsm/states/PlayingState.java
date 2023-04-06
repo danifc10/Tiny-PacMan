@@ -1,25 +1,29 @@
 package pt.isec.pa.tinypac.model.fsm.states;
 
+import pt.isec.pa.tinypac.model.data.GhostDraw;
 import pt.isec.pa.tinypac.model.data.Maze;
+import pt.isec.pa.tinypac.model.data.PacManDraw;
 import pt.isec.pa.tinypac.model.fsm.GameAdapter;
 import pt.isec.pa.tinypac.model.fsm.GameContext;
 import pt.isec.pa.tinypac.model.fsm.IGameStates;
-import pt.isec.pa.tinypac.model.fsm.elements.Ghost;
-import pt.isec.pa.tinypac.model.fsm.elements.PacMan;
+import pt.isec.pa.tinypac.model.data.elements.Ghost;
+import pt.isec.pa.tinypac.model.data.elements.PacMan;
 
 
 public class PlayingState extends GameAdapter {
 
     public PlayingState(GameContext context,PacMan pacMan, Maze maze, Ghost[] ghosts) {
         super(context,pacMan, maze, ghosts);
-        update();
+        System.out.println("criei");
+        //update();
     }
-
+    @Override
     public void update(){
         pacMan.move();
-
+        maze.set(pacMan.getX(), pacMan.getY(), new PacManDraw());
         for(Ghost ghosts : ghosts) {
             ghosts.move();
+            maze.set(ghosts.getX(), ghosts.getY(), new GhostDraw());
         }
 
         if(maze.checkIfFruit(pacMan.getX(),pacMan.getX())){

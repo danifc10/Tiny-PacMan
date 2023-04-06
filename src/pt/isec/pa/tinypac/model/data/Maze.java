@@ -1,5 +1,7 @@
 package pt.isec.pa.tinypac.model.data;
-import java.io.*;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public final class Maze {

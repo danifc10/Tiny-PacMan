@@ -2,7 +2,7 @@ package pt.isec.pa.tinypac;
 
 import pt.isec.pa.tinypac.model.data.Maze;
 import pt.isec.pa.tinypac.model.fsm.GameContext;
-import pt.isec.pa.tinypac.model.fsm.elements.*;
+import pt.isec.pa.tinypac.model.data.elements.*;
 import pt.isec.pa.tinypac.ui.text.GameUI;
 
 import java.io.IOException;
@@ -19,16 +19,14 @@ public class Main {
         display.paint(maze);
 
         */
-         final int WIDTH = 800; // largura da janela
+        final int WIDTH = 800; // largura da janela
         final int HEIGHT = 600; // altura da janela
-         final int TILE_SIZE = 20; // tamanho do tile
-          final int ROWS = HEIGHT / TILE_SIZE; // número de linhas
-          final int COLS = WIDTH / TILE_SIZE; // número de colunas
+        final int TILE_SIZE = 20; // tamanho do tile
 
-          final int LEFT = 0;
-          final int RIGHT = 1;
-          final int UP = 2;
-          final int DOWN = 3;
+        final int LEFT = 0;
+        final int RIGHT = 1;
+        final int UP = 2;
+        final int DOWN = 3;
 
         Maze maze = new Maze(31, 29, "Level101.txt");
         PacMan pacMan = new PacMan(maze.getXstart(),maze.getYstart(), 1,1);

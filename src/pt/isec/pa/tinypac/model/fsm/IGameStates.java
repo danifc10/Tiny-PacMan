@@ -4,6 +4,7 @@ public interface IGameStates {
       GameStates getState();
 
       // transições
+      void update();
       boolean startGame();
       IGameStates eatPoint();
       IGameStates eatFruit();

@@ -1,8 +1,8 @@
 package pt.isec.pa.tinypac.model.fsm;
 
 import pt.isec.pa.tinypac.model.data.Maze;
-import pt.isec.pa.tinypac.model.fsm.elements.Ghost;
-import pt.isec.pa.tinypac.model.fsm.elements.PacMan;
+import pt.isec.pa.tinypac.model.data.elements.Ghost;
+import pt.isec.pa.tinypac.model.data.elements.PacMan;
 import pt.isec.pa.tinypac.model.fsm.states.InitialState;
 
 public class GameContext {
@@ -23,10 +23,13 @@ public class GameContext {
         this.currentState = newState;
     }
 
-    public boolean startGame(){
-        return currentState.startGame();
+    // tranciçoes
+    public void startGame(){
+        currentState.startGame();
     }
-
+    public void update(){
+        currentState.update();
+    }
     public IGameStates eatPoint() {
         return currentState.eatPoint();
     }
@@ -62,7 +65,6 @@ public class GameContext {
     }
 
     // dados
-
     public int getPoint(){
         return points;
     }
@@ -72,6 +74,6 @@ public class GameContext {
     }
 
     public GameStates getState(){
-        return this.currentState.getState();
+        return currentState.getState();
     }
 }
