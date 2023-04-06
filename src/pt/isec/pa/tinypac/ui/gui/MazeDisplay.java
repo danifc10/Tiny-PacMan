@@ -71,6 +71,11 @@ public class MazeDisplay {
                         tg.setBackgroundColor(TextColor.ANSI.GREEN);
                         tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1,1), ' ');
                     }
+                    case 'P'->{
+                        tg.setBackgroundColor(TextColor.ANSI.BLACK);
+                        tg.setForegroundColor(TextColor.ANSI.GREEN_BRIGHT);
+                        tg.putString(x +20,y + 10,"P");
+                    }
 
                 }
 

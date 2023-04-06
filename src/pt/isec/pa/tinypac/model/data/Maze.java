@@ -71,4 +71,71 @@ public final class Maze {
         return this.height;
     }
 
+    public int getXstart(){
+        for(int i = 0 ; i < board.length ; i++){
+            for(int j = 0 ; j < board[i].length ; j++){
+                if(board[i][j].getSymbol() == 'M')
+                    return i;
+            }
+        }
+        return 0;
+    }
+
+    public int getYstart(){
+        for(int i = 0 ; i < board.length ; i++){
+            for(int j = 0 ; j < board[i].length ; j++){
+                if(board[i][j].getSymbol() == 'M')
+                    return j;
+            }
+        }
+        return 0;
+    }
+
+    public int getXghostStart(){
+        for(int i = 0 ; i < board.length ; i++){
+            for(int j = 0 ; j < board[i].length ; j++){
+                if(board[i][j].getSymbol() == 'y')
+                    return i;
+            }
+        }
+        return 0;
+    }
+
+    public void remove(int x, int y) {
+        for(int i = 0 ; i < board.length ; i++){
+            for(int j = 0 ; j < board[i].length ; j++){
+                if(i == x &&  j == y)
+                    this.board[i][j] = new EmptyZone();
+            }
+        }
+    }
+
+    public boolean checkWin() {
+        int count = 0;
+        for(int i = 0 ; i < board.length ; i++){
+            for(int j = 0 ; j < board[i].length ; j++){
+                    if(this.board[i][j].getSymbol() == ' '){
+                        count++;
+                    }
+            }
+        }
+        if(count == (this.width * this.height))
+            return true;
+        else
+            return false;
+    }
+
+    public boolean checkIfPoint(int x, int y){
+        return this.board[x][y].getSymbol() == 'o';
+    }
+    public boolean checkIfFruit(int x, int y){
+        return this.board[x][y].getSymbol() == 'F';
+    }
+    public boolean checkIfPower(int x, int y){
+        return this.board[x][y].getSymbol() == 'O';
+    }
+    public boolean checkIfWrap(int x, int y){
+        return this.board[x][y].getSymbol() == 'W';
+    }
+
 }

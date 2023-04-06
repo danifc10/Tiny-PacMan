@@ -6,9 +6,8 @@ import pt.isec.pa.tinypac.model.fsm.GameContext;
 import pt.isec.pa.tinypac.model.fsm.elements.Ghost;
 import pt.isec.pa.tinypac.model.fsm.elements.PacMan;
 
-public class GameOverState extends GameAdapter {
-    protected GameOverState(GameContext context, PacMan pacMan, Maze maze, Ghost[] ghosts) {
+public class WinState extends GameAdapter {
+    protected WinState(GameContext context, PacMan pacMan, Maze maze, Ghost[] ghosts) {
         super(context, pacMan, maze, ghosts);
     }
-
 }

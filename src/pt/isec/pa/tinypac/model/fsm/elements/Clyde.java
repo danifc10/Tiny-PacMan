@@ -1,4 +1,4 @@
-package pt.isec.pa.tinypac.model.fsm;
+package pt.isec.pa.tinypac.model.fsm.elements;
 
 public class Clyde extends Ghost{
     public Clyde(int x, int y, int direction, int speed) {
