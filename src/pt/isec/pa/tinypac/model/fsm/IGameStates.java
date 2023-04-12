@@ -1,17 +1,21 @@
 package pt.isec.pa.tinypac.model.fsm;
 
+import com.googlecode.lanterna.terminal.Terminal;
+
+import java.io.IOException;
+
 public interface IGameStates {
       GameStates getState();
 
       // transições
-      void update();
+      void update(Terminal terminal) throws IOException;
       boolean startGame();
-      IGameStates eatPoint();
-      IGameStates eatFruit();
-      IGameStates eatPower();
-      IGameStates eatGhost();
+      boolean eatPoint();
+      boolean eatFruit();
+      boolean eatPower();
+      boolean eatGhost();
       IGameStates eatPoint(int x, int y);
-      IGameStates wrapZone();
+      IGameStates wrapZone(int x, int y);
       IGameStates eatAll();
       IGameStates ghostCollision();
       IGameStates restart();

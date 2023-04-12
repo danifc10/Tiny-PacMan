@@ -1,16 +1,18 @@
 package pt.isec.pa.tinypac.ui.text;
 
-
-import pt.isec.pa.tinypac.model.data.Maze;
+import com.googlecode.lanterna.TextColor;
+import com.googlecode.lanterna.terminal.Terminal;
 import pt.isec.pa.tinypac.model.fsm.GameContext;
-import pt.isec.pa.tinypac.ui.gui.MazeDisplay;
 
 import java.io.IOException;
 
-public class GameUI {
+public class GameUI{
+    Terminal terminal;
     GameContext fsm;
-    public GameUI(GameContext fsm) {
+
+    public GameUI(GameContext fsm, Terminal terminal) throws IOException {
         this.fsm = fsm;
+        this.terminal = terminal;
     }
 
     boolean finish = false;
@@ -25,27 +27,26 @@ public class GameUI {
         }
     }
 
-    void initialUI(){
+    void initialUI() throws IOException {
         fsm.startGame();
     }
 
-    void gameOverUI(){
+    void playingUI() throws IOException {
+        fsm.update(terminal);
+        terminal.setCursorPosition(20, 45);
+        terminal.setForegroundColor(TextColor.ANSI.GREEN_BRIGHT);
+        terminal.putString("POINTS:" + fsm.getPoint());
+        terminal.setCursorPosition(20, 46);
+        terminal.setForegroundColor(TextColor.ANSI.GREEN_BRIGHT);
+        terminal.putString("TIME:" + fsm.getTime());
+        terminal.flush();
     }
 
-    void playingUI() throws IOException {
-
-        Maze maze = new Maze(31, 29, "Level101.txt");
-        MazeDisplay display;
-        try {
-            display = new MazeDisplay(maze);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        display.paint(maze);
-
+    void gameOverUI() throws IOException {
+        finish = true;
     }
 
     void winUI(){
-
+        finish = true;
     }
 }

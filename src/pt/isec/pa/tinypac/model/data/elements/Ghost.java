@@ -1,5 +1,7 @@
 package pt.isec.pa.tinypac.model.data.elements;
 
+import pt.isec.pa.tinypac.model.data.MazeControl;
+
 public abstract class Ghost {
     protected int x, y; // posição do fantasma no labirinto
     protected int direction; // direção atual do fantasma
@@ -8,7 +10,6 @@ public abstract class Ghost {
     protected int targetX, targetY; // posição de destino do fantasma
     protected boolean isDead; // se o fantasma está morto ou não
     protected int speed;
-
 
     public Ghost(int x, int y, int direction, int speed) {
         this.x = x;
@@ -22,7 +23,7 @@ public abstract class Ghost {
         this.speed = speed;
     }
 
-    public abstract void move();
+    public abstract void move(MazeControl maze);
 
     public int getX() {
         return x;
@@ -95,4 +96,5 @@ public abstract class Ghost {
     public void setSpeed(int speed) {
         this.speed = speed;
     }
+
 }

@@ -1,18 +1,21 @@
 package pt.isec.pa.tinypac.model.fsm;
 
-import pt.isec.pa.tinypac.model.data.Maze;
+import com.googlecode.lanterna.terminal.Terminal;
+import pt.isec.pa.tinypac.model.data.MazeControl;
 import pt.isec.pa.tinypac.model.data.elements.Ghost;
 import pt.isec.pa.tinypac.model.data.elements.PacMan;
+
+import java.io.IOException;
 
 public class GameAdapter implements IGameStates{
 
 
     protected GameContext context;
     protected Ghost [] ghosts;
-    protected Maze maze;
+    protected MazeControl maze;
     protected PacMan pacMan;
 
-    protected GameAdapter(GameContext context, PacMan pacMan, Maze maze, Ghost [] ghosts){
+    protected GameAdapter(GameContext context, PacMan pacMan, MazeControl maze, Ghost [] ghosts){
         this.context = context;
         this.pacMan = pacMan;
         this.ghosts = ghosts;
@@ -20,7 +23,6 @@ public class GameAdapter implements IGameStates{
     }
 
     protected void changeState(IGameStates newState){
-        System.out.println("ola");
         context.changeState(newState);
     }
 
@@ -30,7 +32,7 @@ public class GameAdapter implements IGameStates{
     }
 
     @Override
-    public void update() {
+    public void update(Terminal terminal) throws IOException {
         return;
     }
 
@@ -40,23 +42,23 @@ public class GameAdapter implements IGameStates{
     }
 
     @Override
-    public IGameStates eatPoint() {
-        return null;
+    public boolean eatPoint() {
+        return true;
     }
 
     @Override
-    public IGameStates eatFruit() {
-        return null;
+    public boolean eatFruit() {
+        return true;
     }
 
     @Override
-    public IGameStates eatPower() {
-        return null;
+    public boolean eatPower() {
+        return true;
     }
 
     @Override
-    public IGameStates eatGhost() {
-        return null;
+    public boolean eatGhost() {
+        return true;
     }
 
     @Override
@@ -65,7 +67,7 @@ public class GameAdapter implements IGameStates{
     }
 
     @Override
-    public IGameStates wrapZone() {
+    public IGameStates wrapZone(int x, int y) {
         return null;
     }
 

@@ -1,24 +1,31 @@
 package pt.isec.pa.tinypac.model.fsm;
 
-import pt.isec.pa.tinypac.model.data.Maze;
+import com.googlecode.lanterna.terminal.Terminal;
+import pt.isec.pa.tinypac.model.data.MazeControl;
 import pt.isec.pa.tinypac.model.data.elements.Ghost;
 import pt.isec.pa.tinypac.model.data.elements.PacMan;
 import pt.isec.pa.tinypac.model.fsm.states.InitialState;
 
-public class GameContext {
+import java.io.IOException;
+
+public class GameContext  {
     private IGameStates currentState;
     private Ghost []ghosts;
-    private Maze maze;
+    private MazeControl maze;
     private PacMan pacMan;
     private int points = 0;
+    private int time  = 0;
 
-    public GameContext(PacMan pacMan, Ghost []ghosts, Maze maze){
+    public GameContext(PacMan pacMan, Ghost []ghosts, MazeControl maze){
         this.pacMan = pacMan;
         this.ghosts = ghosts;
         this.maze = maze;
         this.currentState = new InitialState(this, pacMan,maze,ghosts);
-    }
 
+    }
+    public GameStates getState(){
+        return currentState.getState();
+    }
     void changeState(IGameStates newState){
         this.currentState = newState;
     }
@@ -27,39 +34,33 @@ public class GameContext {
     public void startGame(){
         currentState.startGame();
     }
-    public void update(){
-        currentState.update();
+    public void update(Terminal terminal) throws IOException {
+        currentState.update(terminal);
     }
-    public IGameStates eatPoint() {
+    public boolean eatPoint() {
         return currentState.eatPoint();
     }
-
-    public IGameStates eatFruit(){
+    public boolean eatFruit(){
         return currentState.eatFruit();
     }
-    public IGameStates eatPower(){
+    public boolean eatPower(){
         return currentState.eatPower();
     }
-    public IGameStates eatGhost(){
+    public boolean eatGhost(){
         return currentState.eatGhost();
     }
-
-    public IGameStates wrapZone() {
-        return currentState.wrapZone();
+    public IGameStates wrapZone(int x, int y) {
+        return currentState.wrapZone(x, y);
     }
-
     public IGameStates eatAll() {
         return currentState.eatAll();
     }
-
     public IGameStates ghostCollision() {
         return currentState.ghostCollision();
     }
-
     public IGameStates restart() {
         return currentState.restart();
     }
-
     public IGameStates levelUp() {
         return currentState.levelUp();
     }
@@ -68,12 +69,11 @@ public class GameContext {
     public int getPoint(){
         return points;
     }
-
     public void setPoints(int num){
         points+=num;
     }
-
-    public GameStates getState(){
-        return currentState.getState();
+    public int getTime(){
+        return time;
     }
+
 }

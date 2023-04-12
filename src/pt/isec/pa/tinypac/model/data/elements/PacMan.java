@@ -1,11 +1,13 @@
 package pt.isec.pa.tinypac.model.data.elements;
 
-import pt.isec.pa.tinypac.model.data.IMazeElement;
+import pt.isec.pa.tinypac.gameengine.IGameEngine;
+import pt.isec.pa.tinypac.gameengine.IGameEngineEvolve;
 
-public class PacMan implements IMazeElement {
-    private char symbol = 'P';
+public class PacMan implements IGameEngineEvolve {
     private int x; // posição horizontal
     private int y; // posição vertical
+    private int lastX;
+    private int lastY;
     private int direction; // direção atual
     private int speed; // velocidade
     private int life = 3;
@@ -18,20 +20,26 @@ public class PacMan implements IMazeElement {
     }
 
     public void move() {
-        switch (direction){
-            case 1: //RIGHT
-                this.x++;
-                break;
-            case 2: //LEFT
-                this.x--;
-                break;
-            case 3: // UP
+        lastX = getX();
+        lastY = getY();
+        switch (direction) {
+            case 1 -> {
                 this.y++;
-                break;
-            case 4: // DOWN
+            }//RIGHT
+
+            case 2 -> {
                 this.y--;
-                break;
-            }
+            }//LEFT
+
+            case 3 -> {
+                this.x--;
+            }// UP
+
+            case 4 -> {
+                this.x++;
+            }// DOWN
+
+        }
     }
 
     // getters e setters
@@ -69,14 +77,24 @@ public class PacMan implements IMazeElement {
     }
 
     public void powerMode() {
+
     }
 
     public boolean checkLife() {
         return life > 0;
     }
 
+    public int getLastX() {
+        return lastX;
+    }
+
+    public int getLastY() {
+        return lastY;
+    }
+
+
     @Override
-    public char getSymbol() {
-        return symbol;
+    public void evolve(IGameEngine gameEngine, long currentTime) {
+        move();
     }
 }

@@ -1,5 +1,5 @@
 package pt.isec.pa.tinypac.model.fsm;
 
 public enum GameStates {
-    INITIAL,GAME_OVER,PLAYING, WIN, DEAD;
+    INITIAL,GAME_OVER,PLAYING, WIN
 }
