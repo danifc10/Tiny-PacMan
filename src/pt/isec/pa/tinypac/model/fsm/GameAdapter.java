@@ -1,11 +1,8 @@
 package pt.isec.pa.tinypac.model.fsm;
 
-import com.googlecode.lanterna.terminal.Terminal;
 import pt.isec.pa.tinypac.model.data.MazeControl;
 import pt.isec.pa.tinypac.model.data.elements.Ghost;
 import pt.isec.pa.tinypac.model.data.elements.PacMan;
-
-import java.io.IOException;
 
 public class GameAdapter implements IGameStates{
 
@@ -32,8 +29,18 @@ public class GameAdapter implements IGameStates{
     }
 
     @Override
-    public void update(Terminal terminal) throws IOException {
-        return;
+    public boolean endVulnerableTime() {
+        return false;
+    }
+
+    @Override
+    public boolean setGhostsFree() {
+        return false;
+    }
+
+    @Override
+    public boolean checkIfGhostsOut() {
+        return false;
     }
 
     @Override
@@ -62,32 +69,32 @@ public class GameAdapter implements IGameStates{
     }
 
     @Override
-    public IGameStates eatPoint(int x, int y) {
-        return null;
+    public boolean wrapZone(int x, int y) {
+        return false;
     }
 
     @Override
-    public IGameStates wrapZone(int x, int y) {
-        return null;
+    public boolean ifEatAll() {
+        return false;
     }
 
     @Override
-    public IGameStates eatAll() {
-        return null;
+    public boolean ghostCollision() {
+        return false;
     }
 
     @Override
-    public IGameStates ghostCollision() {
-        return null;
+    public boolean restart() {
+        return false;
     }
 
     @Override
-    public IGameStates restart() {
-        return null;
+    public boolean levelUp() {
+        return false;
     }
 
     @Override
-    public IGameStates levelUp() {
-        return null;
+    public boolean endGame() {
+        return false;
     }
 }

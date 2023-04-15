@@ -24,25 +24,29 @@ public class PacMan implements IGameEngineEvolve {
         lastY = getY();
         switch (direction) {
             case 1 -> {
-                this.y++;
+                this.y+=speed;
             }//RIGHT
 
             case 2 -> {
-                this.y--;
+                this.y-=speed;
             }//LEFT
 
             case 3 -> {
-                this.x--;
+                this.x-=speed;
             }// UP
 
             case 4 -> {
-                this.x++;
+                this.x+=speed;
             }// DOWN
 
         }
     }
 
     // getters e setters
+    public int getLife(){
+        return life;
+    }
+    public void setLife(){this.life--;}
 
     public int getX() {
         return x;
@@ -77,7 +81,7 @@ public class PacMan implements IGameEngineEvolve {
     }
 
     public void powerMode() {
-
+        setSpeed(1);
     }
 
     public boolean checkLife() {
@@ -91,7 +95,6 @@ public class PacMan implements IGameEngineEvolve {
     public int getLastY() {
         return lastY;
     }
-
 
     @Override
     public void evolve(IGameEngine gameEngine, long currentTime) {

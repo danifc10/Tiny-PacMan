@@ -164,6 +164,10 @@ public class MazeControl {
         return maze.get(x,y).getSymbol() == 'W';
     }
 
+    public boolean chekIfGhost(int x, int y){
+        return maze.get(x,y).getSymbol() == 'G';
+    }
+
     public char [][] getMazeControl(){
         return maze.getMaze();
     }

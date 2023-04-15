@@ -12,10 +12,12 @@ import java.io.IOException;
 public class MazeDisplay {
     private MazeControl maze;
     private Terminal terminal;
+    TextGraphics tg;
 
     public MazeDisplay(MazeControl maze, Terminal terminal) throws IOException {
         this.maze = maze;
         this.terminal = terminal;
+        tg = terminal.newTextGraphics();
     }
 
     public void paint(MazeControl maze) throws IOException {

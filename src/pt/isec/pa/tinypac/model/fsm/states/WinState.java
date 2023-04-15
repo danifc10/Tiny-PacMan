@@ -14,6 +14,20 @@ public class WinState extends GameAdapter {
 
     @Override
     public GameStates getState() {
-        return GameStates.PLAYING;
+        return GameStates.WIN;
+    }
+
+    @Override
+    public boolean endGame() {
+        changeState(new FinalState(context, pacMan, maze, ghosts));
+        return false;
+    }
+
+    @Override
+    public boolean levelUp() {
+        int level = context.getLevel();
+        context.setLevel(level + 1);
+        changeState(new InitialState(context, pacMan, maze, ghosts));
+        return true;
     }
 }

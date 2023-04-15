@@ -14,7 +14,7 @@ public class InitialState extends GameAdapter {
 
     @Override
     public boolean startGame(){
-        changeState(new PlayingState(context, pacMan, maze,ghosts));
+        changeState(new MovementState(context, pacMan, maze,ghosts));
         return true;
     }
 

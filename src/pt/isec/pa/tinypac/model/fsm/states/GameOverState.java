@@ -14,7 +14,18 @@ public class GameOverState extends GameAdapter {
 
     @Override
     public GameStates getState() {
-        return GameStates.PLAYING;
+        return GameStates.GAME_OVER;
     }
 
+    @Override
+    public boolean restart() {
+        changeState(new InitialState(context, pacMan, maze, ghosts));
+        return false;
+    }
+
+    @Override
+    public boolean endGame() {
+        changeState(new FinalState(context, pacMan, maze, ghosts));
+        return false;
+    }
 }
