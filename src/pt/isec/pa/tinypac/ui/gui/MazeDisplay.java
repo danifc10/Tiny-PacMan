@@ -5,11 +5,13 @@ import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.terminal.Terminal;
+import pt.isec.pa.tinypac.gameengine.IGameEngine;
+import pt.isec.pa.tinypac.gameengine.IGameEngineEvolve;
 import pt.isec.pa.tinypac.model.data.MazeControl;
 
 import java.io.IOException;
 
-public class MazeDisplay {
+public class MazeDisplay implements IGameEngineEvolve {
     private MazeControl maze;
     private Terminal terminal;
     TextGraphics tg;
@@ -20,7 +22,8 @@ public class MazeDisplay {
         tg = terminal.newTextGraphics();
     }
 
-    public void paint(MazeControl maze) throws IOException {
+    public void paint() throws IOException {
+
         TextGraphics tg = terminal.newTextGraphics();
         char[][] char_board = maze.getMazeControl();
         int height = maze.getHeight();
@@ -66,23 +69,30 @@ public class MazeDisplay {
                         tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1,1), ' ');
                     }
                     case 'P'->{
-                        tg.setBackgroundColor(TextColor.ANSI.BLACK);
-                        tg.setForegroundColor(TextColor.ANSI.GREEN_BRIGHT);
-                        tg.putString(x +20,y + 10,"P");
+                        tg.setBackgroundColor(TextColor.ANSI.YELLOW_BRIGHT);
+                        tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1,1), ' ');
+                       // tg.putString(x +20,y + 10,"P");
                     }
                     case ' '->{
                         tg.setBackgroundColor(TextColor.ANSI.BLACK);
                         tg.fillRectangle(new TerminalPosition(20 + x,10 + y), new TerminalSize(1,1),' ');
                     }
                     case 'G'->{
-                        tg.setBackgroundColor(TextColor.ANSI.BLACK);
-                        tg.setForegroundColor(TextColor.ANSI.RED);
-                        tg.putString(x +20,y + 10,"G");
+                        tg.setBackgroundColor(TextColor.ANSI.MAGENTA);
+                        tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1,1), ' ');
                     }
-
                 }
-
             }
+        }
+        terminal.flush();
+    }
+
+    @Override
+    public void evolve(IGameEngine gameEngine, long currentTime) {
+        try {
+            paint();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

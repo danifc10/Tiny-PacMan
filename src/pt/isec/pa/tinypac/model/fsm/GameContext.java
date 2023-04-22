@@ -1,12 +1,16 @@
 package pt.isec.pa.tinypac.model.fsm;
 
+import pt.isec.pa.tinypac.gameengine.IGameEngine;
 import pt.isec.pa.tinypac.model.data.MazeControl;
 import pt.isec.pa.tinypac.model.data.elements.Ghost;
 import pt.isec.pa.tinypac.model.data.elements.PacMan;
 import pt.isec.pa.tinypac.model.fsm.states.InitialState;
 
-public class GameContext  {
+import java.util.HashMap;
+import java.util.Map;
 
+public class GameContext  {
+    private Map<Integer, String> levelsFile = new HashMap<>();
     private IGameStates currentState;
     private Ghost []ghosts;
     private MazeControl maze;
@@ -14,13 +18,29 @@ public class GameContext  {
     private int points = 0;
     private int time  = 0;
     private int level = 0;
+    private IGameEngine gameEngine;
 
-    public GameContext(PacMan pacMan, Ghost []ghosts, MazeControl maze){
+    public GameContext(PacMan pacMan, Ghost []ghosts, MazeControl maze, IGameEngine gameEngine){
+        putLevelsFile();
+        this.gameEngine = gameEngine;
         this.pacMan = pacMan;
         this.ghosts = ghosts;
         this.maze = maze;
-        this.currentState = new InitialState(this, pacMan,maze,ghosts);
         this.level = 1;
+        this.currentState = new InitialState(this, pacMan,maze,ghosts, gameEngine);
+    }
+
+    public void putLevelsFile() {
+        for(int i = 1 ; i <= 20 ; i++){
+            if(i < 10)
+                this.levelsFile.put(i, "Level10" + i + ".txt");
+            else
+                this.levelsFile.put(i, "Level1" + i + ".txt");
+        }
+    }
+
+    public String getFileLevel(){
+        return levelsFile.get(this.level);
     }
 
     public GameStates getState(){
@@ -31,8 +51,10 @@ public class GameContext  {
     }
 
     // tranciçoes
-    public void startGame(){
-        currentState.startGame();
+    public boolean pauseGame(){return currentState.pauseGame();}
+    public boolean resumeGame(){return currentState.resumeGame();}
+    public void startGame(int direction){
+        currentState.startGame(direction);
     }
     public boolean setGhostsFree(){
         return currentState.setGhostsFree();
@@ -73,7 +95,7 @@ public class GameContext  {
     public boolean endVulnerableTime(){
         return currentState.endVulnerableTime();
     }
-   // public void update(int direction){currentState.update(direction);}
+   //public void update(int direction){currentState.update(direction);}
 
     // dados
     public int getPoint(){
@@ -88,7 +110,10 @@ public class GameContext  {
     public int getLevel(){
         return level;
     }
-    public MazeControl getMaze(){ return maze;}
+    public void setMaze(MazeControl maze1){
+        this.maze = maze1;
+    }
+    public MazeControl getMaze(){ return this.maze;}
     public void setLevel(int level){
         this.level = level;
     }

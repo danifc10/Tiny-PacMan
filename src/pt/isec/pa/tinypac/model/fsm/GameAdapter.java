@@ -1,22 +1,23 @@
 package pt.isec.pa.tinypac.model.fsm;
 
+import pt.isec.pa.tinypac.gameengine.IGameEngine;
 import pt.isec.pa.tinypac.model.data.MazeControl;
 import pt.isec.pa.tinypac.model.data.elements.Ghost;
 import pt.isec.pa.tinypac.model.data.elements.PacMan;
 
 public class GameAdapter implements IGameStates{
-
-
     protected GameContext context;
     protected Ghost [] ghosts;
     protected MazeControl maze;
     protected PacMan pacMan;
+    protected IGameEngine gameEngine;
 
-    protected GameAdapter(GameContext context, PacMan pacMan, MazeControl maze, Ghost [] ghosts){
+    protected GameAdapter(GameContext context, PacMan pacMan, MazeControl maze, Ghost [] ghosts, IGameEngine gameEngine){
         this.context = context;
         this.pacMan = pacMan;
         this.ghosts = ghosts;
         this.maze = maze;
+        this.gameEngine = gameEngine;
     }
 
     protected void changeState(IGameStates newState){
@@ -44,7 +45,7 @@ public class GameAdapter implements IGameStates{
     }
 
     @Override
-    public boolean startGame() {
+    public boolean startGame(int direction) {
         return false;
     }
 
@@ -95,6 +96,16 @@ public class GameAdapter implements IGameStates{
 
     @Override
     public boolean endGame() {
+        return false;
+    }
+
+    @Override
+    public boolean pauseGame() {
+        return false;
+    }
+
+    @Override
+    public boolean resumeGame() {
         return false;
     }
 }

@@ -2,15 +2,18 @@ package pt.isec.pa.tinypac.model.data;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
+import java.util.*;
 
 public class MazeControl {
     private final Maze maze;
     //private final IMazeElement[][] board;
     private int width;
     private int height;
+    private List<Position>ghostStartPositions = new ArrayList<>();
+    private Map<Integer, String> levels = new HashMap<>();
 
     public MazeControl(String File) throws FileNotFoundException {
+        putLevelsFile();
         File arquivo = new File("src\\pt\\isec\\pa\\tinypac\\model\\data\\levels\\" + File );
         // Criar um objeto Scanner para ler o conteúdo do arquivo
         Scanner leitor = new Scanner(arquivo);
@@ -56,6 +59,7 @@ public class MazeControl {
                             //this.board[row][col] = new GhostGate();
                         }
                         case 'y' -> {
+                            ghostStartPositions.add(new Position(row, col));
                             maze.set(row, col, new GhostSpot());
                             //this.board[row][col] = new GhostSpot();
                         }
@@ -78,6 +82,15 @@ public class MazeControl {
         }
     }
 
+    public void putLevelsFile(){
+        levels.put(1, "Level101.txt");
+        levels.put(2, "Level102.txt");
+    }
+
+    public String getLevelFile(int i){
+        return levels.get(i);
+    }
+
     public int getXstart(){
         for(int i = 0 ; i < height ; i++){
             for(int j = 0 ; j < width ; j++){
@@ -98,20 +111,21 @@ public class MazeControl {
         return 0;
     }
 
-    public int getXghostStart(){
-        for(int i = 0 ; i < height ; i++){
-            for(int j = 0 ; j < width ; j++){
-                if(maze.get(i,j).getSymbol()== 'Y')
-                    return i;
-            }
-        }
-        return 0;
-    }
     public int getYghostStart(){
         for(int i = 0 ; i < height ; i++){
             for(int j = 0 ; j < width ; j++){
                 if(maze.get(i,j).getSymbol()== 'Y')
                     return j;
+            }
+        }
+        return 0;
+    }
+
+    public int getXghostStart(){
+        for(int i = 0 ; i < height ; i++){
+            for(int j = 0 ; j < width ; j++){
+                if(maze.get(i,j).getSymbol()== 'Y')
+                    return i;
             }
         }
         return 0;
@@ -124,6 +138,32 @@ public class MazeControl {
                     maze.set(i, j, new EmptyZone());
                 }else if((maze.get(i, j).getSymbol() == 'W')){
                     maze.set(i, j, new WrapZone());
+                }
+            }
+        }
+    }
+
+    public void removeGhostRoad(int x, int y) {
+        for(int i = 0 ; i < height ; i++){
+            for(int j = 0 ; j < width ; j++){
+                if (i == x &&  j == y ) {
+                    char c = maze.get(i, j).getSymbol();
+                    switch (c){
+                        case 'Y':
+                            maze.set(i, j, new GhostGate());
+                        case 'y':
+                            maze.set(i, j, new GhostSpot());
+                        case 'o':
+                            maze.set(i, j, new Point());
+                        case 'O':
+                            maze.set(i, j, new PowerPoint());
+                        case 'F':
+                            maze.set(i, j, new Fruit());
+                        case 'W':
+                            maze.set(i, j, new WrapZone());
+                        case ' ':
+                            maze.set(i, j, new EmptyZone());
+                    }
                 }
             }
         }
@@ -188,4 +228,13 @@ public class MazeControl {
         return maze.get(x,y);
     }
 
+
+    public List<Position> getGhostStartPositions(){
+        return ghostStartPositions;
+    }
+
+
+    public void restartMaze(int level) {
+
+    }
 }

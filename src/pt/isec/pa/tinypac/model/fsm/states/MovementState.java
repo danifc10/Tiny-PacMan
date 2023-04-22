@@ -1,5 +1,6 @@
 package pt.isec.pa.tinypac.model.fsm.states;
 
+import pt.isec.pa.tinypac.gameengine.IGameEngine;
 import pt.isec.pa.tinypac.model.data.MazeControl;
 import pt.isec.pa.tinypac.model.data.elements.Ghost;
 import pt.isec.pa.tinypac.model.data.elements.PacMan;
@@ -7,28 +8,21 @@ import pt.isec.pa.tinypac.model.fsm.GameAdapter;
 import pt.isec.pa.tinypac.model.fsm.GameContext;
 import pt.isec.pa.tinypac.model.fsm.GameStates;
 
-import static java.lang.Thread.sleep;
-
 public class MovementState extends GameAdapter {
-    protected MovementState(GameContext context, PacMan pacMan, MazeControl maze, Ghost[] ghosts) {
-        super(context, pacMan, maze, ghosts);
+    protected MovementState(GameContext context, PacMan pacMan, MazeControl maze, Ghost[] ghosts, IGameEngine gameEngine) {
+        super(context, pacMan, maze, ghosts, gameEngine);
     }
 
     @Override
     public boolean setGhostsFree() { // liberta os fantasmas e passado 5 segundos muda de estado
         //LIBERTA FANTASMAS apos 3 segundos
-        try {
-            sleep(3000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
         for(Ghost ghost : ghosts){
-            ghost.setTargetX(maze.getXghostStart());
-            ghost.setTargetY(maze.getYghostStart());
-            ghost.move(maze);
+            ghost.getOut();
         }
-        changeState(new PlayingState(context, pacMan,maze,ghosts));
+        for(Ghost ghost : ghosts){
+            gameEngine.registerClient(ghost);
+        }
+        changeState(new PlayingState(context, pacMan,maze,ghosts, gameEngine));
         return true;
     }
     @Override

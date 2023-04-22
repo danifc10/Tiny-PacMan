@@ -1,5 +1,6 @@
 package pt.isec.pa.tinypac.model.fsm.states;
 
+import pt.isec.pa.tinypac.gameengine.IGameEngine;
 import pt.isec.pa.tinypac.model.data.MazeControl;
 import pt.isec.pa.tinypac.model.data.elements.Ghost;
 import pt.isec.pa.tinypac.model.data.elements.PacMan;
@@ -10,8 +11,8 @@ import pt.isec.pa.tinypac.model.fsm.GameStates;
 public class VulnerableState extends GameAdapter {
     private int counter  = 10;
     private boolean counterOn = false;
-    protected VulnerableState(GameContext context, PacMan pacMan, MazeControl maze, Ghost[] ghosts) {
-        super(context, pacMan, maze, ghosts);
+    protected VulnerableState(GameContext context, PacMan pacMan, MazeControl maze, Ghost[] ghosts, IGameEngine gameEngine) {
+        super(context, pacMan, maze, ghosts, gameEngine);
         this.counterOn = true;
     }
 
@@ -22,7 +23,7 @@ public class VulnerableState extends GameAdapter {
 
     @Override
     public boolean endVulnerableTime() {
-        changeState(new PlayingState(context, pacMan, maze, ghosts));
+        changeState(new PlayingState(context, pacMan, maze, ghosts, gameEngine));
         return true;
     }
 
@@ -35,7 +36,7 @@ public class VulnerableState extends GameAdapter {
             if(g.getX() == pacMan.getX() && g.getY() == pacMan.getY())
                 g.setDead(true);
         }
-        changeState(new VulnerableState(context, pacMan, maze, ghosts));
+        changeState(new VulnerableState(context, pacMan, maze, ghosts, gameEngine));
         return true;
     }
 
