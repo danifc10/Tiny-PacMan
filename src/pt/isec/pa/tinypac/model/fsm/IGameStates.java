@@ -21,4 +21,6 @@ public interface IGameStates {
       boolean endGame(); // no GAME_OVER e no WIN
       boolean pauseGame();
       boolean resumeGame();
+      boolean setPacManNewDirection(int direction);
+      void checks();
 }

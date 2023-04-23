@@ -3,29 +3,21 @@ package pt.isec.pa.tinypac.model.data.elements;
 import pt.isec.pa.tinypac.gameengine.IGameEngine;
 import pt.isec.pa.tinypac.gameengine.IGameEngineEvolve;
 import pt.isec.pa.tinypac.model.data.MazeControl;
-import pt.isec.pa.tinypac.utils.Direction;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class Ghost implements IGameEngineEvolve {
     protected int x, y; // posição do fantasma no labirinto
     protected int lastX, lastY;
-    protected Direction direction; // direção atual do fantasma
+    protected int direction; // direção atual do fantasma
     protected boolean vulnerable; // se o fantasma está vulnerável ou não
     protected int vulnerabilityTimer; // tempo restante de vulnerabilidade do fantasma
     protected int targetX, targetY; // posição de destino do fantasma
     protected boolean isDead; // se o fantasma está morto ou não
     protected int speed;
-    protected List<Direction> availableDirections;
     protected MazeControl maze;
 
-    public Ghost(int x, int y, Direction direction, int speed, MazeControl maze){
-        this.availableDirections = new ArrayList<>();
-        this.availableDirections.add(Direction.DOWN);
-        this.availableDirections.add(Direction.UP);
-        this.availableDirections.add(Direction.RIGHT);
-        this.availableDirections.add(Direction.LEFT);
+
+    public Ghost(){};
+    public Ghost(int x, int y, int direction, int speed, MazeControl maze){
         this.x = x;
         this.y = y;
         this.direction = direction;
@@ -36,6 +28,25 @@ public abstract class Ghost implements IGameEngineEvolve {
         this.isDead = false;
         this.speed = speed;
         this.maze = maze;
+    }
+
+    public boolean canMove(int x, int y, int direction){
+        switch (direction){
+            case 1: // DOWN
+                x++;
+            case 2: // RIGHT
+                y++;
+            case 0: // UP
+                x--;
+            case 3: // LEFT
+                y--;
+        }
+
+        if (x < 0 || y < 0 || x >= maze.getWidth() || y >= maze.getHeight()) {
+            return false;
+        }
+        System.out.println(maze.checkIfWall(x, y));
+        return !maze.checkIfWall(x, y);
     }
 
     @Override
@@ -85,10 +96,6 @@ public abstract class Ghost implements IGameEngineEvolve {
 
     public int getDirection() {
         return 0;
-    }
-
-    public void setDirection(Direction direction) {
-        this.direction = direction;
     }
 
     public boolean isVulnerable() {

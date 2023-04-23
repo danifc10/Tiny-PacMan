@@ -16,15 +16,16 @@ public class MovementState extends GameAdapter {
     @Override
     public boolean setGhostsFree() { // liberta os fantasmas e passado 5 segundos muda de estado
         //LIBERTA FANTASMAS apos 3 segundos
-        for(Ghost ghost : ghosts){
-            ghost.getOut();
-        }
+
         for(Ghost ghost : ghosts){
             gameEngine.registerClient(ghost);
         }
+
         changeState(new PlayingState(context, pacMan,maze,ghosts, gameEngine));
         return true;
     }
+
+
     @Override
     public GameStates getState() {
         return GameStates.MOVEMENT;

@@ -3,7 +3,7 @@ package pt.isec.pa.tinypac.model.fsm.states;
 import pt.isec.pa.tinypac.gameengine.GameEngine;
 import pt.isec.pa.tinypac.gameengine.IGameEngine;
 import pt.isec.pa.tinypac.model.data.MazeControl;
-import pt.isec.pa.tinypac.model.data.Position;
+import pt.isec.pa.tinypac.utils.Position;
 import pt.isec.pa.tinypac.model.data.elements.Ghost;
 import pt.isec.pa.tinypac.model.data.elements.PacMan;
 import pt.isec.pa.tinypac.model.fsm.GameAdapter;

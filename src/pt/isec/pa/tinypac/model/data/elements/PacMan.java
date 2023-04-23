@@ -1,8 +1,12 @@
 package pt.isec.pa.tinypac.model.data.elements;
 
+import pt.isec.pa.tinypac.gameengine.IGameEngine;
+import pt.isec.pa.tinypac.gameengine.IGameEngineEvolve;
+import pt.isec.pa.tinypac.model.data.IMazeElement;
 import pt.isec.pa.tinypac.model.data.MazeControl;
 
-public class PacMan {
+public class PacMan implements IGameEngineEvolve , IMazeElement {
+    public static final char symbol= 'P';
     private int x; // posição horizontal
     private int y; // posição vertical
     private int lastX;
@@ -10,8 +14,9 @@ public class PacMan {
     private int direction; // direção atual
     private int speed; // velocidade
     private int life = 3;
-    private int nextDirection;
     private MazeControl maze;
+
+    public PacMan(){};
 
     public PacMan(int x, int y, int direction, int speed, MazeControl maze) {
         this.x = x;
@@ -24,6 +29,49 @@ public class PacMan {
     public void setMaze(MazeControl maze){
         this.maze = maze;
     }
+
+    public boolean canMove(int x, int y){
+        return !maze.checkIfWall(x, y) && maze.getXY(x, y).getSymbol() != 'Y';
+    }
+
+    public void movePacMan(){
+        int x = getX();
+        int y = getY();
+        switch (getDirection()) {
+            case 2 :
+                if (y > 0 && canMove(x, y - 1)) {
+                    checkIfWrap(x, y -1);
+                    setDirection(2);
+                    move();
+                }
+                break;
+            case 1 :
+                if (y < maze.getWidth() && canMove(x, y + 1)) {
+                    checkIfWrap(x, y +1);
+                    setDirection(1);
+                    move();
+                }
+                break;
+            case 3 :
+                if (x > 0 && canMove(x - 1, y)) {
+                    checkIfWrap(x - 1, y);
+                    setDirection(3);
+                    move();
+                }
+                break;
+            case 4 :
+                if (x < maze.getHeight() && canMove(x + 1, y)) {
+                    checkIfWrap(x + 1, y);
+                    setDirection(4);
+                    move();
+                }
+                break;
+        }
+
+        maze.setXY(getX(), getY(), new PacMan());
+        maze.remove(getLastX(), getLastY());
+    }
+
     public void move() {
         lastX = getX();
         lastY = getY();
@@ -48,7 +96,19 @@ public class PacMan {
         }
     }
 
-
+    public void checkIfWrap(int x, int y){
+        if(maze.checkIfWrap(x, y)){
+            maze.remove(this.x, this.y);
+            for(int i = 0; i < maze.getHeight() ; i++){
+                for(int j = 0; j < maze.getWidth() ; j++){
+                    if((j != y && i == x ) && (maze.getXY(i,j).getSymbol() == 'W')){
+                        setY(j);
+                        setX(i);
+                    }
+                }
+            }
+        }
+    }
 
     // getters e setters
     public int getLife(){
@@ -81,22 +141,6 @@ public class PacMan {
         this.direction = direction;
     }
 
-    public int getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
-
-    public void powerMode() {
-        setSpeed(1);
-    }
-
-    public boolean checkLife() {
-        return life > 0;
-    }
-
     public int getLastX() {
         return lastX;
     }
@@ -105,11 +149,14 @@ public class PacMan {
         return lastY;
     }
 
-    public void setNextDirection(int readDirection) {
-        nextDirection = readDirection;
+
+    @Override
+    public void evolve(IGameEngine gameEngine, long currentTime) {
+        movePacMan();
     }
 
-    public int getNextDirection() {
-        return nextDirection;
+    @Override
+    public char getSymbol() {
+        return symbol;
     }
 }

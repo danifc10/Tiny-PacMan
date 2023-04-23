@@ -2,14 +2,15 @@ package pt.isec.pa.tinypac.model.fsm;
 
 import pt.isec.pa.tinypac.gameengine.IGameEngine;
 import pt.isec.pa.tinypac.model.data.MazeControl;
-import pt.isec.pa.tinypac.model.data.elements.Ghost;
-import pt.isec.pa.tinypac.model.data.elements.PacMan;
+import pt.isec.pa.tinypac.model.data.elements.*;
 import pt.isec.pa.tinypac.model.fsm.states.InitialState;
+import pt.isec.pa.tinypac.utils.Position;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class GameContext  {
+public class GameContext {
     private Map<Integer, String> levelsFile = new HashMap<>();
     private IGameStates currentState;
     private Ghost []ghosts;
@@ -20,14 +21,23 @@ public class GameContext  {
     private int level = 0;
     private IGameEngine gameEngine;
 
-    public GameContext(PacMan pacMan, Ghost []ghosts, MazeControl maze, IGameEngine gameEngine){
+    public GameContext(MazeControl maze, IGameEngine gameEngine){
         putLevelsFile();
         this.gameEngine = gameEngine;
-        this.pacMan = pacMan;
-        this.ghosts = ghosts;
         this.maze = maze;
         this.level = 1;
+        initElements();
         this.currentState = new InitialState(this, pacMan,maze,ghosts, gameEngine);
+    }
+
+    public void initElements(){
+        List<Position> positions = maze.getGhostStartPositions();
+        this.pacMan = new PacMan(maze.getXstart(), maze.getYstart(), 1,1, maze);
+        this.ghosts = new Ghost[]{
+                new Blinky( positions.get(1).getX(), positions.get(1).getY(), 2, 1, maze),
+                new Pinky(positions.get(0).getX(), positions.get(0).getY(), 2, 1, maze),
+                new Inky(positions.get(2).getX(), positions.get(2).getY(), 2, 1, maze)
+        };
     }
 
     public void putLevelsFile() {
@@ -46,6 +56,7 @@ public class GameContext  {
     public GameStates getState(){
         return currentState.getState();
     }
+
     void changeState(IGameStates newState){
         this.currentState = newState;
     }
@@ -95,7 +106,9 @@ public class GameContext  {
     public boolean endVulnerableTime(){
         return currentState.endVulnerableTime();
     }
-   //public void update(int direction){currentState.update(direction);}
+    public boolean setPacManNewDirection(int direction){
+        return currentState.setPacManNewDirection(direction);
+    }
 
     // dados
     public int getPoint(){
@@ -117,4 +130,5 @@ public class GameContext  {
     public void setLevel(int level){
         this.level = level;
     }
+
 }

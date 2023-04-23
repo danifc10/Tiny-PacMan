@@ -1,123 +1,95 @@
 package pt.isec.pa.tinypac.model.data.elements;
 
-import pt.isec.pa.tinypac.model.data.GhostDraw;
+import pt.isec.pa.tinypac.model.data.IMazeElement;
 import pt.isec.pa.tinypac.model.data.MazeControl;
-import pt.isec.pa.tinypac.utils.Direction;
 
-public class Blinky extends Ghost {
-    public Blinky(int x, int y, Direction direction, int speed, MazeControl maze) {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+public class Blinky extends Ghost implements IMazeElement {
+    Random random = new Random();
+    public Blinky(int x, int y, int direction, int speed, MazeControl maze) {
         super(x, y, direction, speed, maze);
     }
 
+    public Blinky(){};
+    public static final char symbol = 'B';
+
     @Override
-    public boolean getOut(){
-        int targetX = this.maze.getXghostStart();
-        int targetY = this.maze.getYghostStart();
-        while (x >= targetX) { // enquanto não sair da jaula
-            this.lastX = x;
-            this.lastY =y;
-            // verifica se pode se mover na direção atual
-            if (!this.maze.checkIfWall(x, y)) {
-                // move na direção atual
-                switch (direction) {
-                    case LEFT:
-                        y--;
-                        break;
-                    case UP:
-                        x--;
-                        break;
-                    case RIGHT:
-                        y++;
-                        break;
-                    case DOWN:
-                        x++;
-                        break;
-                }
-                check();
-            } else {
-                // não pode se mover na direção atual, sorteia uma nova direção
-                Direction newDirection;
-                do {
-                    int randomIndex = (int) (Math.random() * availableDirections.size());
-                    newDirection = availableDirections.get(randomIndex);
-                } while (newDirection == direction);
+    public char getSymbol() {
 
-            }
-            //maze.removeGhostRoad(lastX, lastY);
-            this.maze.remove(lastX, lastY);
-            this.maze.setXY(x,y,new GhostDraw());
-        }
-
-        return true;
-    }
-
-    public void check(){
-        if(this.maze.getXY(x, y - 1).getSymbol() == 'Y') {
-            setDirection(Direction.LEFT);
-        }
-        else if(this.maze.getXY(x, y + 1).getSymbol() == 'Y') {
-            setDirection(Direction.RIGHT);
-        }
-        else if(this.maze.getXY(x - 1, y).getSymbol() == 'Y') {
-            setDirection(Direction.UP);
-        }
-        else if(this.maze.getXY(x + 1, y).getSymbol() == 'Y') {
-            setDirection(Direction.DOWN);
-        }
+        return symbol;
     }
 
     @Override
     public void move() {
-        checkNeighbords(x, y);
-        this.lastY = y;
-        this.lastX = x;
+        int nextX = x;
+        int nextY = y;
 
-        switch (direction) {
-            case UP:
-                if (this.maze.checkIfWall(x -1 ,y)){
-                    // Escolhe uma nova direção aleatória dentre as disponíveis
-                    int randomIndex = (int) (Math.random() * availableDirections.size());
-                    direction = availableDirections.get(randomIndex);
-                }else{
-                    x -= speed;
-                }
-                break;
-
-            case DOWN:
-                if(this.maze.checkIfWall(x + 1 ,y)){
-                    // Escolhe uma nova direção aleatória dentre as disponíveis
-                    int randomIndex = (int) (Math.random() * availableDirections.size());
-                    direction = availableDirections.get(randomIndex);
-                }else{
-                    x += speed;
-                }
-                break;
-            case LEFT:
-                if (this.maze.checkIfWall(x ,y - 1)){
-                    // Escolhe uma nova direção aleatória dentre as disponíveis
-                    int randomIndex = (int) (Math.random() * availableDirections.size());
-                    direction = availableDirections.get(randomIndex);
-                }else{
-                    y -= speed;
-                }
-
-                break;
-            case RIGHT:
-                if (this.maze.checkIfWall(x ,y + 1)){
-                    // Escolhe uma nova direção aleatória dentre as disponíveis
-                    int randomIndex = (int) (Math.random() * availableDirections.size());
-                    direction = availableDirections.get(randomIndex);
-                }else{
-                    y += speed;
-                }
-                break;
+        // verifica a próxima célula na direção atual
+        if (direction == 0) {
+            nextX--;
+        } else if (direction == 1) {
+            nextX++;
+        } else if (direction == 2) {
+            nextY++;
+        } else if (direction == 3) {
+            nextY--;
         }
 
-        //maze.removeGhostRoad(lastX, lastY);
+        // verifica se a próxima célula é uma parede ou cruzamento
+        if ( maze.checkIfWall(nextX, nextY)) {
+            // escolhe uma nova direção válida
+            List<Integer> possibleDirections = new ArrayList<>();
+            int i = 0;
+            for(int d = 0 ; d < 4; d++){
+                if(d != getOpositeDirection(direction) && d != direction){
+                    possibleDirections.add(i, d);
+                    i++;
+                }
+            }
+            int index = random.nextInt(i);
+            direction = possibleDirections.get(index);
+        }
+
+        lastX = x;
+        lastY = y;
+        // move o fantasma na direção atual
+        if (direction == 0) {
+            x--;
+        } else if (direction == 1) {
+            x++;
+        } else if (direction == 2) {
+            y++;
+        } else if (direction == 3) {
+            y--;
+        }
+
         this.maze.remove(lastX, lastY);
-        this.maze.setXY(x,y,new GhostDraw());
+        this.maze.setXY(x,y,new Blinky());
     }
 
+    @Override
+    public boolean getOut() {
+        move();
+        return true;
+    }
+
+    private int getOpositeDirection(int direction) {
+        switch (direction){
+            case 0:
+                return 1;
+            case 1:
+                return 0;
+            case 2:
+                return 3;
+            case 3:
+                return 2;
+        }
+        return 0;
+    }
+/*
     private void checkNeighbords(int x, int y) {
         if(this.maze.getXY(x, y + 1).getSymbol() == 'P'){ //
             setDirection(Direction.RIGHT);
@@ -128,26 +100,52 @@ public class Blinky extends Ghost {
         }else if(this.maze.getXY(x + 1, y).getSymbol() == 'P'){
             setDirection(Direction.DOWN);
         }
-    }
+    }*/
 
-    private Direction getOppositeDirection(Direction direction) {
+    private boolean isCrossroad(int x, int y) {
+        int numWalls = 0;
 
-        switch (direction){
-            case LEFT:
-                return Direction.RIGHT;
-            case RIGHT:
-                return Direction.LEFT;
-            case DOWN:
-                return Direction.UP;
-            case UP:
-                return Direction.DOWN;
+        // conta o número de paredes nas células vizinhas
+        if (x > 0 && maze.checkIfWall(x - 1, y)) {
+            numWalls++;
+        }
+        if (x < maze.getHeight() - 1 &&  maze.checkIfWall(x + 1, y)) {
+            numWalls++;
+        }
+        if (y > 0 &&  maze.checkIfWall(x , y - 1)) {
+            numWalls++;
+        }
+        if (y < maze.getWidth() - 1 &&  maze.checkIfWall(x , y + 1)) {
+            numWalls++;
         }
 
-        return null;
+        // é um cruzamento se tiver mais de 2 paredes nas células vizinhas
+        return numWalls >= 3;
     }
 
+    private boolean isDirectionValid( int x, int y, int direction) {
+        int nextX = x;
+        int nextY = y;
 
-    public void setMaze(MazeControl maze){
-        this.maze = maze;
+        // verifica a próxima célula na nova direção
+        if (direction == 0) { // UP
+            nextX--;
+        } else if (direction == 1) { // DOWN
+            nextX++;
+        } else if (direction == 2) { // RIGHT
+            nextY++;
+        } else if (direction == 3) { // LEFT
+            nextY--;
+        }
+
+        // verifica se a próxima célula é uma parede ou cruzamento
+        if (maze.checkIfWall(nextX, nextY) || isCrossroad(nextX,nextY)) {
+            return false;
+        }
+        return true;
     }
+
 }
+
+
+

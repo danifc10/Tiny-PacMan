@@ -24,6 +24,13 @@ public class GameAdapter implements IGameStates{
         context.changeState(newState);
     }
 
+    public void checks(){};
+
+    @Override
+    public boolean setPacManNewDirection(int direction){
+        return true;
+    }
+
     @Override
     public GameStates getState() {
         return null;

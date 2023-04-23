@@ -1,36 +1,39 @@
 package pt.isec.pa.tinypac.ui.text;
 
+import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
+import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
+import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.terminal.TerminalFactory;
 import pt.isec.pa.tinypac.GameController;
 import pt.isec.pa.tinypac.gameengine.IGameEngine;
+import pt.isec.pa.tinypac.gameengine.IGameEngineEvolve;
 import pt.isec.pa.tinypac.model.data.MazeControl;
 import pt.isec.pa.tinypac.model.fsm.GameContext;
-import pt.isec.pa.tinypac.ui.gui.MazeDisplay;
+
 
 import java.io.IOException;
 
-public class GameUI {
+public class GameUI implements IGameEngineEvolve {
+    Screen screen;
     IGameEngine gameEngine;
     GameController game;
     Terminal terminal;
     GameContext fsm;
-    MazeDisplay display;
     MazeControl mazeControl;
 
-    public GameUI(MazeControl mazeControl, GameContext context, GameController controller, IGameEngine gameEngine) throws IOException {
+    public GameUI(MazeControl mazeControl, GameContext context) throws IOException {
         this.mazeControl = mazeControl;
         this.fsm = context;
-        this.game = controller;
+
         TerminalSize size = new TerminalSize(80, 60);
         TerminalFactory terminalFactory = new DefaultTerminalFactory().setTerminalEmulatorTitle("TinyPAcMan").setInitialTerminalSize(size);
         terminal = terminalFactory.createTerminal();
-        this.gameEngine = gameEngine;
     }
 
     public int readDirection(KeyStroke key){
@@ -80,13 +83,7 @@ public class GameUI {
         terminal.setForegroundColor(TextColor.ANSI.WHITE);
         terminal.putString("PRESS ONE KEY TO START");
 
-        // mostra labirinto
-        display = new MazeDisplay(fsm.getMaze(), terminal);
-        display.paint();
-
-        // gameengine
-        gameEngine.registerClient(display);
-        gameEngine.registerClient(this.game);
+        show();
 
         // verifica a primeira transição
         KeyStroke key = terminal.readInput();
@@ -105,17 +102,16 @@ public class GameUI {
 
     void playingUI() throws IOException {
         // atualiza o loop de jogo verifica se comeu bola com poderes ou se foi comido
-        game.update(terminal);
-        // mostra pontos e outro info
-        terminal.setCursorPosition(20, 45);
-        terminal.setForegroundColor(TextColor.ANSI.GREEN_BRIGHT);
-        terminal.putString("POINTS:" + fsm.getPoint());
+        //game.update(terminal);
+        KeyStroke key = terminal.readInput();
+        // verificar direção
+        fsm.setPacManNewDirection(readDirection(key));
+        //fsm.checks();
     }
 
     private void vulnerableUI() throws IOException {
         System.out.println("enter vulnerable state");
         // faz o loop do jogo em modo vulnerable durante x segundos
-        game.update(terminal);
         System.out.println("leaving vulnerable state");
         fsm.endVulnerableTime();
     }
@@ -125,11 +121,9 @@ public class GameUI {
         terminal.clearScreen();
         terminal.putString("FIM");
         terminal.close();
-
     }
 
     void gameOverUI()  {
-        System.out.println("aqui");
         fsm.restart();
     }
 
@@ -146,4 +140,87 @@ public class GameUI {
             fsm.resumeGame();
     }
 
+    private void show() throws IOException {
+        TextGraphics tg = terminal.newTextGraphics();
+        char[][] env = mazeControl.getMazeControl();
+        // mostra pontos e outro info
+        terminal.setCursorPosition(20, 45);
+        terminal.setForegroundColor(TextColor.ANSI.GREEN_BRIGHT);
+        terminal.putString("POINTS:" + fsm.getPoint());
+        for (int y = 0; y < env.length; y++) {
+            for (int x = 0; x < env[0].length; x++) {
+                char c = env[y][x];
+                switch (c) {
+                    case 'x' -> {
+                        tg.setBackgroundColor(TextColor.ANSI.BLUE);
+                        tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1, 1), ' ');
+                    }
+                    case 'o' -> {
+                        tg.setBackgroundColor(TextColor.ANSI.BLACK);
+                        tg.setForegroundColor(TextColor.ANSI.YELLOW);
+                        tg.putString(x + 20, y + 10, ".");
+                    }
+                    case 'F' -> {
+                        tg.setBackgroundColor(TextColor.ANSI.BLACK);
+                        tg.setForegroundColor(TextColor.ANSI.WHITE_BRIGHT);
+                        tg.putString(x + 20, y + 10, "O");
+                    }
+                    case 'O' -> {
+                        tg.setBackgroundColor(TextColor.ANSI.BLACK);
+                        tg.setForegroundColor(TextColor.ANSI.GREEN_BRIGHT);
+                        tg.putString(x + 20, y + 10, "o");
+                    }
+                    case 'Y' -> {
+                        tg.setBackgroundColor(TextColor.ANSI.RED);
+                        tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1, 1), ' ');
+                    }
+                    case 'y' -> {
+                        tg.setBackgroundColor(TextColor.ANSI.BLACK);
+                        tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1, 1), ' ');
+                    }
+                    case 'W' -> {
+                        tg.setBackgroundColor(TextColor.ANSI.WHITE);
+                        tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1, 1), ' ');
+                    }
+                    case 'M' -> {
+                        tg.setBackgroundColor(TextColor.ANSI.GREEN);
+                        tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1, 1), ' ');
+                    }
+                    case 'P' -> {
+                        tg.setBackgroundColor(TextColor.ANSI.YELLOW_BRIGHT);
+                        tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1, 1), ' ');
+                        // tg.putString(x +20,y + 10,"P");
+                    }
+                    case ' ' -> {
+                        tg.setBackgroundColor(TextColor.ANSI.BLACK);
+                        tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1, 1), ' ');
+                    }
+                    case 'B' -> {
+                        tg.setBackgroundColor(TextColor.ANSI.MAGENTA);
+                        tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1, 1), ' ');
+                    }
+                    case 'K' -> {
+                        tg.setBackgroundColor(TextColor.ANSI.MAGENTA_BRIGHT);
+                        tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1, 1), ' ');
+                    }
+                    case 'I' -> {
+                        tg.setBackgroundColor(TextColor.ANSI.RED_BRIGHT);
+                        tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1, 1), ' ');
+                    }
+                }
+            }
+        }
+        terminal.flush();
+        //screen.refresh();
+    }
+
+
+    @Override
+    public void evolve(IGameEngine gameEngine, long currentTime) {
+        try {
+            show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
