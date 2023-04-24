@@ -5,6 +5,7 @@ import pt.isec.pa.tinypac.model.data.MazeControl;
 
 public class Pinky extends Ghost implements IMazeElement {
     public static final char symbol = 'K';
+    private IMazeElement symbolRemove =null;
     private int nextCornerX ;
     private int nextCornerY ;
     private int cornerIndex;
@@ -53,7 +54,7 @@ public class Pinky extends Ghost implements IMazeElement {
         int nextX = x + dx[direction];
         int nextY = y + dy[direction];
 
-        if (!maze.checkIfWall(nextX, nextY) && maze.getXY(x, y).getSymbol() == 'Y') {
+        if (!maze.checkIfWallGhost(nextX, nextY) && maze.getXY(x, y).getSymbol() == 'Y') {
             x = nextX;
             y = nextY;
         } else {
@@ -63,7 +64,7 @@ public class Pinky extends Ghost implements IMazeElement {
                 int newX = x + dx[d];
                 int newY = y + dy[d];
 
-                if (!maze.checkIfWall(newX, newY)) {
+                if (!maze.checkIfWallGhost(newX, newY)) {
                     int distToCorner = (int) distanceToTarget(newX, newY, nextCornerX, nextCornerY);
                     if (distToCorner < minDist && d != getOpositeDirection(direction)) {
                         minDist = distToCorner;
@@ -79,7 +80,11 @@ public class Pinky extends Ghost implements IMazeElement {
             }
         }
 
-        this.maze.removeGhostRoad(lastX, lastY);
+        maze.remove(lastX, lastY);
+        if(symbolRemove != null && lastX != 0 && symbolRemove.getSymbol() != 'I' && symbolRemove.getSymbol() != 'B' && symbolRemove.getSymbol() != 'K') {
+            maze.setXY(lastX, lastY, symbolRemove);
+        }
+        symbolRemove = maze.getXY(x, y);
         this.maze.setXY(x,y,new Pinky());
     }
 

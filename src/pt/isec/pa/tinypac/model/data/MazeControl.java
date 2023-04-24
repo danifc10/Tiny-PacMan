@@ -150,17 +150,13 @@ public class MazeControl {
     public void removeGhostRoad(int x, int y) {
         for(int i = 0 ; i < height ; i++){
             for(int j = 0 ; j < width ; j++){
-                if((i == x &&  j == y ) && (maze.get(i, j).getSymbol() == 'W')){
+                if((maze.get(i, j).getSymbol() == 'W')){
                     maze.set(i, j, new WrapZone());
-                }else if((i == x &&  j == y ) && (maze.get(i, j).getSymbol() == 'Y')){
+                }else if(maze.get(i, j).getSymbol() == 'Y'){
                     maze.set(i, j, new GhostGate());
-                }else if((i == x &&  j == y ) && maze.get(i, j).getSymbol()== 'o') {
+                }else if(maze.get(i, j).getSymbol() == 'o'){
                     maze.set(i, j, new Point());
-                }else if((i == x &&  j == y ) && maze.get(i, j).getSymbol()== 'O') {
-                    maze.set(i, j, new PowerPoint());
-                }else if((i == x &&  j == y ) && maze.get(i, j).getSymbol()== 'F') {
-                    maze.set(i, j, new Fruit());
-                }else if((i == x &&  j == y ) ){
+                }else if ((i == x && j == y) && (maze.get(i, j).getSymbol() != 'W') && (maze.get(i, j).getSymbol() != 'Y')) {
                     maze.set(i, j, new EmptyZone());
                 }
             }
@@ -183,7 +179,7 @@ public class MazeControl {
     }
 
     public boolean checkIfWall(int x, int y) {
-        return maze.get(x,y).getSymbol() == 'x';
+        return ((maze.get(x,y).getSymbol()) == 'x');
     }
 
     public boolean checkIfPoint(int x, int y){
@@ -230,4 +226,10 @@ public class MazeControl {
         return ghostStartPositions;
     }
 
+    public boolean checkIfWallGhost(int x, int y) {
+        if(maze.get(x, y).getSymbol() == 'W' || maze.get(x, y).getSymbol() == 'x')
+            return true;
+        else
+            return false;
+    }
 }

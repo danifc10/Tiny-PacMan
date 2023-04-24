@@ -36,7 +36,7 @@ public class GameContext {
         this.ghosts = new Ghost[]{
                 new Blinky( positions.get(1).getX(), positions.get(1).getY(), 2, 1, maze),
                 new Pinky(positions.get(0).getX(), positions.get(0).getY(), 2, 1, maze),
-                new Inky(positions.get(2).getX(), positions.get(2).getY(), 2, 1, maze)
+                new Inky(positions.get(2).getX(), positions.get(2).getY(), 1, 1, maze)
         };
     }
 

@@ -171,7 +171,7 @@ public class GameUI implements IGameEngineEvolve {
                         tg.putString(x + 20, y + 10, "o");
                     }
                     case 'Y' -> {
-                        tg.setBackgroundColor(TextColor.ANSI.RED);
+                        tg.setBackgroundColor(TextColor.ANSI.BLACK);
                         tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1, 1), ' ');
                     }
                     case 'y' -> {
@@ -189,7 +189,6 @@ public class GameUI implements IGameEngineEvolve {
                     case 'P' -> {
                         tg.setBackgroundColor(TextColor.ANSI.YELLOW_BRIGHT);
                         tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1, 1), ' ');
-                        // tg.putString(x +20,y + 10,"P");
                     }
                     case ' ' -> {
                         tg.setBackgroundColor(TextColor.ANSI.BLACK);
@@ -200,7 +199,7 @@ public class GameUI implements IGameEngineEvolve {
                         tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1, 1), ' ');
                     }
                     case 'K' -> {
-                        tg.setBackgroundColor(TextColor.ANSI.MAGENTA_BRIGHT);
+                        tg.setBackgroundColor(TextColor.ANSI.GREEN_BRIGHT);
                         tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1, 1), ' ');
                     }
                     case 'I' -> {
@@ -211,7 +210,6 @@ public class GameUI implements IGameEngineEvolve {
             }
         }
         terminal.flush();
-        //screen.refresh();
     }
 
 
