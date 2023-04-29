@@ -23,9 +23,6 @@ public class PlayingState extends GameAdapter {
 
     @Override
     public boolean pauseGame() {
-        for (Ghost ghost : ghosts) {
-            gameEngine.unregisterClient(ghost);
-        }
         changeState(new PauseState(context,pacMan, maze, ghosts, gameEngine));
         return true;
     }

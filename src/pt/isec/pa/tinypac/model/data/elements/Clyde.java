@@ -12,7 +12,8 @@ public class Clyde extends Ghost implements IMazeElement{
     private boolean isOut = false;
     Random random = new Random();
     private IMazeElement symbolRemove =null;
-    public static final char symbol = 'C';
+    private static final char symbol = 'C';
+
     public Clyde(int x, int y, int direction, int speed, MazeControl maze) {
         super(x, y, direction, speed, maze);
         this.roadMade = new ArrayList<>();
@@ -35,6 +36,12 @@ public class Clyde extends Ghost implements IMazeElement{
         int nextX = x;
         int nextY = y;
 
+        // verifica se o pacman esta no seu campo de visao
+        if(checkIfPacman(x, y)){
+            followPacMan();
+            return;
+        }
+
         if (direction == 0) {
             nextX--;
         } else if (direction == 1) {
@@ -45,8 +52,7 @@ public class Clyde extends Ghost implements IMazeElement{
             nextY--;
         }
 
-        // verifica se a próxima célula é uma parede ou cruzamento
-        if ( maze.checkIfWallGhost(nextX, nextY) || maze.getXY(nextX, nextY).getSymbol() == 'Y'){
+        if( maze.checkIfWallGhost(nextX, nextY) || maze.getXY(nextX, nextY).getSymbol() == 'Y'){ // verifica se a próxima célula é uma parede ou cruzamento
             // escolhe uma nova direção válida
             List<Integer> possibleDirections = new ArrayList<>();
             int i = 0;
@@ -76,22 +82,20 @@ public class Clyde extends Ghost implements IMazeElement{
         lastX = x;
         lastY = y;
 
+        if (direction == 0) {
+            x--;
+        } else if (direction == 1) {
+            x++;
+        } else if (direction == 2) {
+            y++;
+        } else if (direction == 3) {
+            y--;
+        }
 
-      //  if(!checkIfPacman(nextX, nextY)){
-            // move o fantasma na direção atual
-            if (direction == 0) {
-                x--;
-            } else if (direction == 1) {
-                x++;
-            } else if (direction == 2) {
-                y++;
-            } else if (direction == 3) {
-                y--;
-            }
-     //   }
         if(road_index == -1) {
             road_index = 0;
         }
+
         roadMade.add(road_index, new Position(x, y));
         maze.remove(lastX, lastY);
         if(symbolRemove != null && lastX != 0 && symbolRemove.getSymbol() != 'I' && symbolRemove.getSymbol() != 'B' && symbolRemove.getSymbol() != 'K') {
@@ -117,40 +121,45 @@ public class Clyde extends Ghost implements IMazeElement{
     }
 
     private boolean checkIfPacman(int x, int y) {
-        int px = -1, py = -1;
-        for (int i = 0; i < maze.getWidth(); i++) {
-            for (int j = 0; j < maze.getHeight(); j++) {
-                if ((i == x || j == y)) {
-                    px = i;
-                    py = j;
-                }
-            }
-        }
-
-        if (px != -1) {
-            if (px > x) {
-                this.x++;
-                this.direction = 1;
-            }
-            else if (px < x) {
-                this.x--;
-                this.direction = 0;
-            }
-            else if (py > y){
-                this.y++;
-                this.direction = 2;
-            }
-            else if (py < y) {
-                this.y--;
-                this.direction = 3;
-            }
-
+        Position pacManPosition = maze.getPacManPosition();
+        if((pacManPosition.getX() == x || pacManPosition.getY() == y))
             return true;
-        }
+
         return false;
     }
 
+    public void followPacMan(){
+        lastX = x;
+        lastY = y;
+        int pacManX = maze.getPacManPosition().getX(), pacManY = maze.getPacManPosition().getY();
+        if( pacManX == x){
+            if( this.y <pacManY){
+                if(isDirectionValid(x, y, 2))
+                    this.y++;
+            }else {
+                if (isDirectionValid(x, y, 3))
+                    this.y--;
+            }
+        }else if(pacManY == y){
+            if( this.x < pacManX){
+                if(isDirectionValid(x, y, 1))
+                    this.x++;
+            }else {
+                if (isDirectionValid(x, y, 0))
+                    this.x--;
+            }
+        }
 
+        roadMade.add(road_index, new Position(x, y));
+        maze.remove(lastX, lastY);
+        if(symbolRemove != null && lastX != 0 && symbolRemove.getSymbol() != 'I' && symbolRemove.getSymbol() != 'B' && symbolRemove.getSymbol() != 'K') {
+            maze.setXY(lastX, lastY, symbolRemove);
+        }
+
+        symbolRemove = maze.getXY(x, y);
+        this.maze.setXY(x,y,new Clyde());
+        road_index++;
+    }
     public boolean getOut() {
         while(!isOut){
             int nextX = x;

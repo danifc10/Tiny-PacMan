@@ -113,6 +113,7 @@ public class GameController implements IGameEngineEvolve {
 
     @Override
     public void evolve(IGameEngine gameEngine, long currentTime) {
+
         if(fsm.getState() == GameStates.VULNERABLE) {
             vulnerableTime++;
             if(vulnerableTime == 30){// aproximadamente 5 segundos

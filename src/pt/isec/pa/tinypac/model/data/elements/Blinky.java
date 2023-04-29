@@ -9,16 +9,17 @@ import java.util.List;
 import java.util.Random;
 
 public class Blinky extends Ghost implements IMazeElement {
+    private static final char symbol = 'B';
     private boolean isOut = false;
     Random random = new Random();
     private IMazeElement symbolRemove =null;
+
     public Blinky(int x, int y, int direction, int speed, MazeControl maze) {
         super(x, y, direction, speed, maze);
         this.roadMade = new ArrayList<>();
     }
 
     public Blinky(){};
-    public static final char symbol = 'B';
 
     @Override
     public char getSymbol() {
@@ -99,11 +100,6 @@ public class Blinky extends Ghost implements IMazeElement {
         this.maze.setXY(x,y,new Blinky());
         road_index++;
     }
-
-    private boolean checkIfGate(int nextX, int nextY) {
-        return maze.getXY(nextX, nextY).getSymbol() == 'Y';
-    }
-
 
     public boolean getOut() {
         while(!isOut){

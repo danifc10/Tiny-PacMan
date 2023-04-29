@@ -7,7 +7,7 @@ import pt.isec.pa.tinypac.utils.Position;
 import java.util.ArrayList;
 
 public class Inky extends Ghost  implements IMazeElement {
-    public static final char symbol = 'I';
+    private static final char symbol = 'I';
     IMazeElement symbolRemove = null;
     private int nextCornerX ;
     private int nextCornerY ;
@@ -145,4 +145,5 @@ public class Inky extends Ghost  implements IMazeElement {
             this.maze.setXY(x, y, new Inky());
         }
     }
+
 }

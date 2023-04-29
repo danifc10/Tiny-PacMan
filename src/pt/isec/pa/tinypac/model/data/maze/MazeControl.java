@@ -230,4 +230,15 @@ public class MazeControl {
     public void setNewFruit() {
         maze.set(fruitPosition.getX(), fruitPosition.getY(), new Fruit());
     }
+
+    public Position getPacManPosition() {
+        Position p = null;
+        for(int i = 0 ; i < height ; i++){
+            for(int j = 0 ;  j < width ; j++){
+                if(maze.get(i, j).getSymbol() == 'P')
+                    p = new Position(i, j);
+            }
+        }
+        return p;
+    }
 }
