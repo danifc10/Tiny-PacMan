@@ -1,7 +1,7 @@
 package pt.isec.pa.tinypac.model.fsm.states;
 
 import pt.isec.pa.tinypac.gameengine.IGameEngine;
-import pt.isec.pa.tinypac.model.data.MazeControl;
+import pt.isec.pa.tinypac.model.data.maze.MazeControl;
 import pt.isec.pa.tinypac.model.data.elements.Ghost;
 import pt.isec.pa.tinypac.model.data.elements.PacMan;
 import pt.isec.pa.tinypac.model.fsm.GameAdapter;
@@ -16,14 +16,13 @@ public class InitialState extends GameAdapter {
     @Override
     public boolean startGame(int direction){
         pacMan.setDirection(direction);
-        gameEngine.registerClient(pacMan);
         gameEngine.start(180);
-        changeState(new MovementState(context, pacMan, context.getMaze(),ghosts, gameEngine));
+        changeState(new MovementState(context, pacMan, maze,ghosts, gameEngine));
         return true;
     }
+
     @Override
     public boolean eatPoint() {
-        System.out.println("entrei pontos");
         // add points
         context.setPoints(10);
         changeState(new InitialState(context, pacMan,maze,ghosts, gameEngine));

@@ -1,6 +1,8 @@
 package pt.isec.pa.tinypac.model.data;
 
-public class Fruit implements IMazeElement{
+import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
+
+public class Fruit implements IMazeElement {
     public static final char symbol= 'F';
 
     @Override

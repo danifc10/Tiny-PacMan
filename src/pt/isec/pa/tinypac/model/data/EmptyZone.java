@@ -1,6 +1,8 @@
 package pt.isec.pa.tinypac.model.data;
 
-public class EmptyZone implements IMazeElement{
+import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
+
+public class EmptyZone implements IMazeElement {
     public static final char symbol = ' ';
 
     @Override

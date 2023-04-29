@@ -1,6 +1,8 @@
 package pt.isec.pa.tinypac.model.data;
 
-public class PowerPoint implements IMazeElement{
+import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
+
+public class PowerPoint implements IMazeElement {
     public static final char symbol = 'O';
 
     @Override

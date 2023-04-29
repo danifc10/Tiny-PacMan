@@ -1,4 +1,4 @@
-package pt.isec.pa.tinypac.model.data;
+package pt.isec.pa.tinypac.model.data.maze;
 
 public final class Maze{
 

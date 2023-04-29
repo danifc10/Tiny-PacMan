@@ -1,13 +1,12 @@
 package pt.isec.pa.tinypac.model.fsm;
 
 import pt.isec.pa.tinypac.gameengine.IGameEngine;
-import pt.isec.pa.tinypac.model.data.MazeControl;
-import pt.isec.pa.tinypac.model.data.elements.*;
+import pt.isec.pa.tinypac.model.data.elements.Ghost;
+import pt.isec.pa.tinypac.model.data.elements.PacMan;
+import pt.isec.pa.tinypac.model.data.maze.MazeControl;
 import pt.isec.pa.tinypac.model.fsm.states.InitialState;
-import pt.isec.pa.tinypac.utils.Position;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class GameContext {
@@ -21,24 +20,27 @@ public class GameContext {
     private int level = 0;
     private IGameEngine gameEngine;
 
-    public GameContext(MazeControl maze, IGameEngine gameEngine){
+    public GameContext(MazeControl maze, IGameEngine gameEngine, PacMan pacMan, Ghost [] ghosts){
         putLevelsFile();
         this.gameEngine = gameEngine;
         this.maze = maze;
         this.level = 1;
-        initElements();
+        this.pacMan = pacMan;
+        this.ghosts = ghosts;
         this.currentState = new InitialState(this, pacMan,maze,ghosts, gameEngine);
     }
-
+/*
     public void initElements(){
         List<Position> positions = maze.getGhostStartPositions();
         this.pacMan = new PacMan(maze.getXstart(), maze.getYstart(), 1,1, maze);
+
         this.ghosts = new Ghost[]{
-                new Blinky( positions.get(1).getX(), positions.get(1).getY(), 2, 1, maze),
-                new Pinky(positions.get(0).getX(), positions.get(0).getY(), 2, 1, maze),
-                new Inky(positions.get(2).getX(), positions.get(2).getY(), 1, 1, maze)
+                new Blinky( positions.get(0).getX(), positions.get(0).getY(), 2, 1, maze),
+                new Pinky(positions.get(1).getX(), positions.get(1).getY(), 2, 1, maze),
+                new Inky(positions.get(2).getX(), positions.get(2).getY(), 1, 1, maze),
+                new Clyde(positions.get(3).getX(), positions.get(3).getY(), 2, 1, maze)
         };
-    }
+    }*/
 
     public void putLevelsFile() {
         for(int i = 1 ; i <= 20 ; i++){

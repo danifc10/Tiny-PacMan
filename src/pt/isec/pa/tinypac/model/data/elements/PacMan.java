@@ -2,8 +2,8 @@ package pt.isec.pa.tinypac.model.data.elements;
 
 import pt.isec.pa.tinypac.gameengine.IGameEngine;
 import pt.isec.pa.tinypac.gameengine.IGameEngineEvolve;
-import pt.isec.pa.tinypac.model.data.IMazeElement;
-import pt.isec.pa.tinypac.model.data.MazeControl;
+import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
+import pt.isec.pa.tinypac.model.data.maze.MazeControl;
 
 public class PacMan implements IGameEngineEvolve , IMazeElement {
     public static final char symbol= 'P';
@@ -97,14 +97,12 @@ public class PacMan implements IGameEngineEvolve , IMazeElement {
     }
 
     public void checkIfWrap(int x, int y){
-        if(maze.checkIfWrap(x, y)){
-            maze.remove(this.x, this.y);
-            for(int i = 0; i < maze.getHeight() ; i++){
-                for(int j = 0; j < maze.getWidth() ; j++){
-                    if((j != y && i == x ) && (maze.getXY(i,j).getSymbol() == 'W')){
-                        setY(j);
-                        setX(i);
-                    }
+        maze.remove(this.x, this.y);
+        for(int i = 0; i < maze.getHeight() ; i++){
+            for(int j = 0; j < maze.getWidth() ; j++){
+                if((j != y && i == x ) && (maze.getXY(i,j).getSymbol() == 'W')){
+                    setY(j);
+                    setX(i);
                 }
             }
         }
@@ -148,7 +146,6 @@ public class PacMan implements IGameEngineEvolve , IMazeElement {
     public int getLastY() {
         return lastY;
     }
-
 
     @Override
     public void evolve(IGameEngine gameEngine, long currentTime) {

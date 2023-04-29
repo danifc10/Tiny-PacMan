@@ -2,7 +2,10 @@ package pt.isec.pa.tinypac.model.data.elements;
 
 import pt.isec.pa.tinypac.gameengine.IGameEngine;
 import pt.isec.pa.tinypac.gameengine.IGameEngineEvolve;
-import pt.isec.pa.tinypac.model.data.MazeControl;
+import pt.isec.pa.tinypac.model.data.maze.MazeControl;
+import pt.isec.pa.tinypac.utils.Position;
+
+import java.util.List;
 
 public abstract class Ghost implements IGameEngineEvolve {
     protected int x, y; // posição do fantasma no labirinto
@@ -14,6 +17,10 @@ public abstract class Ghost implements IGameEngineEvolve {
     protected boolean isDead; // se o fantasma está morto ou não
     protected int speed;
     protected MazeControl maze;
+    private int time = 0;
+    public List<Position> roadMade;
+    public int road_index = 0;
+
 
 
     public Ghost(){};
@@ -51,7 +58,9 @@ public abstract class Ghost implements IGameEngineEvolve {
 
     @Override
     public void evolve(IGameEngine gameEngine, long currentTime) {
-        move();
+        time++;
+        if (time >= 30) // aproximadamente 5 segundos
+            move();
     }
 
     public void setMaze(MazeControl maze){
@@ -74,9 +83,10 @@ public abstract class Ghost implements IGameEngineEvolve {
         this.lastY = lastY;
     }
 
+
     public abstract void move();
 
-    public abstract boolean getOut();
+    public abstract void vulnerableMove();
 
     public int getX() {
         return x;
@@ -136,6 +146,7 @@ public abstract class Ghost implements IGameEngineEvolve {
 
     public void setDead(boolean dead) {
         isDead = dead;
+        maze.removeGhost(this.x, this.y);
     }
 
     public int getSpeed() {

@@ -1,7 +1,7 @@
 package pt.isec.pa.tinypac.model.fsm.states;
 
 import pt.isec.pa.tinypac.gameengine.IGameEngine;
-import pt.isec.pa.tinypac.model.data.MazeControl;
+import pt.isec.pa.tinypac.model.data.maze.MazeControl;
 import pt.isec.pa.tinypac.model.data.elements.Ghost;
 import pt.isec.pa.tinypac.model.data.elements.PacMan;
 import pt.isec.pa.tinypac.model.fsm.GameAdapter;
@@ -20,7 +20,9 @@ public class PauseState extends GameAdapter {
 
     @Override
     public boolean resumeGame(){
-        gameEngine.resume();
+        for(Ghost ghost : ghosts)
+            gameEngine.registerClient(ghost);
+
         changeState(new PlayingState(context, pacMan, maze, ghosts, gameEngine));
         return true;
     }

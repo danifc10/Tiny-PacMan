@@ -1,6 +1,8 @@
 package pt.isec.pa.tinypac.model.data;
 
-public class PacManStart implements IMazeElement{
+import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
+
+public class PacManStart implements IMazeElement {
     public static final char symbol = 'M';
     @Override
     public char getSymbol() {

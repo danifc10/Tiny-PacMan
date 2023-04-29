@@ -1,7 +1,7 @@
 package pt.isec.pa.tinypac.model.fsm.states;
 
 import pt.isec.pa.tinypac.gameengine.IGameEngine;
-import pt.isec.pa.tinypac.model.data.MazeControl;
+import pt.isec.pa.tinypac.model.data.maze.MazeControl;
 import pt.isec.pa.tinypac.model.data.elements.Ghost;
 import pt.isec.pa.tinypac.model.data.elements.PacMan;
 import pt.isec.pa.tinypac.model.fsm.GameAdapter;
@@ -15,12 +15,7 @@ public class MovementState extends GameAdapter {
 
     @Override
     public boolean setGhostsFree() { // liberta os fantasmas e passado 5 segundos muda de estado
-        //LIBERTA FANTASMAS apos 3 segundos
-
-        for(Ghost ghost : ghosts){
-            gameEngine.registerClient(ghost);
-        }
-
+        //LIBERTA FANTASMAS apos 5 segundos
         changeState(new PlayingState(context, pacMan,maze,ghosts, gameEngine));
         return true;
     }

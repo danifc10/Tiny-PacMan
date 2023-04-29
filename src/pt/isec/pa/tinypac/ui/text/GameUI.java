@@ -6,31 +6,30 @@ import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
-import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.terminal.TerminalFactory;
 import pt.isec.pa.tinypac.GameController;
 import pt.isec.pa.tinypac.gameengine.IGameEngine;
 import pt.isec.pa.tinypac.gameengine.IGameEngineEvolve;
-import pt.isec.pa.tinypac.model.data.MazeControl;
+import pt.isec.pa.tinypac.model.data.maze.MazeControl;
 import pt.isec.pa.tinypac.model.fsm.GameContext;
-
+import pt.isec.pa.tinypac.model.fsm.GameStates;
 
 import java.io.IOException;
 
 public class GameUI implements IGameEngineEvolve {
-    Screen screen;
-    IGameEngine gameEngine;
     GameController game;
+    IGameEngine gameEngine;
     Terminal terminal;
     GameContext fsm;
     MazeControl mazeControl;
 
-    public GameUI(MazeControl mazeControl, GameContext context) throws IOException {
+    public GameUI(MazeControl mazeControl, GameContext context, GameController game, IGameEngine gameEngine) throws IOException {
         this.mazeControl = mazeControl;
         this.fsm = context;
-
+        this.game = game;
+        this.gameEngine = gameEngine;
         TerminalSize size = new TerminalSize(80, 60);
         TerminalFactory terminalFactory = new DefaultTerminalFactory().setTerminalEmulatorTitle("TinyPAcMan").setInitialTerminalSize(size);
         terminal = terminalFactory.createTerminal();
@@ -55,6 +54,7 @@ public class GameUI implements IGameEngineEvolve {
     }
 
     boolean finish = false;
+
     public void start() throws IOException {
         while(!finish){
             switch (fsm.getState()){
@@ -71,6 +71,7 @@ public class GameUI implements IGameEngineEvolve {
     }
 
     void initialUI() throws IOException {
+        game.setMaze(fsm.getMaze());
         // inicia o terminal
         terminal.clearScreen();
         System.out.println("enter initial state");
@@ -102,18 +103,26 @@ public class GameUI implements IGameEngineEvolve {
 
     void playingUI() throws IOException {
         // atualiza o loop de jogo verifica se comeu bola com poderes ou se foi comido
-        //game.update(terminal);
         KeyStroke key = terminal.readInput();
+        // se space pausa
+        if(key.getKeyType() == KeyType.Character) {
+            gameEngine.unregisterClient(game);
+            fsm.pauseGame();
+        }
         // verificar direção
         fsm.setPacManNewDirection(readDirection(key));
-        //fsm.checks();
     }
 
     private void vulnerableUI() throws IOException {
-        System.out.println("enter vulnerable state");
-        // faz o loop do jogo em modo vulnerable durante x segundos
-        System.out.println("leaving vulnerable state");
-        fsm.endVulnerableTime();
+        KeyStroke key = terminal.readInput();
+        // se space pausa
+        if(key.getKeyType() == KeyType.Character) {
+            gameEngine.unregisterClient(game);
+            fsm.pauseGame();
+        }
+        // verificar direção
+        fsm.setPacManNewDirection(readDirection(key));
+
     }
 
     void finalUI() throws IOException {
@@ -124,7 +133,11 @@ public class GameUI implements IGameEngineEvolve {
     }
 
     void gameOverUI()  {
-        fsm.restart();
+
+        if(game.getPacManLife() > 0)
+            fsm.restart();
+        else
+            fsm.endGame();
     }
 
     void winUI(){
@@ -136,17 +149,20 @@ public class GameUI implements IGameEngineEvolve {
 
     void pauseUI() throws IOException {
         KeyStroke key = terminal.readInput();
-        if(key.getKeyType() == KeyType.Character)
+        if(key.getKeyType() == KeyType.Character) {
+            gameEngine.registerClient(game);
             fsm.resumeGame();
+        }
     }
 
     private void show() throws IOException {
         TextGraphics tg = terminal.newTextGraphics();
-        char[][] env = mazeControl.getMazeControl();
+        char[][] env = fsm.getMaze().getMazeControl();
         // mostra pontos e outro info
         terminal.setCursorPosition(20, 45);
         terminal.setForegroundColor(TextColor.ANSI.GREEN_BRIGHT);
         terminal.putString("POINTS:" + fsm.getPoint());
+        terminal.setCursorPosition(20, 46);
         for (int y = 0; y < env.length; y++) {
             for (int x = 0; x < env[0].length; x++) {
                 char c = env[y][x];
@@ -195,16 +211,37 @@ public class GameUI implements IGameEngineEvolve {
                         tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1, 1), ' ');
                     }
                     case 'B' -> {
-                        tg.setBackgroundColor(TextColor.ANSI.MAGENTA);
-                        tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1, 1), ' ');
+                        if (fsm.getState() == GameStates.VULNERABLE) {
+                            tg.setBackgroundColor(TextColor.ANSI.RED_BRIGHT);
+                            tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1, 1), ' ');
+                        }
+                        else {
+                            tg.setBackgroundColor(TextColor.ANSI.MAGENTA);
+                            tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1, 1), ' ');
+                        }
                     }
                     case 'K' -> {
-                        tg.setBackgroundColor(TextColor.ANSI.GREEN_BRIGHT);
-                        tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1, 1), ' ');
+                        if (fsm.getState() == GameStates.VULNERABLE){
+                            tg.setBackgroundColor(TextColor.ANSI.RED_BRIGHT);
+                            tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1, 1), ' ');
+                        }
+                        else {
+                            tg.setBackgroundColor(TextColor.ANSI.GREEN_BRIGHT);
+                            tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1, 1), ' ');
+                        }
                     }
                     case 'I' -> {
                         tg.setBackgroundColor(TextColor.ANSI.RED_BRIGHT);
                         tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1, 1), ' ');
+                    }
+                    case 'C' -> {
+                        if(fsm.getState() == GameStates.VULNERABLE){
+                            tg.setBackgroundColor(TextColor.ANSI.RED_BRIGHT);
+                            tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1, 1), ' ');
+                        }else{
+                            tg.setBackgroundColor(TextColor.ANSI.BLUE_BRIGHT);
+                            tg.fillRectangle(new TerminalPosition(20 + x, 10 + y), new TerminalSize(1, 1), ' ');
+                        }
                     }
                 }
             }
@@ -212,9 +249,9 @@ public class GameUI implements IGameEngineEvolve {
         terminal.flush();
     }
 
-
     @Override
     public void evolve(IGameEngine gameEngine, long currentTime) {
+
         try {
             show();
         } catch (IOException e) {

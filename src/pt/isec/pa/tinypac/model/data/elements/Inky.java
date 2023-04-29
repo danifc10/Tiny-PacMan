@@ -1,6 +1,10 @@
 package pt.isec.pa.tinypac.model.data.elements;
 
-import pt.isec.pa.tinypac.model.data.*;
+import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
+import pt.isec.pa.tinypac.model.data.maze.MazeControl;
+import pt.isec.pa.tinypac.utils.Position;
+
+import java.util.ArrayList;
 
 public class Inky extends Ghost  implements IMazeElement {
     public static final char symbol = 'I';
@@ -24,6 +28,7 @@ public class Inky extends Ghost  implements IMazeElement {
         this.distanceThreshold = maze.getHeight() * 0.15;
         this.nextCornerX = maze.getXghostStart();
         this.nextCornerY = maze.getYghostStart(); // Coordenada Y do próximo canto de destino
+        this.roadMade = new ArrayList<>();
     }
 
     private double distanceToTarget(int x1, int y1, int x2, int y2) {
@@ -96,13 +101,16 @@ public class Inky extends Ghost  implements IMazeElement {
                 y += dy[direction];
             }
         }
-
+        if(road_index == -1)
+            road_index = 0;
+        roadMade.add(road_index, new Position(x, y));
         maze.remove(lastX, lastY);
-        if(symbolRemove != null && lastX != 0 && symbolRemove.getSymbol() != 'I' && symbolRemove.getSymbol() != 'B' && symbolRemove.getSymbol() != 'K') {
+        if(symbolRemove != null && lastX != 0 && symbolRemove.getSymbol() != 'I' && symbolRemove.getSymbol() != 'B' && symbolRemove.getSymbol() != 'K' && symbolRemove.getSymbol() != 'C') {
             maze.setXY(lastX, lastY, symbolRemove);
         }
         symbolRemove = maze.getXY(x, y);
         this.maze.setXY(x,y,new Inky());
+        road_index++;
     }
 
     private int getOpositeDirection(int direction) {
@@ -119,13 +127,22 @@ public class Inky extends Ghost  implements IMazeElement {
         return 0;
     }
 
-    @Override
-    public boolean getOut() {
-        return false;
-    }
 
     @Override
     public char getSymbol() {
         return symbol;
+    }
+
+    @Override
+    public void vulnerableMove() {
+        --road_index;
+        if(road_index >= 0) {
+            this.lastX = x;
+            this.lastY = y;
+            this.x = roadMade.get(road_index).getX();
+            this.y = roadMade.get(road_index).getY();
+            maze.remove(lastX, lastY);
+            this.maze.setXY(x, y, new Inky());
+        }
     }
 }

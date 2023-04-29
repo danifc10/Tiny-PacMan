@@ -1,5 +1,6 @@
-package pt.isec.pa.tinypac.model.data;
+package pt.isec.pa.tinypac.model.data.maze;
 
+import pt.isec.pa.tinypac.model.data.*;
 import pt.isec.pa.tinypac.utils.Position;
 
 import java.io.File;
@@ -12,6 +13,7 @@ public class MazeControl {
     private int width;
     private int height;
     private List<Position>ghostStartPositions = new ArrayList<>();
+    private Position fruitPosition;
     private Map<Integer, String> levels = new HashMap<>();
 
     public MazeControl(String File) throws FileNotFoundException {
@@ -50,6 +52,7 @@ public class MazeControl {
                         }
                         case 'F' -> {
                             maze.set(row, col, new Fruit());
+                            fruitPosition = new Position(row, col);
                             //this.board[row][col] = new Fruit();
                         }
                         case 'O' -> {
@@ -147,22 +150,6 @@ public class MazeControl {
         }
     }
 
-    public void removeGhostRoad(int x, int y) {
-        for(int i = 0 ; i < height ; i++){
-            for(int j = 0 ; j < width ; j++){
-                if((maze.get(i, j).getSymbol() == 'W')){
-                    maze.set(i, j, new WrapZone());
-                }else if(maze.get(i, j).getSymbol() == 'Y'){
-                    maze.set(i, j, new GhostGate());
-                }else if(maze.get(i, j).getSymbol() == 'o'){
-                    maze.set(i, j, new Point());
-                }else if ((i == x && j == y) && (maze.get(i, j).getSymbol() != 'W') && (maze.get(i, j).getSymbol() != 'Y')) {
-                    maze.set(i, j, new EmptyZone());
-                }
-            }
-        }
-    }
-
     public boolean checkWin() {
         int count = 0;
         for(int i = 0 ; i < height ; i++){
@@ -199,7 +186,10 @@ public class MazeControl {
     }
 
     public boolean chekIfGhost(int x, int y){
-        return maze.get(x,y).getSymbol() == 'G';
+        return ((maze.get(x, y).getSymbol() == 'B')
+                || (maze.get(x, y).getSymbol() == 'I')
+                || (maze.get(x, y).getSymbol() == 'K')
+                || (maze.get(x, y).getSymbol() == 'C'));
     }
 
     public char [][] getMazeControl(){
@@ -231,5 +221,13 @@ public class MazeControl {
             return true;
         else
             return false;
+    }
+
+    public void removeGhost(int x, int y) {
+        maze.set(x, y, new EmptyZone());
+    }
+
+    public void setNewFruit() {
+        maze.set(fruitPosition.getX(), fruitPosition.getY(), new Fruit());
     }
 }

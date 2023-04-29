@@ -1,7 +1,7 @@
 package pt.isec.pa.tinypac.model.fsm;
 
 import pt.isec.pa.tinypac.gameengine.IGameEngine;
-import pt.isec.pa.tinypac.model.data.MazeControl;
+import pt.isec.pa.tinypac.model.data.maze.MazeControl;
 import pt.isec.pa.tinypac.model.data.elements.Ghost;
 import pt.isec.pa.tinypac.model.data.elements.PacMan;
 
@@ -25,6 +25,8 @@ public class GameAdapter implements IGameStates{
     }
 
     public void checks(){};
+
+    public void setMaze(MazeControl maze){this.maze = maze;}
 
     @Override
     public boolean setPacManNewDirection(int direction){

@@ -1,7 +1,10 @@
 package pt.isec.pa.tinypac.model.data.elements;
 
-import pt.isec.pa.tinypac.model.data.IMazeElement;
-import pt.isec.pa.tinypac.model.data.MazeControl;
+import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
+import pt.isec.pa.tinypac.model.data.maze.MazeControl;
+import pt.isec.pa.tinypac.utils.Position;
+
+import java.util.ArrayList;
 
 public class Pinky extends Ghost implements IMazeElement {
     public static final char symbol = 'K';
@@ -22,6 +25,7 @@ public class Pinky extends Ghost implements IMazeElement {
         this.distanceThreshold = maze.getHeight() * 0.15;
         this.nextCornerX = corners[cornerIndex][0]; // Coordenada X do próximo canto de destino
         this.nextCornerY = corners[cornerIndex][1]; // Coordenada Y do próximo canto de destino
+        this.roadMade = new ArrayList<>();
     }
 
     public Pinky(){};
@@ -79,13 +83,29 @@ public class Pinky extends Ghost implements IMazeElement {
                 y += dy[direction];
             }
         }
-
+        if(road_index == -1)
+            road_index = 0;
+        roadMade.add(road_index, new Position(x, y));
         maze.remove(lastX, lastY);
-        if(symbolRemove != null && lastX != 0 && symbolRemove.getSymbol() != 'I' && symbolRemove.getSymbol() != 'B' && symbolRemove.getSymbol() != 'K') {
+        if(symbolRemove != null && lastX != 0 && symbolRemove.getSymbol() != 'I' && symbolRemove.getSymbol() != 'B' && symbolRemove.getSymbol() != 'K' && symbolRemove.getSymbol() != 'C') {
             maze.setXY(lastX, lastY, symbolRemove);
         }
         symbolRemove = maze.getXY(x, y);
         this.maze.setXY(x,y,new Pinky());
+        road_index++;
+    }
+
+    @Override
+    public void vulnerableMove() {
+        --road_index;
+        if(road_index >= 0) {
+            this.lastX = x;
+            this.lastY = y;
+            this.x = roadMade.get(road_index).getX();
+            this.y = roadMade.get(road_index).getY();
+            maze.remove(lastX, lastY);
+            this.maze.setXY(x, y, new Pinky());
+        }
     }
 
     private int getOpositeDirection(int direction) {
@@ -101,30 +121,6 @@ public class Pinky extends Ghost implements IMazeElement {
         }
         return 0;
     }
-
-    @Override
-    public boolean getOut() {
-        return false;
-    }
-
-    private void moveInDirection(int direction) {
-        // Move o fantasma na direção definida
-        switch (direction) {
-            case 1: // 1 DOWN
-                this.x++;
-                break;
-            case 2: // 2 RIGHT
-                this.y++;
-                break;
-            case 0: // 0 UP
-                this.x--;
-                break;
-            case 3: //3 LEFT
-                this.y--;
-                break;
-        }
-    }
-
 
 
     @Override

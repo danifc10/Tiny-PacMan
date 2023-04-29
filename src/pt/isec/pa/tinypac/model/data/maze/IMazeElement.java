@@ -1,4 +1,4 @@
-package pt.isec.pa.tinypac.model.data;
+package pt.isec.pa.tinypac.model.data.maze;
 
 public interface IMazeElement {
     char getSymbol(); // returns the symbol of this element

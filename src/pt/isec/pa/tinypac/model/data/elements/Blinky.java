@@ -1,7 +1,8 @@
 package pt.isec.pa.tinypac.model.data.elements;
 
-import pt.isec.pa.tinypac.model.data.IMazeElement;
-import pt.isec.pa.tinypac.model.data.MazeControl;
+import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
+import pt.isec.pa.tinypac.model.data.maze.MazeControl;
+import pt.isec.pa.tinypac.utils.Position;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ public class Blinky extends Ghost implements IMazeElement {
     private IMazeElement symbolRemove =null;
     public Blinky(int x, int y, int direction, int speed, MazeControl maze) {
         super(x, y, direction, speed, maze);
+        this.roadMade = new ArrayList<>();
     }
 
     public Blinky(){};
@@ -25,7 +27,6 @@ public class Blinky extends Ghost implements IMazeElement {
 
     @Override
     public void move() {
-
         if(!isOut) {
             getOut();
             return;
@@ -85,7 +86,10 @@ public class Blinky extends Ghost implements IMazeElement {
         } else if (direction == 3) {
             y--;
         }
-
+        if(road_index == -1) {
+            road_index = 0;
+        }
+        roadMade.add(road_index, new Position(x, y));
         maze.remove(lastX, lastY);
         if(symbolRemove != null && lastX != 0 && symbolRemove.getSymbol() != 'I' && symbolRemove.getSymbol() != 'B' && symbolRemove.getSymbol() != 'K') {
             maze.setXY(lastX, lastY, symbolRemove);
@@ -93,14 +97,14 @@ public class Blinky extends Ghost implements IMazeElement {
 
         symbolRemove = maze.getXY(x, y);
         this.maze.setXY(x,y,new Blinky());
-
+        road_index++;
     }
 
     private boolean checkIfGate(int nextX, int nextY) {
         return maze.getXY(nextX, nextY).getSymbol() == 'Y';
     }
 
-    @Override
+
     public boolean getOut() {
         while(!isOut){
             int nextX = x;
@@ -149,11 +153,10 @@ public class Blinky extends Ghost implements IMazeElement {
                 lastY = y;
                 x = nextX;
                 y = nextY;
-
             }
 
             maze.remove(lastX, lastY);
-            if(symbolRemove != null && lastX != 0 && symbolRemove.getSymbol() != 'I' && symbolRemove.getSymbol() != 'B' && symbolRemove.getSymbol() != 'K') {
+            if(symbolRemove != null && lastX != 0 && symbolRemove.getSymbol() != 'I' && symbolRemove.getSymbol() != 'B' && symbolRemove.getSymbol() != 'K' && symbolRemove.getSymbol() != 'C') {
                 maze.setXY(lastX, lastY, symbolRemove);
             }
 
@@ -181,40 +184,6 @@ public class Blinky extends Ghost implements IMazeElement {
         return 0;
     }
 
-/*
-    private void checkNeighbords(int x, int y) {
-        if(this.maze.getXY(x, y + 1).getSymbol() == 'P'){ //
-            setDirection(Direction.RIGHT);
-        }else if(this.maze.getXY(x, y -1 ).getSymbol() == 'P'){
-            setDirection(Direction.LEFT);
-        }else if(this.maze.getXY(x - 1, y).getSymbol() == 'P'){
-            setDirection(Direction.UP);
-        }else if(this.maze.getXY(x + 1, y).getSymbol() == 'P'){
-            setDirection(Direction.DOWN);
-        }
-    }*/
-
-    private boolean isCrossroad(int x, int y) {
-        int numWalls = 0;
-
-        // conta o número de paredes nas células vizinhas
-        if (x > 0 && maze.checkIfWallGhost(x - 1, y)) {
-            numWalls++;
-        }
-        if (x < maze.getHeight() - 1 &&  maze.checkIfWallGhost(x + 1, y)) {
-            numWalls++;
-        }
-        if (y > 0 &&  maze.checkIfWallGhost(x , y - 1)) {
-            numWalls++;
-        }
-        if (y < maze.getWidth() - 1 &&  maze.checkIfWallGhost(x , y + 1)) {
-            numWalls++;
-        }
-
-        // é um cruzamento se tiver mais de 2 paredes nas células vizinhas
-        return numWalls >= 3;
-    }
-
     private boolean isDirectionValid( int x, int y, int direction) {
 
         int nextX = x;
@@ -235,8 +204,19 @@ public class Blinky extends Ghost implements IMazeElement {
             return false;
         else
             return true;
+    }
 
-
+    @Override
+    public void vulnerableMove() {
+        --road_index;
+        if(road_index >= 0) {
+            this.lastX = x;
+            this.lastY = y;
+            this.x = roadMade.get(road_index).getX();
+            this.y = roadMade.get(road_index).getY();
+            maze.remove(lastX, lastY);
+            this.maze.setXY(x, y, new Blinky());
+        }
     }
 
 }

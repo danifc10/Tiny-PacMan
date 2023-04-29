@@ -1,6 +1,8 @@
 package pt.isec.pa.tinypac.model.data;
 
-public class GhostSpot implements IMazeElement{
+import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
+
+public class GhostSpot implements IMazeElement {
     public static final char symbol= 'y';
     @Override
     public char getSymbol() {
