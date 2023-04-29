@@ -13,15 +13,6 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        final int LEFT = 2;
-        final int RIGHT = 1;
-        final int UP = 3;
-        final int DOWN = 4;
-/*
-        Map <Integer, String> levels = new HashMap<>();
-        levels.put(1,"Level101.txt");
-        levels.put(2,"Level102.txt");
-*/
 
         MazeControl mazeControl = new MazeControl("Level101.txt");
         List<Position> positions = mazeControl.getGhostStartPositions();

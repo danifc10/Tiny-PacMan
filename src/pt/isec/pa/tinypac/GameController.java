@@ -116,7 +116,7 @@ public class GameController implements IGameEngineEvolve {
 
         if(fsm.getState() == GameStates.VULNERABLE) {
             vulnerableTime++;
-            if(vulnerableTime == 30){// aproximadamente 5 segundos
+            if(vulnerableTime == 50){// aproximadamente 5 segundos
                 vulnerableTime = 0;
                 fsm.endVulnerableTime();
             }

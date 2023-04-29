@@ -37,7 +37,7 @@ public class Clyde extends Ghost implements IMazeElement{
         int nextY = y;
 
         // verifica se o pacman esta no seu campo de visao
-        if(checkIfPacman(x, y)){
+        if(checkIfPacman(x, y) && !vulnerable){
             followPacMan();
             return;
         }
@@ -121,9 +121,40 @@ public class Clyde extends Ghost implements IMazeElement{
     }
 
     private boolean checkIfPacman(int x, int y) {
+        int count = 0;
         Position pacManPosition = maze.getPacManPosition();
-        if((pacManPosition.getX() == x || pacManPosition.getY() == y))
-            return true;
+        if(pacManPosition.getX() == x){
+            if(this.y < pacManPosition.getY()) {
+                for (int j = this.y; j < pacManPosition.getY(); j++)
+                    if (maze.checkIfWallGhost(x, j))
+                        count++;
+            }else if(this.y > pacManPosition.getY()){
+                for (int j = pacManPosition.getY(); j < this.y; j++)
+                    if (maze.checkIfWallGhost(x, j))
+                        count++;
+            }
+
+            if(count != 0)
+                return false;
+            else
+                return true;
+        }else if(pacManPosition.getY() == y) {
+            if(this.x < pacManPosition.getX()) {
+                for (int j = this.x; j < pacManPosition.getX(); j++)
+                    if (maze.checkIfWallGhost(j, y))
+                        count++;
+            }else if(this.x > pacManPosition.getX()){
+                for (int j = pacManPosition.getX(); j < this.x; j++)
+                    if (maze.checkIfWallGhost(j, y))
+                        count++;
+            }
+
+            if(count != 0)
+                return false;
+            else
+                return true;
+        }
+
 
         return false;
     }
@@ -150,6 +181,10 @@ public class Clyde extends Ghost implements IMazeElement{
             }
         }
 
+        if(road_index == -1) {
+            road_index = 0;
+        }
+
         roadMade.add(road_index, new Position(x, y));
         maze.remove(lastX, lastY);
         if(symbolRemove != null && lastX != 0 && symbolRemove.getSymbol() != 'I' && symbolRemove.getSymbol() != 'B' && symbolRemove.getSymbol() != 'K') {
@@ -160,6 +195,7 @@ public class Clyde extends Ghost implements IMazeElement{
         this.maze.setXY(x,y,new Clyde());
         road_index++;
     }
+
     public boolean getOut() {
         while(!isOut){
             int nextX = x;
