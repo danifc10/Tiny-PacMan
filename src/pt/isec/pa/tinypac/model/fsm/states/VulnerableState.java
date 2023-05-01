@@ -28,24 +28,6 @@ public class VulnerableState extends GameAdapter {
     }
 
     @Override
-    public boolean setPacManNewDirection(int direction){
-        if(direction == 1){
-            if(pacMan.canMove(pacMan.getX(), pacMan.getY() + 1))
-                pacMan.setDirection(1);
-        }else if(direction == 2){
-            if(pacMan.canMove(pacMan.getX(), pacMan.getY() - 1))
-                pacMan.setDirection(2);
-        }else if(direction== 3){
-            if(pacMan.canMove(pacMan.getX() - 1, pacMan.getY()))
-                pacMan.setDirection(3);
-        }else if(direction== 4){
-            if (pacMan.canMove(pacMan.getX() + 1, pacMan.getY()))
-                pacMan.setDirection(4);
-        }
-        return true;
-    }
-
-    @Override
     public boolean endVulnerableTime() {
         for (Ghost g : ghosts) {
             g.setVulnerable(false);

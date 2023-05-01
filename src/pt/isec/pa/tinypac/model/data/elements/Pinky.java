@@ -12,13 +12,13 @@ public class Pinky extends Ghost implements IMazeElement {
     private int nextCornerX ;
     private int nextCornerY ;
     private int cornerIndex;
-    private double distanceThreshold;
+    private double distanceThreshold; // distancia minima definida
     private int[][] corners; // coordenadas dos cantos do labirinto
-    int[] dx = {-1, 1, 0, 0}; // Deslocamento na coordenada X para cada direção
-    int[] dy = {0, 0, 1, -1}; // Deslocamento na coordenada Y para cada direção
+    private final int[] dx = {-1, 1, 0, 0}; // movimento de X para cada direção
+    private final int[] dy = {0, 0, 1, -1}; // movimento de Y para cada direção
 
-    public Pinky(int x, int y, int direction, int speed, MazeControl maze) {
-        super(x, y, direction, speed, maze);
+    public Pinky(int x, int y, int direction, MazeControl maze) {
+        super(x, y, direction, maze);
         this.direction = 2;
         this.corners = new int[][]{{0, maze.getWidth() }, {maze.getWidth(), maze.getHeight()}, {0, 0},{maze.getWidth(), 0} };
         this.cornerIndex = 0;
@@ -39,7 +39,6 @@ public class Pinky extends Ghost implements IMazeElement {
 
     @Override
     public void move() {
-
         int lastX = x;
         int lastY = y;
 
@@ -130,7 +129,6 @@ public class Pinky extends Ghost implements IMazeElement {
         }
         return 0;
     }
-
 
     @Override
     public char getSymbol() {

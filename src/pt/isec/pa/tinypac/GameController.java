@@ -12,7 +12,6 @@ import pt.isec.pa.tinypac.utils.Position;
 import java.util.List;
 
 public class GameController implements IGameEngineEvolve {
-    private IGameEngine gameEngine;
     private GameContext fsm;
     private MazeControl mazeControl;
     private PacMan pacMan;
@@ -26,9 +25,8 @@ public class GameController implements IGameEngineEvolve {
     private int numOfGhosts = 4;
     private int level = 1;
 
-    public GameController(MazeControl mazeControl, IGameEngine gameEngine, PacMan pacMan, Ghost[] ghosts, GameContext context) {
+    public GameController(MazeControl mazeControl, PacMan pacMan, Ghost[] ghosts, GameContext context) {
         this.pacMan = pacMan;
-        this.gameEngine = gameEngine;
         this.mazeControl = mazeControl;
         this.fsm = context;
         this.ghosts = ghosts;
@@ -131,13 +129,13 @@ public class GameController implements IGameEngineEvolve {
 
         MazeControl mazeControl = new MazeControl(fsm.getLevel());
         List<Position> positions = mazeControl.getGhostStartPositions();
-        PacMan pacMan = new PacMan(mazeControl.getPacManStart().getX(), mazeControl.getPacManStart().getY(), 1,1, mazeControl);
+        PacMan pacMan = new PacMan(mazeControl.getPacManStart().getX(), mazeControl.getPacManStart().getY(), 1, mazeControl);
 
         Ghost[] ghosts = new Ghost[]{
-                new Blinky( positions.get(0).getX(), positions.get(0).getY(), 2, 1, mazeControl),
-                new Pinky(positions.get(1).getX(), positions.get(1).getY(), 2, 1, mazeControl),
-                new Inky(positions.get(2).getX(), positions.get(2).getY(), 1, 1, mazeControl),
-                new Clyde(positions.get(3).getX(), positions.get(3).getY(), 2, 1, mazeControl)
+                new Blinky( positions.get(0).getX(), positions.get(0).getY(), 2,mazeControl),
+                new Pinky(positions.get(1).getX(), positions.get(1).getY(), 2, mazeControl),
+                new Inky(positions.get(2).getX(), positions.get(2).getY(), 1, mazeControl),
+                new Clyde(positions.get(3).getX(), positions.get(3).getY(), 2, mazeControl)
         };
         this.mazeControl = mazeControl;
         this.pacMan = pacMan;
@@ -146,29 +144,28 @@ public class GameController implements IGameEngineEvolve {
         fsm.resetPoints();
     }
 
-    public boolean levelUp() {
+    public void levelUp() {
         numOfGhosts= 4;
         level = fsm.getLevel();
         pacManLife = 3;
         fsm.setLevel(level + 1);
         MazeControl mazeControl = new MazeControl(fsm.getLevel());
         List<Position> positions = mazeControl.getGhostStartPositions();
-        PacMan pacMan = new PacMan(mazeControl.getPacManStart().getX(), mazeControl.getPacManStart().getY(), 1,1, mazeControl);
+        PacMan pacMan = new PacMan(mazeControl.getPacManStart().getX(), mazeControl.getPacManStart().getY(), 1, mazeControl);
 
         Ghost[] ghosts = new Ghost[]{
-                new Blinky( positions.get(0).getX(), positions.get(0).getY(), 2, 1, mazeControl),
-                new Pinky(positions.get(1).getX(), positions.get(1).getY(), 2, 1, mazeControl),
-                new Inky(positions.get(2).getX(), positions.get(2).getY(), 1, 1, mazeControl),
-                new Clyde(positions.get(3).getX(), positions.get(3).getY(), 2, 1, mazeControl)
+                new Blinky( positions.get(0).getX(), positions.get(0).getY(), 2,  mazeControl),
+                new Pinky(positions.get(1).getX(), positions.get(1).getY(), 2, mazeControl),
+                new Inky(positions.get(2).getX(), positions.get(2).getY(), 1, mazeControl),
+                new Clyde(positions.get(3).getX(), positions.get(3).getY(), 2,  mazeControl)
         };
         this.mazeControl = mazeControl;
         this.pacMan = pacMan;
         this.ghosts = ghosts;
         fsm.resetPoints();
-        return true;
     }
 
-    public boolean setPacManNewDirection(int direction){
+    public void setPacManNewDirection(int direction){
         if(direction == 1){
             if(pacMan.canMove(pacMan.getX(), pacMan.getY() + 1))
                 pacMan.setDirection(1);
@@ -182,7 +179,6 @@ public class GameController implements IGameEngineEvolve {
             if (pacMan.canMove(pacMan.getX() + 1, pacMan.getY()))
                 pacMan.setDirection(4);
         }
-        return true;
     }
 
     public int getPacManLife() {
@@ -226,7 +222,6 @@ public class GameController implements IGameEngineEvolve {
         }
         movePacMan();
     }
-
 
 }
 

@@ -13,8 +13,8 @@ public class Clyde extends Ghost implements IMazeElement{
     private IMazeElement symbolRemove =null;
     private static final char symbol = 'C';
 
-    public Clyde(int x, int y, int direction, int speed, MazeControl maze) {
-        super(x, y, direction, speed, maze);
+    public Clyde(int x, int y, int direction, MazeControl maze) {
+        super(x, y, direction, maze);
         this.roadMade = new ArrayList<>();
         this.isOut = false;
     }
@@ -161,7 +161,6 @@ public class Clyde extends Ghost implements IMazeElement{
             else
                 return true;
         }
-
 
         return false;
     }

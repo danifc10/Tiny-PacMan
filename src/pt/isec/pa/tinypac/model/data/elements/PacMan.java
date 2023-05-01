@@ -1,28 +1,23 @@
 package pt.isec.pa.tinypac.model.data.elements;
 
-import pt.isec.pa.tinypac.gameengine.IGameEngine;
-import pt.isec.pa.tinypac.gameengine.IGameEngineEvolve;
 import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
 import pt.isec.pa.tinypac.model.data.maze.MazeControl;
 
-public class PacMan implements IGameEngineEvolve , IMazeElement {
+public class PacMan implements IMazeElement {
     public static final char symbol= 'P';
-    private int x; // posição horizontal
-    private int y; // posição vertical
+    private int x; // row
+    private int y; // col
     private int lastX;
     private int lastY;
     private int direction; // direção atual
-    private int speed; // velocidade
-    private int life = 3;
     private MazeControl maze;
 
     public PacMan(){};
 
-    public PacMan(int x, int y, int direction, int speed, MazeControl maze) {
+    public PacMan(int x, int y, int direction, MazeControl maze) {
         this.x = x;
         this.y = y;
         this.direction = direction;
-        this.speed = speed;
         this.maze = maze;
     }
 
@@ -34,63 +29,25 @@ public class PacMan implements IGameEngineEvolve , IMazeElement {
         return !maze.checkIfWall(x, y) && maze.getXY(x, y).getSymbol() != 'Y';
     }
 
-    public void movePacMan(){
-        int x = getX();
-        int y = getY();
-        switch (getDirection()) {
-            case 2 :
-                if (y > 0 && canMove(x, y - 1)) {
-                    checkIfWarp(x, y -1);
-                    setDirection(2);
-                    move();
-                }
-                break;
-            case 1 :
-                if (y < maze.getWidth() && canMove(x, y + 1)) {
-                    checkIfWarp(x, y +1);
-                    setDirection(1);
-                    move();
-                }
-                break;
-            case 3 :
-                if (x > 0 && canMove(x - 1, y)) {
-                    checkIfWarp(x - 1, y);
-                    setDirection(3);
-                    move();
-                }
-                break;
-            case 4 :
-                if (x < maze.getHeight() && canMove(x + 1, y)) {
-                    checkIfWarp(x + 1, y);
-                    setDirection(4);
-                    move();
-                }
-                break;
-        }
-
-        maze.setXY(getX(), getY(), new PacMan());
-        maze.remove(getLastX(), getLastY());
-    }
-
     public void move() {
         lastX = getX();
         lastY = getY();
 
         switch (direction) {
             case 1 -> {
-                this.y+=speed;
+                this.y++;
             }//RIGHT
 
             case 2 -> {
-                this.y-=speed;
+                this.y--;
             }//LEFT
 
             case 3 -> {
-                this.x-=speed;
+                this.x--;
             }// UP
 
             case 4 -> {
-                this.x+=speed;
+                this.x++;
             }// DOWN
 
         }
@@ -109,12 +66,6 @@ public class PacMan implements IGameEngineEvolve , IMazeElement {
     }
 
     // getters e setters
-    public int getLife(){
-        return life;
-    }
-
-    public void setLife(){this.life--;}
-
     public int getX() {
         return x;
     }
@@ -145,11 +96,6 @@ public class PacMan implements IGameEngineEvolve , IMazeElement {
 
     public int getLastY() {
         return lastY;
-    }
-
-    @Override
-    public void evolve(IGameEngine gameEngine, long currentTime) {
-        movePacMan();
     }
 
     @Override

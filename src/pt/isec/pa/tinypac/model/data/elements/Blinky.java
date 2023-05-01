@@ -13,8 +13,8 @@ public class Blinky extends Ghost implements IMazeElement {
     Random random = new Random();
     private IMazeElement symbolRemove =null;
 
-    public Blinky(int x, int y, int direction, int speed, MazeControl maze) {
-        super(x, y, direction, speed, maze);
+    public Blinky(int x, int y, int direction, MazeControl maze) {
+        super(x, y, direction, maze);
         this.roadMade = new ArrayList<>();
         this.isOut = false;
     }

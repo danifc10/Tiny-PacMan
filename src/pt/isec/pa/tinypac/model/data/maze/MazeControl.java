@@ -10,7 +10,6 @@ import java.util.*;
 
 public class MazeControl {
     private Maze maze;
-    //private final IMazeElement[][] board;
     private int width;
     private int height;
     private List<Position>ghostStartPositions ;

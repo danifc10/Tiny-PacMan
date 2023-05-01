@@ -10,28 +10,20 @@ public abstract class Ghost {
     protected int lastX, lastY;
     protected int direction; // direção atual do fantasma
     protected boolean vulnerable; // se o fantasma está vulnerável ou não
-    protected int vulnerabilityTimer; // tempo restante de vulnerabilidade do fantasma
-    protected int targetX, targetY; // posição de destino do fantasma
     protected boolean isDead; // se o fantasma está morto ou não
-    protected int speed;
     protected MazeControl maze;
-    protected boolean isOut;
-    private int time = 0;
+    protected boolean isOut;  // se esta na jaula ou nao
     public List<Position> roadMade;
     public int road_index = 0;
 
     public Ghost(){};
 
-    public Ghost(int x, int y, int direction, int speed, MazeControl maze){
+    public Ghost(int x, int y, int direction, MazeControl maze){
         this.x = x;
         this.y = y;
         this.direction = direction;
         this.vulnerable = false;
-        this.vulnerabilityTimer = 0;
-        this.targetX = x;
-        this.targetY = y;
         this.isDead = false;
-        this.speed = speed;
         this.maze = maze;
     }
 
@@ -71,20 +63,8 @@ public abstract class Ghost {
         return 0;
     }
 
-    public boolean isVulnerable() {
-        return vulnerable;
-    }
-
     public void setVulnerable(boolean vulnerable) {
         this.vulnerable = vulnerable;
-    }
-
-    public void setTargetX(int targetX) {
-        this.targetX = targetX;
-    }
-
-    public void setTargetY(int targetY) {
-        this.targetY = targetY;
     }
 
     public boolean isDead() {
@@ -93,17 +73,5 @@ public abstract class Ghost {
 
     public void setDead(boolean dead) {
         isDead = dead;
-    }
-
-    public int getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
-
-    public void setIsOut(boolean b) {
-        isOut = b;
     }
 }

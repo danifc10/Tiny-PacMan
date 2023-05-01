@@ -17,7 +17,6 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-
         TerminalSize size = new TerminalSize(80, 60);
         TerminalFactory terminalFactory = new DefaultTerminalFactory().setTerminalEmulatorTitle("DEIS - ISEC").setInitialTerminalSize(size);
         Terminal terminal = terminalFactory.createTerminal();
@@ -25,17 +24,17 @@ public class Main {
 
         MazeControl mazeControl = new MazeControl(1);
         List<Position> positions = mazeControl.getGhostStartPositions();
-        PacMan pacMan = new PacMan(mazeControl.getPacManStart().getX(), mazeControl.getPacManStart().getY(), 1,1, mazeControl);
+        PacMan pacMan = new PacMan(mazeControl.getPacManStart().getX(), mazeControl.getPacManStart().getY(), 1, mazeControl);
         Ghost[] ghosts = new Ghost[]{
-                new Blinky( positions.get(0).getX(), positions.get(0).getY(), 2, 1, mazeControl),
-                new Pinky(positions.get(1).getX(), positions.get(1).getY(), 2, 1, mazeControl),
-                new Inky(positions.get(2).getX(), positions.get(2).getY(), 1, 1, mazeControl),
-                new Clyde(positions.get(3).getX(), positions.get(3).getY(), 2, 1, mazeControl)
+                new Blinky( positions.get(0).getX(), positions.get(0).getY(), 2,  mazeControl),
+                new Pinky(positions.get(1).getX(), positions.get(1).getY(), 2,  mazeControl),
+                new Inky(positions.get(2).getX(), positions.get(2).getY(), 1,  mazeControl),
+                new Clyde(positions.get(3).getX(), positions.get(3).getY(), 2, mazeControl)
         };
 
         IGameEngine gameEngine = new GameEngine();
         GameContext fsm = new GameContext(mazeControl, gameEngine, pacMan, ghosts);
-        GameController game = new GameController(mazeControl, gameEngine, pacMan, ghosts,fsm);
+        GameController game = new GameController(mazeControl, pacMan, ghosts,fsm);
         GameUI ui = new GameUI( fsm, game, gameEngine, terminal);
         gameEngine.registerClient(ui);
         ui.start();

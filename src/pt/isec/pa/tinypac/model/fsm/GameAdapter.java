@@ -29,11 +29,6 @@ public class GameAdapter implements IGameStates{
     public void setMaze(MazeControl maze){this.maze = maze;}
 
     @Override
-    public boolean setPacManNewDirection(int direction){
-        return true;
-    }
-
-    @Override
     public GameStates getState() {
         return null;
     }
@@ -48,10 +43,6 @@ public class GameAdapter implements IGameStates{
         return false;
     }
 
-    @Override
-    public boolean checkIfGhostsOut() {
-        return false;
-    }
 
     @Override
     public boolean startGame() {
@@ -76,11 +67,6 @@ public class GameAdapter implements IGameStates{
     @Override
     public boolean eatGhost() {
         return true;
-    }
-
-    @Override
-    public boolean wrapZone(int x, int y) {
-        return false;
     }
 
     @Override

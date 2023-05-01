@@ -70,7 +70,7 @@ public class GameUI implements IGameEngineEvolve {
 
     void playingUI() throws IOException {
         KeyStroke key = terminal.readInput();
-        if(key.getKeyType() == KeyType.Character) {
+        if(key.getKeyType() == KeyType.Character && fsm.getState() == GameStates.PLAYING) {
             gameEngine.unregisterClient(game);
             fsm.pauseGame();
         }

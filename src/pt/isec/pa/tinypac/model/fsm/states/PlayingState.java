@@ -50,7 +50,6 @@ public class PlayingState extends GameAdapter {
         return true;
     }
 
-
     @Override
     public boolean ghostCollision() {  // se colide com fantasma passa para o estado initial
         changeState(new GameOverState(context, pacMan, maze, ghosts, gameEngine));
@@ -61,24 +60,6 @@ public class PlayingState extends GameAdapter {
     public boolean ifEatAll() { //tanto comer todos os fantasmas como todos os pontos
         changeState(new WinState(context, pacMan, maze, ghosts, gameEngine));
         return false;
-    }
-
-    @Override
-    public boolean setPacManNewDirection(int direction){
-        if(direction == 1){
-            if(pacMan.canMove(pacMan.getX(), pacMan.getY() + 1))
-                pacMan.setDirection(1);
-        }else if(direction == 2){
-            if(pacMan.canMove(pacMan.getX(), pacMan.getY() - 1))
-                pacMan.setDirection(2);
-        }else if(direction== 3){
-            if(pacMan.canMove(pacMan.getX() - 1, pacMan.getY()))
-                pacMan.setDirection(3);
-        }else if(direction== 4){
-            if (pacMan.canMove(pacMan.getX() + 1, pacMan.getY()))
-                pacMan.setDirection(4);
-        }
-        return true;
     }
 
 }

@@ -8,20 +8,20 @@ import java.util.ArrayList;
 
 public class Inky extends Ghost  implements IMazeElement {
     private static final char symbol = 'I';
-    IMazeElement symbolRemove = null;
+    private IMazeElement symbolRemove = null;
     private int nextCornerX ;
     private int nextCornerY ;
     private int cornerIndex;
     private double distanceThreshold;
-    int nextX, nextY;
+
     private int[][] corners; // coordenadas dos cantos do labirinto
-    int[] dx = {-1, 1, 0, 0}; // Deslocamento na coordenada X para cada direção
-    int[] dy = {0, 0, 1, -1}; // Deslocamento na coordenada Y para cada direção
+    private final int[] dx = {-1, 1, 0, 0}; // movimento de X para cada direção
+    private final int[] dy = {0, 0, 1, -1}; // movimento de Y para cada direção
 
     public Inky(){};
 
-    public Inky(int x, int y, int direction, int speed, MazeControl maze) {
-        super(x, y, direction, speed, maze);
+    public Inky(int x, int y, int direction, MazeControl maze) {
+        super(x, y, direction, maze);
         this.direction = 2;
         this.corners = new int[][]{
                 {maze.getGhostGate().getX(),maze.getGhostGate().getY()},
@@ -33,7 +33,7 @@ public class Inky extends Ghost  implements IMazeElement {
         this.cornerIndex = 0;
         this.distanceThreshold = maze.getHeight() * 0.15;
         this.nextCornerX = maze.getGhostGate().getX();
-        this.nextCornerY = maze.getGhostGate().getY(); // Coordenada Y do próximo canto de destino
+        this.nextCornerY = maze.getGhostGate().getY();
         this.roadMade = new ArrayList<>();
         this.isOut = false;
     }
@@ -45,7 +45,7 @@ public class Inky extends Ghost  implements IMazeElement {
     }
 
     public void move() {
-        if(isOut == false){
+        if(!isOut){
             this.nextCornerX = maze.getGhostGate().getX();
             this.nextCornerY = maze.getGhostGate().getY();
         }
@@ -71,6 +71,7 @@ public class Inky extends Ghost  implements IMazeElement {
             nextCornerY = corners[cornerIndex][1];
         }
 
+        // para sair da jaula
         if(cornerIndex == 0  && nextCornerX == maze.getGhostGate().getX()){
             if(this.maze.getXY(x, y + 1).getSymbol() == 'Y'){
                 direction = 2;
@@ -112,9 +113,11 @@ public class Inky extends Ghost  implements IMazeElement {
                 y += dy[direction];
             }
         }
+
         if(road_index < 0) {
             road_index = 0;
         }
+
         roadMade.add(road_index, new Position(x, y));
         maze.remove(lastX, lastY);
         if(symbolRemove != null && lastX != 0 && symbolRemove.getSymbol() != 'I' && symbolRemove.getSymbol() != 'B' && symbolRemove.getSymbol() != 'K' && symbolRemove.getSymbol() != 'C') {
@@ -138,7 +141,6 @@ public class Inky extends Ghost  implements IMazeElement {
         }
         return 0;
     }
-
 
     @Override
     public char getSymbol() {
