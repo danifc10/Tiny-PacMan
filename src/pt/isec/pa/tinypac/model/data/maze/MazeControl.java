@@ -23,7 +23,7 @@ public class MazeControl {
         System.out.println(level);
         ghostStartPositions = new ArrayList<>();
         putLevelsFile();
-        File arquivo = new File("src\\levels\\" + getLevelFile(level) );
+        File arquivo = new File("levels\\"+getLevelFile(level));
         // Criar um para ler o conteúdo do arquivo
         Scanner leitor = null;
         try {
