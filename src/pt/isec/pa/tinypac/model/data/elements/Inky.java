@@ -23,12 +23,19 @@ public class Inky extends Ghost  implements IMazeElement {
     public Inky(int x, int y, int direction, int speed, MazeControl maze) {
         super(x, y, direction, speed, maze);
         this.direction = 2;
-        this.corners = new int[][]{{maze.getXghostStart(),maze.getYghostStart()},{maze.getHeight(), maze.getWidth()},{maze.getHeight(), 0} ,{0, maze.getWidth()},  {0, 0}};
+        this.corners = new int[][]{
+                {maze.getGhostGate().getX(),maze.getGhostGate().getY()},
+                {maze.getHeight(), maze.getWidth()},
+                {maze.getHeight(), 0} ,
+                {0, maze.getWidth()},
+                {0, 0}
+        };
         this.cornerIndex = 0;
         this.distanceThreshold = maze.getHeight() * 0.15;
-        this.nextCornerX = maze.getXghostStart();
-        this.nextCornerY = maze.getYghostStart(); // Coordenada Y do próximo canto de destino
+        this.nextCornerX = maze.getGhostGate().getX();
+        this.nextCornerY = maze.getGhostGate().getY(); // Coordenada Y do próximo canto de destino
         this.roadMade = new ArrayList<>();
+        this.isOut = false;
     }
 
     private double distanceToTarget(int x1, int y1, int x2, int y2) {
@@ -38,11 +45,15 @@ public class Inky extends Ghost  implements IMazeElement {
     }
 
     public void move() {
+        if(isOut == false){
+            this.nextCornerX = maze.getGhostGate().getX();
+            this.nextCornerY = maze.getGhostGate().getY();
+        }
         int lastX = x;
         int lastY = y;
         /// verifica se o fantasma chegou ao canto pretendido
         if (x == (corners[cornerIndex][0]) && y == (corners[cornerIndex][1])) {
-            if(cornerIndex == 0 && nextCornerX == maze.getXstart()){
+            if(cornerIndex == 0 && nextCornerX == maze.getGhostGate().getX()){
                 for(int i = 0 ; i < corners.length ;i++){
                     corners[cornerIndex][0] = corners[cornerIndex +1][0];
                     corners[cornerIndex][1] = corners[cornerIndex +1][1];
@@ -54,13 +65,13 @@ public class Inky extends Ghost  implements IMazeElement {
 
         // verifica se o fantasma está muito próximo do canto pretendido
         int distanceToCorner = (int) distanceToTarget(x, y, nextCornerX, nextCornerY);
-        if (distanceToCorner <= distanceThreshold && nextCornerX != maze.getXghostStart()) {
+        if (distanceToCorner <= distanceThreshold && nextCornerX != maze.getGhostGate().getX()) {
             cornerIndex = (cornerIndex + 1) % corners.length; // avança para o próximo canto
             nextCornerX = corners[cornerIndex][0];
             nextCornerY = corners[cornerIndex][1];
         }
 
-        if(cornerIndex == 0  && nextCornerX == maze.getXghostStart()){
+        if(cornerIndex == 0  && nextCornerX == maze.getGhostGate().getX()){
             if(this.maze.getXY(x, y + 1).getSymbol() == 'Y'){
                 direction = 2;
             }else if(this.maze.getXY(x, y -1 ).getSymbol() == 'Y'){
@@ -101,8 +112,9 @@ public class Inky extends Ghost  implements IMazeElement {
                 y += dy[direction];
             }
         }
-        if(road_index == -1)
+        if(road_index < 0) {
             road_index = 0;
+        }
         roadMade.add(road_index, new Position(x, y));
         maze.remove(lastX, lastY);
         if(symbolRemove != null && lastX != 0 && symbolRemove.getSymbol() != 'I' && symbolRemove.getSymbol() != 'B' && symbolRemove.getSymbol() != 'K' && symbolRemove.getSymbol() != 'C') {
@@ -141,7 +153,12 @@ public class Inky extends Ghost  implements IMazeElement {
             this.lastY = y;
             this.x = roadMade.get(road_index).getX();
             this.y = roadMade.get(road_index).getY();
+
             maze.remove(lastX, lastY);
+            if(symbolRemove != null && lastX != 0 && symbolRemove.getSymbol() != 'I' && symbolRemove.getSymbol() != 'B' && symbolRemove.getSymbol() != 'K' && symbolRemove.getSymbol() != 'C') {
+                maze.setXY(lastX, lastY, symbolRemove);
+            }
+            symbolRemove = maze.getXY(x, y);
             this.maze.setXY(x, y, new Inky());
         }
     }

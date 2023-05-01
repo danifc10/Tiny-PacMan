@@ -40,28 +40,28 @@ public class PacMan implements IGameEngineEvolve , IMazeElement {
         switch (getDirection()) {
             case 2 :
                 if (y > 0 && canMove(x, y - 1)) {
-                    checkIfWrap(x, y -1);
+                    checkIfWarp(x, y -1);
                     setDirection(2);
                     move();
                 }
                 break;
             case 1 :
                 if (y < maze.getWidth() && canMove(x, y + 1)) {
-                    checkIfWrap(x, y +1);
+                    checkIfWarp(x, y +1);
                     setDirection(1);
                     move();
                 }
                 break;
             case 3 :
                 if (x > 0 && canMove(x - 1, y)) {
-                    checkIfWrap(x - 1, y);
+                    checkIfWarp(x - 1, y);
                     setDirection(3);
                     move();
                 }
                 break;
             case 4 :
                 if (x < maze.getHeight() && canMove(x + 1, y)) {
-                    checkIfWrap(x + 1, y);
+                    checkIfWarp(x + 1, y);
                     setDirection(4);
                     move();
                 }
@@ -96,7 +96,7 @@ public class PacMan implements IGameEngineEvolve , IMazeElement {
         }
     }
 
-    public void checkIfWrap(int x, int y){
+    public void checkIfWarp(int x, int y){
         maze.remove(this.x, this.y);
         for(int i = 0; i < maze.getHeight() ; i++){
             for(int j = 0; j < maze.getWidth() ; j++){

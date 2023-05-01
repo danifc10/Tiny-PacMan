@@ -54,7 +54,7 @@ public class GameAdapter implements IGameStates{
     }
 
     @Override
-    public boolean startGame(int direction) {
+    public boolean startGame() {
         return false;
     }
 

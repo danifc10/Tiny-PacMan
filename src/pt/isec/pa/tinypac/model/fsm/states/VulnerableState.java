@@ -22,6 +22,12 @@ public class VulnerableState extends GameAdapter {
     }
 
     @Override
+    public boolean ifEatAll() { //tanto comer todos os fantasmas como todos os pontos
+        changeState(new WinState(context, pacMan, maze, ghosts, gameEngine));
+        return false;
+    }
+
+    @Override
     public boolean setPacManNewDirection(int direction){
         if(direction == 1){
             if(pacMan.canMove(pacMan.getX(), pacMan.getY() + 1))
@@ -52,13 +58,6 @@ public class VulnerableState extends GameAdapter {
 
     @Override
     public boolean eatGhost() { // se comer um fantasma
-        // add points
-        context.setPoints(50);
-        // remove ghost
-        for(Ghost g : ghosts){
-            if(g.getX() == pacMan.getX() && g.getY() == pacMan.getY())
-                g.setDead(true);
-        }
         changeState(new VulnerableState(context, pacMan, maze, ghosts, gameEngine));
         return true;
     }
@@ -90,7 +89,4 @@ public class VulnerableState extends GameAdapter {
         changeState(new VulnerableState(context, pacMan, maze, ghosts, gameEngine));
         return true;
     }
-
-
-
 }

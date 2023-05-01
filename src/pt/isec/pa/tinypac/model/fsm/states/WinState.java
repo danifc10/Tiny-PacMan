@@ -1,9 +1,9 @@
 package pt.isec.pa.tinypac.model.fsm.states;
 
 import pt.isec.pa.tinypac.gameengine.IGameEngine;
-import pt.isec.pa.tinypac.model.data.maze.MazeControl;
 import pt.isec.pa.tinypac.model.data.elements.Ghost;
 import pt.isec.pa.tinypac.model.data.elements.PacMan;
+import pt.isec.pa.tinypac.model.data.maze.MazeControl;
 import pt.isec.pa.tinypac.model.fsm.GameAdapter;
 import pt.isec.pa.tinypac.model.fsm.GameContext;
 import pt.isec.pa.tinypac.model.fsm.GameStates;
@@ -19,15 +19,7 @@ public class WinState extends GameAdapter {
     }
 
     @Override
-    public boolean endGame() {
-        changeState(new FinalState(context, pacMan, maze, ghosts, gameEngine));
-        return false;
-    }
-
-    @Override
     public boolean levelUp() {
-        int level = context.getLevel();
-        context.setLevel(level + 1);
         changeState(new InitialState(context, pacMan, maze, ghosts, gameEngine));
         return true;
     }

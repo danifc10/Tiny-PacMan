@@ -14,9 +14,8 @@ public class InitialState extends GameAdapter {
     }
 
     @Override
-    public boolean startGame(int direction){
-        pacMan.setDirection(direction);
-        gameEngine.start(180);
+    public boolean startGame(){
+
         changeState(new MovementState(context, pacMan, maze,ghosts, gameEngine));
         return true;
     }
@@ -34,17 +33,6 @@ public class InitialState extends GameAdapter {
         // add points
         context.setPoints(20);
         changeState(new InitialState(context, pacMan,maze,ghosts, gameEngine));
-        return true;
-    }
-
-    @Override
-    public boolean eatPower() { // se come poderes passa para o estado vulneravel
-        // add points
-        context.setPoints(50);
-        for(Ghost g : ghosts){
-            g.setVulnerable(true);
-        }
-        changeState(new VulnerableState(context, pacMan, maze, ghosts, gameEngine));
         return true;
     }
 

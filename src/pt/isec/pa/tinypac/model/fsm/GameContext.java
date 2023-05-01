@@ -29,18 +29,6 @@ public class GameContext {
         this.ghosts = ghosts;
         this.currentState = new InitialState(this, pacMan,maze,ghosts, gameEngine);
     }
-/*
-    public void initElements(){
-        List<Position> positions = maze.getGhostStartPositions();
-        this.pacMan = new PacMan(maze.getXstart(), maze.getYstart(), 1,1, maze);
-
-        this.ghosts = new Ghost[]{
-                new Blinky( positions.get(0).getX(), positions.get(0).getY(), 2, 1, maze),
-                new Pinky(positions.get(1).getX(), positions.get(1).getY(), 2, 1, maze),
-                new Inky(positions.get(2).getX(), positions.get(2).getY(), 1, 1, maze),
-                new Clyde(positions.get(3).getX(), positions.get(3).getY(), 2, 1, maze)
-        };
-    }*/
 
     public void putLevelsFile() {
         for(int i = 1 ; i <= 20 ; i++){
@@ -66,14 +54,11 @@ public class GameContext {
     // tranciçoes
     public boolean pauseGame(){return currentState.pauseGame();}
     public boolean resumeGame(){return currentState.resumeGame();}
-    public void startGame(int direction){
-        currentState.startGame(direction);
+    public void startGame(){
+        currentState.startGame();
     }
     public boolean setGhostsFree(){
         return currentState.setGhostsFree();
-    }
-    public boolean checkIfGhostsOut(){
-        return currentState.checkIfGhostsOut();
     }
     public boolean eatPoint() {
         return currentState.eatPoint();
@@ -119,18 +104,24 @@ public class GameContext {
     public void setPoints(int num){
         points+=num;
     }
+    public void resetPoints(){
+        points = 0;
+    }
     public int getTime(){
         return time;
     }
     public int getLevel(){
         return level;
     }
-    public void setMaze(MazeControl maze1){
-        this.maze = maze1;
+    public void setMaze(MazeControl maze){
+        this.maze = maze;
     }
     public MazeControl getMaze(){ return this.maze;}
+    public char [][] getMazeChar(){ return this.maze.getMazeControl();}
     public void setLevel(int level){
         this.level = level;
     }
-
+    public void setPacMan(PacMan p){
+        this.pacMan = p;
+    }
 }

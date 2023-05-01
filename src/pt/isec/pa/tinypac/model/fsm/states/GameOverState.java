@@ -23,10 +23,4 @@ public class GameOverState extends GameAdapter {
         changeState(new InitialState(context, pacMan, maze, ghosts, gameEngine));
         return false;
     }
-
-    @Override
-    public boolean endGame() {
-        changeState(new FinalState(context, pacMan, maze, ghosts, gameEngine));
-        return false;
-    }
 }

@@ -15,6 +15,7 @@ public abstract class Ghost {
     protected boolean isDead; // se o fantasma está morto ou não
     protected int speed;
     protected MazeControl maze;
+    protected boolean isOut;
     private int time = 0;
     public List<Position> roadMade;
     public int road_index = 0;
@@ -34,25 +35,6 @@ public abstract class Ghost {
         this.maze = maze;
     }
 
-    public boolean canMove(int x, int y, int direction){
-        switch (direction){
-            case 1: // DOWN
-                x++;
-            case 2: // RIGHT
-                y++;
-            case 0: // UP
-                x--;
-            case 3: // LEFT
-                y--;
-        }
-
-        if (x < 0 || y < 0 || x >= maze.getWidth() || y >= maze.getHeight()) {
-            return false;
-        }
-        System.out.println(maze.checkIfWall(x, y));
-        return !maze.checkIfWall(x, y);
-    }
-
     public void setMaze(MazeControl maze){
         this.maze = maze;
     }
@@ -61,16 +43,8 @@ public abstract class Ghost {
         return lastX;
     }
 
-    public void setLastX(int lastX) {
-        this.lastX = lastX;
-    }
-
     public int getLastY() {
         return lastY;
-    }
-
-    public void setLastY(int lastY) {
-        this.lastY = lastY;
     }
 
     public abstract void move();
@@ -105,24 +79,8 @@ public abstract class Ghost {
         this.vulnerable = vulnerable;
     }
 
-    public int getVulnerabilityTimer() {
-        return vulnerabilityTimer;
-    }
-
-    public void setVulnerabilityTimer(int vulnerabilityTimer) {
-        this.vulnerabilityTimer = vulnerabilityTimer;
-    }
-
-    public int getTargetX() {
-        return targetX;
-    }
-
     public void setTargetX(int targetX) {
         this.targetX = targetX;
-    }
-
-    public int getTargetY() {
-        return targetY;
     }
 
     public void setTargetY(int targetY) {
@@ -135,7 +93,6 @@ public abstract class Ghost {
 
     public void setDead(boolean dead) {
         isDead = dead;
-        maze.removeGhost(this.x, this.y);
     }
 
     public int getSpeed() {
@@ -144,5 +101,9 @@ public abstract class Ghost {
 
     public void setSpeed(int speed) {
         this.speed = speed;
+    }
+
+    public void setIsOut(boolean b) {
+        isOut = b;
     }
 }

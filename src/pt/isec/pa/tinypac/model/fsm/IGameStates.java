@@ -8,7 +8,7 @@ public interface IGameStates {
       boolean endVulnerableTime();
       boolean setGhostsFree(); // no MOVEMENT
       boolean checkIfGhostsOut(); // no GHOSTS_OUT
-      boolean startGame(int direction); // no INITIAL
+      boolean startGame(); // no INITIAL
       boolean eatPoint(); // no PLAYING e no VULNERABLE
       boolean eatFruit(); // no PLAYING e no VULNERABLE
       boolean eatPower(); // no PLAYING

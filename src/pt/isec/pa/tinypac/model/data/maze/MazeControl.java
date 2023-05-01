@@ -5,22 +5,33 @@ import pt.isec.pa.tinypac.utils.Position;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 
 public class MazeControl {
-    private final Maze maze;
+    private Maze maze;
     //private final IMazeElement[][] board;
     private int width;
     private int height;
-    private List<Position>ghostStartPositions = new ArrayList<>();
+    private List<Position>ghostStartPositions ;
     private Position fruitPosition;
-    private Map<Integer, String> levels = new HashMap<>();
+    private Position ghostGate;
+    private Position pacManStart;
+    private final Map<Integer, String> levels = new HashMap<>();
+    private int totalPoints = 0;
 
-    public MazeControl(String File) throws FileNotFoundException {
+    public MazeControl(int level) {
+        System.out.println(level);
+        ghostStartPositions = new ArrayList<>();
         putLevelsFile();
-        File arquivo = new File("src\\levels\\" + File );
-        // Criar um objeto Scanner para ler o conteúdo do arquivo
-        Scanner leitor = new Scanner(arquivo);
+        File arquivo = new File("src\\levels\\" + getLevelFile(level) );
+        // Criar um para ler o conteúdo do arquivo
+        Scanner leitor = null;
+        try {
+            leitor = new Scanner(arquivo);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         // Ler o conteúdo do arquivo linha por linha
         this.width = 0;
         this.height = 0;
@@ -30,51 +41,48 @@ public class MazeControl {
             this.width = line.length();
         }
         leitor.close();
+
         this.maze = new Maze(this.height, this.width);
-        //this.board = new IMazeElement[rows][cols];
+
         try {
-            // Criar um objeto Scanner para ler o conteúdo do arquivo
-            Scanner leitor2 = new Scanner(arquivo);
+            leitor = new Scanner(arquivo);
             // Ler o conteúdo do arquivo linha por linha
             int row = 0;
-            while (leitor2.hasNextLine()) {
-                String line = leitor2.nextLine();
+            while (leitor.hasNextLine()) {
+                String line = leitor.nextLine();
                 for (int col = 0; col < line.length(); col++) {
                     char c = line.charAt(col);
                     switch (c) {
                         case 'x' -> {
                             maze.set(row, col, new Wall());
-                            //this.board[row][col] = new Wall();
                         }
                         case 'o' -> {
                             maze.set(row, col, new Point());
-                            //this.board[row][col] = new Point();
+                            totalPoints++;
                         }
                         case 'F' -> {
                             maze.set(row, col, new Fruit());
                             fruitPosition = new Position(row, col);
-                            //this.board[row][col] = new Fruit();
+                            totalPoints++;
                         }
                         case 'O' -> {
                             maze.set(row, col, new PowerPoint());
-                            //this.board[row][col] = new PowerPoint();
+                            totalPoints++;
                         }
                         case 'Y' -> {
                             maze.set(row, col, new GhostGate());
-                            //this.board[row][col] = new GhostGate();
+                            ghostGate = new Position(row, col);
                         }
                         case 'y' -> {
                             ghostStartPositions.add(new Position(row, col));
                             maze.set(row, col, new GhostSpot());
-                            //this.board[row][col] = new GhostSpot();
                         }
                         case 'W' ->{
-                            maze.set(row, col, new WrapZone());
-                            //this.board[row][col] = new WrapZone();
+                            maze.set(row, col, new WarpZone());
                         }
                         case 'M' -> {
                             maze.set(row, col, new PacManStart());
-                            //this.board[row][col] = new PacManStart();
+                            pacManStart = new Position(row, col);
                         }
                     }
                 }
@@ -90,57 +98,54 @@ public class MazeControl {
     public void putLevelsFile(){
         levels.put(1, "Level101.txt");
         levels.put(2, "Level102.txt");
+        levels.put(3, "Level103.txt");
+        levels.put(4, "Level104.txt");
+        levels.put(5, "Level105.txt");
+        levels.put(6, "Level106.txt");
+        levels.put(7, "Level107.txt");
+        levels.put(8, "Level108.txt");
+        levels.put(9, "Level109.txt");
+        levels.put(10, "Level110.txt");
+        levels.put(11, "Level111.txt");
+        levels.put(12, "Level112.txt");
+        levels.put(13, "Level113.txt");
+        levels.put(14, "Level114.txt");
+        levels.put(15, "Level115.txt");
+        levels.put(16, "Level116.txt");
+        levels.put(17, "Level117.txt");
+        levels.put(18, "Level118.txt");
+        levels.put(19, "Level119.txt");
+        levels.put(20, "Level120.txt");
     }
 
     public String getLevelFile(int i){
         return levels.get(i);
     }
 
-    public int getXstart(){
-        for(int i = 0 ; i < height ; i++){
-            for(int j = 0 ; j < width ; j++){
-                if((maze.get(i,j).getSymbol())== 'M')
-                    return i;
-            }
-        }
-        return 0;
+    public Position getPacManStart(){
+        return pacManStart;
     }
 
-    public int getYstart(){
-        for(int i = 0 ; i < height ; i++){
-            for(int j = 0 ; j < width ; j++){
-                if(maze.get(i,j).getSymbol() == 'M')
-                    return j;
-            }
-        }
-        return 0;
+    public Position getGhostGate(){
+        return ghostGate;
     }
 
-    public int getYghostStart(){
+    public Position getPacManPosition() {
+        Position p = null;
         for(int i = 0 ; i < height ; i++){
-            for(int j = 0 ; j < width ; j++){
-                if(maze.get(i,j).getSymbol()== 'Y')
-                    return j;
+            for(int j = 0 ;  j < width ; j++){
+                if(maze.get(i, j).getSymbol() == 'P')
+                    p = new Position(i, j);
             }
         }
-        return 0;
-    }
-
-    public int getXghostStart(){
-        for(int i = 0 ; i < height ; i++){
-            for(int j = 0 ; j < width ; j++){
-                if(maze.get(i,j).getSymbol()== 'Y')
-                    return i;
-            }
-        }
-        return 0;
+        return p;
     }
 
     public void remove(int x, int y) {
         for(int i = 0 ; i < height ; i++){
             for(int j = 0 ; j < width ; j++){
                 if((maze.get(i, j).getSymbol() == 'W')){
-                    maze.set(i, j, new WrapZone());
+                    maze.set(i, j, new WarpZone());
                 }else if(maze.get(i, j).getSymbol() == 'Y'){
                     maze.set(i, j, new GhostGate());
                 }else if((i == x &&  j == y ) && (maze.get(i, j).getSymbol() != 'W') && (maze.get(i, j).getSymbol() != 'Y')) {
@@ -159,7 +164,7 @@ public class MazeControl {
                 }
             }
         }
-        if(count == (this.width * this.height))
+        if(count >= totalPoints)
             return true;
         else
             return false;
@@ -181,7 +186,7 @@ public class MazeControl {
         return maze.get(x,y).getSymbol() == 'O';
     }
 
-    public boolean checkIfWrap(int x, int y){
+    public boolean checkIfWarp(int x, int y){
         return maze.get(x,y).getSymbol() == 'W';
     }
 
@@ -231,14 +236,4 @@ public class MazeControl {
         maze.set(fruitPosition.getX(), fruitPosition.getY(), new Fruit());
     }
 
-    public Position getPacManPosition() {
-        Position p = null;
-        for(int i = 0 ; i < height ; i++){
-            for(int j = 0 ;  j < width ; j++){
-                if(maze.get(i, j).getSymbol() == 'P')
-                    p = new Position(i, j);
-            }
-        }
-        return p;
-    }
 }

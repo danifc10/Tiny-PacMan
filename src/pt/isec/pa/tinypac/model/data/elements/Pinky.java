@@ -26,6 +26,7 @@ public class Pinky extends Ghost implements IMazeElement {
         this.nextCornerX = corners[cornerIndex][0]; // Coordenada X do próximo canto de destino
         this.nextCornerY = corners[cornerIndex][1]; // Coordenada Y do próximo canto de destino
         this.roadMade = new ArrayList<>();
+        this.isOut = false;
     }
 
     public Pinky(){};
@@ -38,6 +39,7 @@ public class Pinky extends Ghost implements IMazeElement {
 
     @Override
     public void move() {
+
         int lastX = x;
         int lastY = y;
 
@@ -83,8 +85,10 @@ public class Pinky extends Ghost implements IMazeElement {
                 y += dy[direction];
             }
         }
-        if(road_index == -1)
+
+        if(road_index < 0) {
             road_index = 0;
+        }
         roadMade.add(road_index, new Position(x, y));
         maze.remove(lastX, lastY);
         if(symbolRemove != null && lastX != 0 && symbolRemove.getSymbol() != 'I' && symbolRemove.getSymbol() != 'B' && symbolRemove.getSymbol() != 'K' && symbolRemove.getSymbol() != 'C') {
@@ -101,9 +105,14 @@ public class Pinky extends Ghost implements IMazeElement {
         if(road_index >= 0) {
             this.lastX = x;
             this.lastY = y;
+
             this.x = roadMade.get(road_index).getX();
             this.y = roadMade.get(road_index).getY();
             maze.remove(lastX, lastY);
+            if(symbolRemove != null && lastX != 0 && symbolRemove.getSymbol() != 'I' && symbolRemove.getSymbol() != 'B' && symbolRemove.getSymbol() != 'K' && symbolRemove.getSymbol() != 'C') {
+                maze.setXY(lastX, lastY, symbolRemove);
+            }
+            symbolRemove = maze.getXY(x, y);
             this.maze.setXY(x, y, new Pinky());
         }
     }
