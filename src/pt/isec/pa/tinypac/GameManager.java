@@ -11,8 +11,8 @@ import java.beans.PropertyChangeSupport;
 
 public class GameManager implements IGameEngineEvolve {
     private GameContext fsm;
-    private int time = 0;
     PropertyChangeSupport pcs;
+    private boolean activateTimer = false;
 
     public GameManager() {
         fsm = new GameContext();
@@ -43,6 +43,7 @@ public class GameManager implements IGameEngineEvolve {
 
     // transitions and data here
     public void changePacManDirection(int direction){
+        activateTimer = true;
         fsm.setPacManNewDirection(direction);
     }
 
@@ -56,12 +57,15 @@ public class GameManager implements IGameEngineEvolve {
 
     @Override
     public void evolve(IGameEngine gameEngine, long currentTime) {
-        time++;
+
         (new Thread(() -> {
             Platform.runLater(() -> pcs.firePropertyChange(null,null,null));
         })).start();
 
         fsm.evolve();
+
+        if(activateTimer)
+            fsm.timer();
     }
 
     public int getPoints() {
@@ -72,8 +76,12 @@ public class GameManager implements IGameEngineEvolve {
         return fsm.getPacManLife();
     }
 
+    public int getLevel(){
+        return fsm.getLevel();
+    }
+
     public int getTime(){
-        return time;
+        return fsm.getTime();
     }
 
     public void saveGame() {

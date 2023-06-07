@@ -1,11 +1,12 @@
 package pt.isec.pa.tinypac.model.data.elements;
 
+import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
 import pt.isec.pa.tinypac.model.data.maze.MazeControl;
 import pt.isec.pa.tinypac.utils.Position;
 
 import java.util.List;
 
-public abstract class Ghost {
+public abstract class Ghost implements IMazeElement {
     protected int x, y; // posição do fantasma no labirinto
     protected int lastX, lastY;
     protected int direction; // direção atual do fantasma
@@ -15,16 +16,18 @@ public abstract class Ghost {
     protected boolean isOut;  // se esta na jaula ou nao
     public List<Position> roadMade;
     public int road_index = 0;
+    protected int speed;
 
     public Ghost(){};
 
-    public Ghost(int x, int y, int direction, MazeControl maze){
+    public Ghost(int x, int y, int direction, MazeControl maze, int speed){
         this.x = x;
         this.y = y;
         this.direction = direction;
         this.vulnerable = false;
         this.isDead = false;
         this.maze = maze;
+        this.speed = speed;
     }
 
     public void setMaze(MazeControl maze){
@@ -74,4 +77,5 @@ public abstract class Ghost {
     public void setDead(boolean dead) {
         isDead = dead;
     }
+
 }

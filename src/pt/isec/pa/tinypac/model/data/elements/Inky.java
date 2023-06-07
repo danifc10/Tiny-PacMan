@@ -6,7 +6,7 @@ import pt.isec.pa.tinypac.utils.Position;
 
 import java.util.ArrayList;
 
-public class Inky extends Ghost  implements IMazeElement {
+public class Inky extends Ghost {
     private static final char symbol = 'I';
     private IMazeElement symbolRemove = null;
     private int nextCornerX ;
@@ -20,8 +20,8 @@ public class Inky extends Ghost  implements IMazeElement {
 
     public Inky(){};
 
-    public Inky(int x, int y, int direction, MazeControl maze) {
-        super(x, y, direction, maze);
+    public Inky(int x, int y, int direction, MazeControl maze, int speed) {
+        super(x, y, direction, maze, speed);
         this.direction = 2;
         this.corners = new int[][]{
                 {maze.getGhostGate().getX(),maze.getGhostGate().getY()},

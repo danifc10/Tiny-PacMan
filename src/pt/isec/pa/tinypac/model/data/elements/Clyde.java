@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Clyde extends Ghost implements IMazeElement{
+public class Clyde extends Ghost{
     Random random = new Random();
     private IMazeElement symbolRemove =null;
     private static final char symbol = 'C';
 
-    public Clyde(int x, int y, int direction, MazeControl maze) {
-        super(x, y, direction, maze);
+    public Clyde(int x, int y, int direction, MazeControl maze, int speed) {
+        super(x, y, direction, maze, speed);
         this.roadMade = new ArrayList<>();
         this.isOut = false;
     }

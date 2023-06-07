@@ -39,14 +39,15 @@ public class PlayingState extends GameAdapter {
                 changeState(GameStates.GAME_OVER);
         }
         gameData.moveGhosts();
+        if(gameData.checkIfWin()) {
+            gameData.levelUp();
+            changeState(GameStates.INITIAL);
+        }
     }
 
     @Override
     public GameStates getState() {
         return GameStates.PLAYING;
     }
-
-
-
 
 }

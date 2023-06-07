@@ -14,7 +14,7 @@ import pt.isec.pa.tinypac.ui.gui.resources.ImageManager;
 
 public class InfoPanel extends HBox {
     GameManager gameManager;
-    HBox hbPoints,hbLife, hbTime;
+    HBox hbPoints,hbLife, hbTime, hbLevel;
 
     public InfoPanel(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -30,18 +30,26 @@ public class InfoPanel extends HBox {
         setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 
         hbPoints = new HBox();
-        hbPoints.setAlignment(Pos.BASELINE_LEFT);
+        hbPoints.setAlignment(Pos.CENTER);
         hbPoints.setPrefWidth(Integer.MAX_VALUE);
+        hbPoints.setSpacing(10);
 
         hbLife = new HBox();
-        hbLife.setAlignment(Pos.CENTER_RIGHT);
+        hbLife.setAlignment(Pos.CENTER);
         hbLife.setPrefWidth(Integer.MAX_VALUE);
 
         hbTime = new HBox();
-        hbTime.setAlignment(Pos.BASELINE_CENTER);
+        hbTime.setAlignment(Pos.CENTER);
         hbTime.setPrefWidth(Integer.MAX_VALUE);
+        hbTime.setPadding(new Insets(10));
 
-        this.getChildren().addAll(hbPoints,hbLife, hbTime);
+        hbLevel = new HBox();
+        hbLevel.setAlignment(Pos.CENTER);
+        hbLevel.setPrefWidth(Integer.MAX_VALUE);
+        hbLevel.setPadding(new Insets(10));
+
+        this.getChildren().addAll(hbPoints,hbTime, hbLevel, hbLife);
+
     }
 
     private void registerHandlers() {
@@ -52,33 +60,33 @@ public class InfoPanel extends HBox {
 
         hbPoints.getChildren().clear();
         int points = gameManager.getPoints();
-        Label lblPoints = new Label("Points: "+ points);
-        lblPoints.setStyle("-fx-background-color: yellow;");
-        if (points==0) {
-            hbPoints.getChildren().add(lblPoints);
-            hbPoints.getChildren().get(0).setId("labelnone");
-        }else {
-            hbPoints.getChildren().add(lblPoints);
-        }
+        Label lblPoints = new Label("Points: " + points);
+        lblPoints.setStyle(" -fx-text-fill: white; ");
+        hbPoints.getChildren().add(lblPoints);
+
 
         hbTime.getChildren().clear();
         int time = gameManager.getTime();
         Label lblTime = new Label("Time: " + time);
-        lblTime.setStyle("-fx-background-color: green;");
-        if (points==0) {
-            hbPoints.getChildren().add(lblTime);
-            hbPoints.getChildren().get(0).setId("labelnone");
-        }else {
-            hbPoints.getChildren().add(lblTime);
-        }
+        lblTime.setStyle(" -fx-text-fill: white; ");
+        hbTime.getChildren().add(lblTime);
+
 
         hbLife.getChildren().clear();
         int life = gameManager.getLife();
         for (int i = 0; i < life; i++) {
             ImageView imageView = new ImageView(ImageManager.getImage("pacman.png"));
-            imageView.setFitHeight(25);
-            imageView.setFitWidth(25);
+            imageView.setFitHeight(20);
+            imageView.setFitWidth(20);
+            hbLife.setSpacing(10);
             hbLife.getChildren().add(imageView);
         }
+
+        hbLevel.getChildren().clear();
+        int level = gameManager.getLevel();
+        Label lblLevel = new Label("Level: "+ level);
+        lblLevel.setStyle(" -fx-text-fill: white");
+        hbLevel.getChildren().add(lblLevel);
+
     }
 }

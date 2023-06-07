@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Blinky extends Ghost implements IMazeElement {
+public class Blinky extends Ghost {
     private static final char symbol = 'B';
     Random random = new Random();
     private IMazeElement symbolRemove =null;
 
-    public Blinky(int x, int y, int direction, MazeControl maze) {
-        super(x, y, direction, maze);
+    public Blinky(int x, int y, int direction, MazeControl maze, int speed) {
+        super(x, y, direction, maze, speed);
         this.roadMade = new ArrayList<>();
         this.isOut = false;
     }
@@ -227,6 +227,5 @@ public class Blinky extends Ghost implements IMazeElement {
     }
 
 }
-
 
 

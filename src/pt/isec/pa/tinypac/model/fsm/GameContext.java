@@ -72,4 +72,12 @@ public class GameContext {
     public void evolve() {
         currentState.evolve();
     }
+
+    public void timer() {
+        gameData.timer();
+    }
+
+    public int getTime() {
+        return gameData.getTime();
+    }
 }

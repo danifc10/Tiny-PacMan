@@ -6,7 +6,7 @@ import pt.isec.pa.tinypac.utils.Position;
 
 import java.util.ArrayList;
 
-public class Pinky extends Ghost implements IMazeElement {
+public class Pinky extends Ghost {
     private static final char symbol = 'K';
     private IMazeElement symbolRemove =null;
     private int nextCornerX ;
@@ -17,8 +17,8 @@ public class Pinky extends Ghost implements IMazeElement {
     private final int[] dx = {-1, 1, 0, 0}; // movimento de X para cada direção
     private final int[] dy = {0, 0, 1, -1}; // movimento de Y para cada direção
 
-    public Pinky(int x, int y, int direction, MazeControl maze) {
-        super(x, y, direction, maze);
+    public Pinky(int x, int y, int direction, MazeControl maze, int speed) {
+        super(x, y, direction, maze, speed);
         this.direction = 2;
         this.corners = new int[][]{{0, maze.getWidth() }, {maze.getWidth(), maze.getHeight()}, {0, 0},{maze.getWidth(), 0} };
         this.cornerIndex = 0;

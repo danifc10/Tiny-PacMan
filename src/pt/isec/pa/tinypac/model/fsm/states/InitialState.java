@@ -7,10 +7,11 @@ import pt.isec.pa.tinypac.model.fsm.GameContext;
 import pt.isec.pa.tinypac.model.fsm.GameStates;
 
 public class InitialState extends GameAdapter {
-    private int waitTime = 0;
+    private int startTime;
     private int aux = 0;
     public InitialState(GameContext context, GameData gameData, IGameEngine gameEngine) {
         super(context,gameData, gameEngine);
+        aux = 0;
     }
 
     @Override
@@ -25,14 +26,11 @@ public class InitialState extends GameAdapter {
     public void changeDirection(int direction) {
         gameData.setPacManDirection(direction);
         aux = 1;
-
     }
 
     @Override
     public void evolve() {
-        waitTime++;
-
-        if(waitTime >= 30) {
+        if(gameData.getTime() >= 5 && aux == 1) {
             gameData.setGhostsFree();
             changeState(GameStates.PLAYING);
         }

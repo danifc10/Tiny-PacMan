@@ -91,7 +91,7 @@ public class MazeUI extends TilePane {
                 imageName = "wall.png";
                 break;
             case 'o':
-                imageName = "dot.png";
+                imageName = "pellet.png";
                 break;
             case 'O':
                 imageName = "powerDot.png";

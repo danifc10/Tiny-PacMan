@@ -8,7 +8,7 @@ import pt.isec.pa.tinypac.model.fsm.GameContext;
 import pt.isec.pa.tinypac.model.fsm.GameStates;
 
 public class VulnerableState extends GameAdapter {
-    private int vulnerableTime = 30;
+    private int vulnerableTime = (20-gameData.getLevel()) ; // diminui conforme aumenta de nivel
     private int countGhosts = 0;
     public VulnerableState(GameContext context, GameData gameData, IGameEngine gameEngine) {
         super(context, gameData, gameEngine);

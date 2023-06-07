@@ -30,21 +30,24 @@ public class InitialUI extends BorderPane {
 
     private void createViews() {
         setFocusTraversable(true);
+
         btnStart = new Button("Start");
         btnStart.setMinWidth(100);
+
         btnCredits  = new Button("Credits");
         btnCredits.setMinWidth(100);
+
         btnTop5  = new Button("Top5");
         btnTop5.setMinWidth(100);
+
         btnExit  = new Button("Exit");
         btnExit.setMinWidth(100);
+
         VBox hBox = new VBox(btnStart, btnCredits, btnTop5,btnExit);
         hBox.setAlignment(Pos.CENTER);
         hBox.setSpacing(10);
+
         this.setCenter(hBox);
-        btnTop5.setDisable(false);
-        btnCredits.setDisable(false);
-        btnExit.setDisable(false);
     }
 
     private void registerHandlers() {

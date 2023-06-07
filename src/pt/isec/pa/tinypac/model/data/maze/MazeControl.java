@@ -23,6 +23,9 @@ public class MazeControl {
         ghostStartPositions = new ArrayList<>();
         putLevelsFile();
         File arquivo = new File("levels\\"+ getLevelFile(level));
+        while(!arquivo.exists()){
+            arquivo = new File("levels\\" + getLevelFile(level - 1));
+        }
         // Criar um para ler o conteúdo do arquivo
         Scanner leitor = null;
         try {
@@ -91,6 +94,7 @@ public class MazeControl {
             System.out.println("O arquivo não foi encontrado.");
             e.printStackTrace();
         }
+        System.out.println("total: " + totalPoints);
     }
 
     public void putLevelsFile(){
@@ -232,6 +236,10 @@ public class MazeControl {
 
     public void setNewFruit() {
         maze.set(fruitPosition.getX(), fruitPosition.getY(), new Fruit());
+    }
+
+    public int getTotalPoints(){
+        return totalPoints;
     }
 
 }

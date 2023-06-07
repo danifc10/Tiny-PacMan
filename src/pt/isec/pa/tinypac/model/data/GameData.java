@@ -14,13 +14,16 @@ public class GameData {
     private Ghost [] ghosts;
     private List<Position> positions;
     private int totalPoints = 0;
-    private int level;
+    private int level = 1;
     private int countFruitPoints = 0;
     private int countPoints = 0;
-
+    private int time = 0;
     private int pacManLife = 3;
     private int numOfGhosts = 4;
     private int lastGhostX , lastGhostY;
+    private int speed = 0;
+    private int thingsEaten = 0;
+    private final int endTime = 300;
 
     public GameData() {
         //initGame();
@@ -28,14 +31,16 @@ public class GameData {
 
     public void initGame() {
         totalPoints = 0;
-        mazeControl = new MazeControl(2);
+        thingsEaten = 0;
+        time = 0;
+        mazeControl = new MazeControl(level);
         positions = mazeControl.getGhostStartPositions();
         pacMan = new PacMan(mazeControl.getPacManStart().getX(), mazeControl.getPacManStart().getY(), 1, mazeControl);
         ghosts = new Ghost[]{
-                new Blinky( positions.get(0).getX(), positions.get(0).getY(), 2,  mazeControl),
-                new Pinky(positions.get(1).getX(), positions.get(1).getY(), 2,  mazeControl),
-                new Inky(positions.get(2).getX(), positions.get(2).getY(), 1,  mazeControl),
-                new Clyde(positions.get(3).getX(), positions.get(3).getY(), 2, mazeControl)
+                new Blinky( positions.get(0).getX(), positions.get(0).getY(), 2,  mazeControl, speed++),
+                new Pinky(positions.get(1).getX(), positions.get(1).getY(), 2,  mazeControl, speed++),
+                new Inky(positions.get(2).getX(), positions.get(2).getY(), 1,  mazeControl, speed++),
+                new Clyde(positions.get(3).getX(), positions.get(3).getY(), 2, mazeControl, speed++)
         };
     }
 
@@ -139,40 +144,30 @@ public class GameData {
                 countPoints = 0;
             }
             totalPoints++;
+            thingsEaten++;
         } else if (mazeControl.checkIfFruit(x, y)) {
             countFruitPoints++;
+            thingsEaten++;
             totalPoints+= (25*countFruitPoints);
         } else if (mazeControl.checkIfPower(x, y)) {
             totalPoints+=10;
+            thingsEaten++;
         } else if (mazeControl.checkIfWarp(x, y)) {
             pacMan.checkIfWarp(x, y);
         }else if (mazeControl.chekIfGhost(x, y)) {
             element = new Blinky();
             lastGhostX = x;
             lastGhostY = y;
-            /*
-            if (fsm.getState() == GameStates.PLAYING) {
-               // fsm.ghostCollision();
-            } else if (fsm.getState() == GameStates.VULNERABLE) {
-              //  fsm.eatGhost();
-                countGhostsPoints++;
-                numOfGhosts--;
-                totalPoints
-                = 50 * countGhostsPoints;
-                for(Ghost g : ghosts){
-                    if((g.getX() == x && g.getY() == y )||( g.getLastX() == x && g.getLastY() == y)) {
-                        g.setDead(true);
-                    }
-                }
-                for(Ghost g : ghosts){
-                    if(g.isDead())
-                        mazeControl.removeGhost(g.getX(), g.getY());
-                }
-                if (countGhostsPoints == 4)
-                    countGhostsPoints = 0;
-            }*/
         }
         return element;
+    }
+
+    public boolean checkIfWin(){
+        System.out.println("COMIDOS: " + thingsEaten + " Total: " + mazeControl.getTotalPoints());
+        if(thingsEaten >= mazeControl.getTotalPoints() || numOfGhosts == 0)
+            return true;
+        else
+            return false;
     }
 
     public char[][] getMaze() {
@@ -186,7 +181,7 @@ public class GameData {
     }
 
     public void eatGhost(int countGhostsPoints) {
-        System.out.println("COMI FANTASMA");
+        System.out.println("COMI FANTASMA ultimo x e y" + lastGhostX +" "+ lastGhostY);
         this.numOfGhosts--;
         totalPoints = 50 * countGhostsPoints;
         for(Ghost g : ghosts){
@@ -199,7 +194,6 @@ public class GameData {
                 mazeControl.removeGhost(g.getX(), g.getY());
         }
     }
-
 
     public int getPacManLife() {
         return pacManLife;
@@ -221,5 +215,18 @@ public class GameData {
 
     public void setLife() {
         pacManLife--;
+    }
+
+    public void timer() {
+        time++;
+    }
+
+    public int getTime(){
+        return time;
+    }
+
+    public void levelUp() {
+        level++;
+        initGame();
     }
 }
