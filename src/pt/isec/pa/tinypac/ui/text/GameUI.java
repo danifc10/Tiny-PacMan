@@ -1,35 +1,24 @@
 package pt.isec.pa.tinypac.ui.text;
 
-import com.googlecode.lanterna.TerminalPosition;
-import com.googlecode.lanterna.TerminalSize;
-import com.googlecode.lanterna.TextColor;
-import com.googlecode.lanterna.graphics.TextGraphics;
-import com.googlecode.lanterna.input.KeyStroke;
-import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.terminal.Terminal;
-import pt.isec.pa.tinypac.GameController;
 import pt.isec.pa.tinypac.gameengine.IGameEngine;
-import pt.isec.pa.tinypac.gameengine.IGameEngineEvolve;
 import pt.isec.pa.tinypac.model.fsm.GameContext;
-import pt.isec.pa.tinypac.model.fsm.GameStates;
 
 import java.io.IOException;
 
-public class GameUI implements IGameEngineEvolve {
-    private GameController game;
+public class GameUI  {
     private IGameEngine gameEngine;
     private Terminal terminal;
     private GameContext fsm;
 
-    public GameUI(GameContext context, GameController game, IGameEngine gameEngine, Terminal terminal) throws IOException {
+    public GameUI(GameContext context, IGameEngine gameEngine, Terminal terminal) throws IOException {
         this.fsm = context;
-        this.game = game;
         this.gameEngine = gameEngine;
         this.terminal = terminal;
     }
 
     boolean finish = false;
-
+/*
     public void start() throws IOException {
         while(!finish){
             switch (fsm.getState()){
@@ -61,9 +50,9 @@ public class GameUI implements IGameEngineEvolve {
 
         // verifica a primeira transição
         KeyStroke key = terminal.readInput();
-        game.setPacManNewDirection(readDirection(key));
-        gameEngine.registerClient(game);
-        gameEngine.start(180);
+        fsm.setPacManNewDirection(readDirection(key));
+      //  gameEngine.registerClient(game);
+       // gameEngine.start(180);
         fsm.startGame();
         terminal.clearScreen();
     }
@@ -74,14 +63,14 @@ public class GameUI implements IGameEngineEvolve {
             gameEngine.unregisterClient(game);
             fsm.pauseGame();
         }
-        game.setPacManNewDirection(readDirection(key));
+        fsm.setPacManNewDirection(readDirection(key));
     }
 
     void gameOverUI() throws IOException {
         System.out.println("game over");
         gameEngine.unregisterClient(game);
-        if(game.getPacManLife() - 1> 0) {
-            game.restartMaze();
+        if(fsm.getPacManLife() - 1> 0) {
+            fsm.restartMaze();
             fsm.restart();
         }else{
             finish = true;
@@ -245,6 +234,6 @@ public class GameUI implements IGameEngineEvolve {
             throw new RuntimeException(e);
         }
     }
-
+*/
 
 }

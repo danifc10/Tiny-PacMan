@@ -18,4 +18,5 @@ public interface IGameStates {
       boolean endGame(); // no GAME_OVER e no WIN
       boolean pauseGame();
       boolean resumeGame();
+      void changeDirection(int direction);
 }

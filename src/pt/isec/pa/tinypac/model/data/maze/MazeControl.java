@@ -20,10 +20,9 @@ public class MazeControl {
     private int totalPoints = 0;
 
     public MazeControl(int level) {
-        System.out.println(level);
         ghostStartPositions = new ArrayList<>();
         putLevelsFile();
-        File arquivo = new File("levels\\"+getLevelFile(level));
+        File arquivo = new File("levels\\"+ getLevelFile(level));
         // Criar um para ler o conteúdo do arquivo
         Scanner leitor = null;
         try {
