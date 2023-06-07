@@ -50,7 +50,6 @@ public class GameContext {
     }
 
     // dados
-
     public int getPoints(){
         return gameData.getPoints();
     }
@@ -69,7 +68,8 @@ public class GameContext {
         return gameData.getPacManLife();
     }
 
-    public int getTime() {
-        return gameData.getTime();
+
+    public void evolve() {
+        currentState.evolve();
     }
 }

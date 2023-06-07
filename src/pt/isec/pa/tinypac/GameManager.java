@@ -11,6 +11,7 @@ import java.beans.PropertyChangeSupport;
 
 public class GameManager implements IGameEngineEvolve {
     private GameContext fsm;
+    private int time = 0;
     PropertyChangeSupport pcs;
 
     public GameManager() {
@@ -55,9 +56,12 @@ public class GameManager implements IGameEngineEvolve {
 
     @Override
     public void evolve(IGameEngine gameEngine, long currentTime) {
+        time++;
         (new Thread(() -> {
             Platform.runLater(() -> pcs.firePropertyChange(null,null,null));
         })).start();
+
+        fsm.evolve();
     }
 
     public int getPoints() {
@@ -69,10 +73,11 @@ public class GameManager implements IGameEngineEvolve {
     }
 
     public int getTime(){
-        return fsm.getTime();
+        return time;
     }
 
     public void saveGame() {
+        // implementar saves
     }
 }
 

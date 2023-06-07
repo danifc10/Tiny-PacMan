@@ -17,9 +17,12 @@ public class PauseState extends GameAdapter {
     }
 
     @Override
+    public void evolve() {
+
+    }
+
+    @Override
     public boolean resumeGame(){
-        gameEngine.registerClient(gameData);
-        gameEngine.resume();
         changeState(GameStates.PLAYING);
         return true;
     }

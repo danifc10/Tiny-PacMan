@@ -19,4 +19,6 @@ public interface IGameStates {
       boolean pauseGame();
       boolean resumeGame();
       void changeDirection(int direction);
+
+    void evolve();
 }

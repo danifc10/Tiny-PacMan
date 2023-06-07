@@ -49,7 +49,6 @@ public class RootPane extends BorderPane {
 
         this.setOnKeyPressed(event -> {
             KeyCode keyCode = event.getCode();
-            System.out.println(keyCode);
             if (keyCode == KeyCode.UP) {
                 gameManager.changePacManDirection(3);
             } else if (keyCode == KeyCode.DOWN) {

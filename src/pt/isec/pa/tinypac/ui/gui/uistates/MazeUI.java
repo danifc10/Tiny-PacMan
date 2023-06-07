@@ -10,6 +10,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 import pt.isec.pa.tinypac.GameManager;
+import pt.isec.pa.tinypac.model.fsm.GameStates;
 import pt.isec.pa.tinypac.ui.gui.resources.ImageManager;
 
 public class MazeUI extends TilePane {
@@ -60,19 +61,31 @@ public class MazeUI extends TilePane {
         String imageName;
         switch (cell) {
             case 'K':
-                imageName = "pinky.png";
+                if(gameManager.getState() == GameStates.VULNERABLE)
+                    imageName = "blueGhost.png";
+                else
+                    imageName = "pinky.png";
                 break;
             case 'B':
-                imageName = "blinky.png";
+                if(gameManager.getState() == GameStates.VULNERABLE)
+                    imageName = "blueGhost.png";
+                else
+                    imageName = "blinky.png";
                 break;
             case 'C':
-                imageName = "clyde.png";
+                if(gameManager.getState() == GameStates.VULNERABLE)
+                    imageName = "blueGhost.png";
+                else
+                    imageName = "clyde.png";
                 break;
             case 'P':
                 imageName = "pacman.png";
                 break;
             case 'I':
-                imageName = "inky.png";
+                if(gameManager.getState() == GameStates.VULNERABLE)
+                    imageName = "blueGhost.png";
+                else
+                    imageName = "inky.png";
                 break;
             case 'x':
                 imageName = "wall.png";
@@ -88,6 +101,9 @@ public class MazeUI extends TilePane {
                 break;
             case 'W':
                 imageName = "warp.png";
+                break;
+            case 'F':
+                imageName = "fruit.png";
                 break;
             default:
                 imageName = "empty.png";

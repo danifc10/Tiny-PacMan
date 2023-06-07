@@ -18,7 +18,7 @@ public class MainJFX extends Application {
         gameEngine = new GameEngine();
         gameManager = Main.gameManager;
         gameEngine.registerClient(gameManager);
-        gameEngine.start(900);
+        gameEngine.start(300);
     }
 
     @Override

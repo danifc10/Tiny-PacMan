@@ -55,7 +55,7 @@ public class InfoPanel extends HBox {
         Label lblPoints = new Label("Points: "+ points);
         lblPoints.setStyle("-fx-background-color: yellow;");
         if (points==0) {
-            hbPoints.getChildren().add(new Label("-none-"));
+            hbPoints.getChildren().add(lblPoints);
             hbPoints.getChildren().get(0).setId("labelnone");
         }else {
             hbPoints.getChildren().add(lblPoints);

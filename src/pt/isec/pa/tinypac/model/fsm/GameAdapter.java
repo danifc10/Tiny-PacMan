@@ -107,4 +107,9 @@ public class GameAdapter implements IGameStates{
     public void changeDirection(int direction) {
         return;
     }
+
+    @Override
+    public void evolve() {
+
+    }
 }

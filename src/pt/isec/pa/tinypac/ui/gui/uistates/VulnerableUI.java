@@ -1,44 +1,37 @@
 package pt.isec.pa.tinypac.ui.gui.uistates;
 
-import javafx.application.Platform;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
+import javafx.geometry.Insets;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 import pt.isec.pa.tinypac.GameManager;
 import pt.isec.pa.tinypac.model.fsm.GameStates;
+import pt.isec.pa.tinypac.ui.gui.InfoPanel;
 
 public class VulnerableUI extends BorderPane {
     GameManager gameManager;
-    Button btnStart,btnExit;
+    MazeUI mazeUI;
 
     public VulnerableUI(GameManager gameManager) {
         this.gameManager = gameManager;
-
         createViews();
         registerHandlers();
         update();
     }
 
     private void createViews() {
-        btnStart = new Button("Start");
-        btnStart.setMinWidth(100);
-        btnExit  = new Button("Exit");
-        btnExit.setMinWidth(100);
-        HBox hBox = new HBox(btnStart,btnExit);
-        hBox.setAlignment(Pos.CENTER);
-        hBox.setSpacing(10);
-        this.setCenter(hBox);
+        setFocusTraversable(true);
+        this.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+        this.getChildren().clear();
+        mazeUI = new MazeUI(gameManager);
+        this.setCenter(mazeUI);
+        this.setBottom(new InfoPanel(gameManager));
     }
 
     private void registerHandlers() {
         gameManager.addPropertyChangeListener(evt -> { update(); });
-        btnStart.setOnAction( event -> {
-            gameManager.start();
-        });
-        btnExit.setOnAction( event -> {
-            Platform.exit();
-        });
     }
 
     private void update() {
@@ -47,6 +40,5 @@ public class VulnerableUI extends BorderPane {
             return;
         }
         this.setVisible(true);
-
     }
 }
