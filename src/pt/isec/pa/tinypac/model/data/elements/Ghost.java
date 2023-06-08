@@ -1,12 +1,11 @@
 package pt.isec.pa.tinypac.model.data.elements;
 
-import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
 import pt.isec.pa.tinypac.model.data.maze.MazeControl;
 import pt.isec.pa.tinypac.utils.Position;
 
 import java.util.List;
 
-public abstract class Ghost implements IMazeElement {
+public abstract class Ghost{
     protected int x, y; // posição do fantasma no labirinto
     protected int lastX, lastY;
     protected int direction; // direção atual do fantasma

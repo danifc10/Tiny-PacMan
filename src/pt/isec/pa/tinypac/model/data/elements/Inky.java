@@ -6,7 +6,7 @@ import pt.isec.pa.tinypac.utils.Position;
 
 import java.util.ArrayList;
 
-public class Inky extends Ghost {
+public class Inky extends Ghost implements IMazeElement{
     private static final char symbol = 'I';
     private IMazeElement symbolRemove = null;
     private int nextCornerX ;

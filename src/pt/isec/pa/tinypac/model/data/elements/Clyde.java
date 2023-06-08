@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Clyde extends Ghost{
+public class Clyde extends Ghost implements IMazeElement{
     Random random = new Random();
     private IMazeElement symbolRemove =null;
     private static final char symbol = 'C';

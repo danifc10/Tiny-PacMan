@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Blinky extends Ghost {
+public class Blinky extends Ghost implements IMazeElement{
     private static final char symbol = 'B';
     Random random = new Random();
     private IMazeElement symbolRemove =null;

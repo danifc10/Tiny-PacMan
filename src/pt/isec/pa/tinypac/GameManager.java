@@ -33,15 +33,7 @@ public class GameManager implements IGameEngineEvolve {
         pcs.firePropertyChange(null,null,null);
     }
 
-    public char[][] getMaze(){
-        return fsm.getMaze();
-    }
-
-    public GameStates getState() {
-        return fsm.getState();
-    }
-
-    // transitions and data here
+    // transitions
     public void changePacManDirection(int direction){
         activateTimer = true;
         fsm.setPacManNewDirection(direction);
@@ -66,6 +58,15 @@ public class GameManager implements IGameEngineEvolve {
 
         if(activateTimer)
             fsm.timer();
+    }
+
+    // data
+    public char[][] getMaze(){
+        return fsm.getMaze();
+    }
+
+    public GameStates getState() {
+        return fsm.getState();
     }
 
     public int getPoints() {

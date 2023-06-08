@@ -10,7 +10,6 @@ import pt.isec.pa.tinypac.model.fsm.GameContext;
 import pt.isec.pa.tinypac.model.fsm.GameStates;
 
 public class PlayingState extends GameAdapter {
-
     public PlayingState(GameContext context, GameData gameData, IGameEngine gameEngine) {
         super(context, gameData, gameEngine);
     }
@@ -30,8 +29,9 @@ public class PlayingState extends GameAdapter {
         IMazeElement eaten = gameData.movePacMan();
         if(eaten instanceof PowerPoint)
             changeState(GameStates.VULNERABLE);
-        else if(eaten instanceof Blinky) {
+        else if(eaten instanceof Blinky) { // devia ser GHOST
             if(gameData.getPacManLife() > 0) {
+                System.out.println("no more lifes");
                 gameData.setLife();
                 gameData.initGame();
                 changeState(GameStates.INITIAL);
