@@ -31,14 +31,20 @@ public class PlayingState extends GameAdapter {
             changeState(GameStates.VULNERABLE);
         else if(eaten instanceof Blinky) { // devia ser GHOST
             if(gameData.getPacManLife() > 0) {
-                System.out.println("no more lifes");
                 gameData.setLife();
                 gameData.initGame();
                 changeState(GameStates.INITIAL);
             }else
                 changeState(GameStates.GAME_OVER);
         }
-        gameData.moveGhosts();
+        if(gameData.moveGhosts()) {
+            if (gameData.getPacManLife() > 0) {
+                gameData.setLife();
+                gameData.initGame();
+                changeState(GameStates.INITIAL);
+            } else
+                changeState(GameStates.GAME_OVER);
+        }
         if(gameData.checkIfWin()) {
             gameData.levelUp();
             changeState(GameStates.INITIAL);

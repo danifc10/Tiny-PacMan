@@ -2,7 +2,9 @@ package pt.isec.pa.tinypac.model.fsm.states;
 
 import pt.isec.pa.tinypac.gameengine.IGameEngine;
 import pt.isec.pa.tinypac.model.data.GameData;
+import pt.isec.pa.tinypac.model.data.PowerPoint;
 import pt.isec.pa.tinypac.model.data.elements.Blinky;
+import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
 import pt.isec.pa.tinypac.model.fsm.GameAdapter;
 import pt.isec.pa.tinypac.model.fsm.GameContext;
 import pt.isec.pa.tinypac.model.fsm.GameStates;
@@ -33,12 +35,23 @@ public class VulnerableState extends GameAdapter {
             gameData.endVulnerable();
             changeState(GameStates.PLAYING);
         }
-        if(gameData.movePacMan() instanceof Blinky) {
+        IMazeElement eaten = gameData.movePacMan();
+        if(eaten instanceof PowerPoint)
+            vulnerableTime = vulnerableTime * 2;
+        else if(eaten instanceof Blinky) {
             countGhosts++;
             gameData.eatGhost(countGhosts);
         }
-        gameData.vulnerableMoveGhosts();
 
+        if(gameData.vulnerableMoveGhosts()){
+            countGhosts++;
+            gameData.eatGhost(countGhosts);
+        }
+
+        if(gameData.checkIfWin()) {
+            gameData.levelUp();
+            changeState(GameStates.INITIAL);
+        }
         if (countGhosts== 4)
             countGhosts = 0;
     }

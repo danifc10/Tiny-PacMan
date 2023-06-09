@@ -3,7 +3,9 @@ package pt.isec.pa.tinypac.model.data.elements;
 import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
 import pt.isec.pa.tinypac.model.data.maze.MazeControl;
 
-public class PacMan implements IMazeElement {
+import java.io.Serializable;
+
+public class PacMan implements IMazeElement , Serializable {
     public static final char symbol= 'P';
     private int x; // row
     private int y; // col

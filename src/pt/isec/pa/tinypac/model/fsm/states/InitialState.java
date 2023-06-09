@@ -15,14 +15,6 @@ public class InitialState extends GameAdapter {
     }
 
     @Override
-    public boolean startGame(){
-        System.out.println("initial start");
-        gameData.initGame();
-        changeState(GameStates.INITIAL);
-        return true;
-    }
-
-    @Override
     public void changeDirection(int direction) {
         gameData.setPacManDirection(direction);
         aux = 1;

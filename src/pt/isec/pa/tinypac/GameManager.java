@@ -10,6 +10,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 public class GameManager implements IGameEngineEvolve {
+    public static final String file = "files\\game.dat";
     private GameContext fsm;
     PropertyChangeSupport pcs;
     private boolean activateTimer = false;
@@ -85,8 +86,15 @@ public class GameManager implements IGameEngineEvolve {
         return fsm.getTime();
     }
 
-    public void saveGame() {
-        // implementar saves
+    public void saveGame(){
+        fsm.save();
+    }
+
+    public void loadGame(){
+        fsm.load();
+    }
+
+    public void registerPoints() {
     }
 }
 

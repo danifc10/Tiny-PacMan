@@ -5,10 +5,11 @@ import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
 import pt.isec.pa.tinypac.model.data.maze.MazeControl;
 import pt.isec.pa.tinypac.utils.Position;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameData {
+public class GameData implements Serializable {
     private MazeControl mazeControl;
     private PacMan pacMan;
     private Ghost [] ghosts;
@@ -22,15 +23,14 @@ public class GameData {
     private int numOfGhosts = 4;
     private int lastGhostX , lastGhostY;
     private int speed = 0;
-    private int thingsEaten = 0;
-    private final int endTime = 300;
+    private boolean stopTimer;
 
     public GameData() {
+        initGame();
     }
 
     public void initGame() {
         totalPoints = 0;
-        thingsEaten = 0;
         time = 0;
         mazeControl = new MazeControl(level);
         positions = mazeControl.getGhostStartPositions();
@@ -41,6 +41,7 @@ public class GameData {
                 new Inky(positions.get(2).getX(), positions.get(2).getY(), 1,  mazeControl, speed++),
                 new Clyde(positions.get(3).getX(), positions.get(3).getY(), 2, mazeControl, speed++)
         };
+
     }
 
     // getter and setters to data
@@ -63,10 +64,12 @@ public class GameData {
         return pacManLife;
     }
     public void setLife() {
+        stopTimer = true;
         pacManLife--;
     }
     public void timer() {
-        time++;
+        if(!stopTimer)
+            time++;
     }
     public int getTime(){
         return time;
@@ -90,21 +93,33 @@ public class GameData {
             g.move();
         }
     }
-    public void moveGhosts() {
+    public boolean moveGhosts() {
         for (Ghost ghost : ghosts) {
-            if(!ghost.isDead())
+            if(!ghost.isDead()) {
                 ghost.move();
+                if (ghost.getX() == pacMan.getX() && ghost.getY() == pacMan.getY()){
+                    return true;
+                }
+            }
+
         }
+        return false;
     }
-    public void vulnerableMoveGhosts(){
+    public boolean vulnerableMoveGhosts(){
         for (Ghost ghost : ghosts) {
-            if(!ghost.isDead())
+            if(!ghost.isDead()) {
                 ghost.vulnerableMove();
+                if (ghost.getX() == pacMan.getX() && ghost.getY() == pacMan.getY()){
+                    return true;
+                }
+            }
         }
+        return false;
     }
 
     // pacman things
     public void setPacManDirection(int direction) {
+        stopTimer = false;
         if(direction == 1){
             if(pacMan.canMove(pacMan.getX(), pacMan.getY() + 1))
                 pacMan.setDirection(1);
@@ -185,14 +200,11 @@ public class GameData {
                 countPoints = 0;
             }
             totalPoints++;
-            thingsEaten++;
         } else if (mazeControl.checkIfFruit(x, y)) {
             countFruitPoints++;
-            thingsEaten++;
             totalPoints+= (25*countFruitPoints);
         } else if (mazeControl.checkIfPower(x, y)) {
             totalPoints+=10;
-            thingsEaten++;
         } else if (mazeControl.checkIfWarp(x, y)) {
             pacMan.checkIfWarp(x, y);
         }else if (mazeControl.chekIfGhost(x, y)) {
@@ -207,13 +219,10 @@ public class GameData {
 
     // like a transition but not a really one
     public boolean checkIfWin(){
-        System.out.println("COMIDOS: " + thingsEaten + " Total: " + mazeControl.getTotalPoints());
-        if(thingsEaten >= mazeControl.getTotalPoints() || numOfGhosts == 0)
-            return true;
-        else
-            return false;
+        return mazeControl.checkWin();
     }
     public void levelUp() {
+        stopTimer = true;
         level++;
         initGame();
     }

@@ -1,14 +1,16 @@
 package pt.isec.pa.tinypac.model.data.maze;
 
 import pt.isec.pa.tinypac.model.data.*;
+import pt.isec.pa.tinypac.model.data.elements.*;
 import pt.isec.pa.tinypac.utils.Position;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.*;
 
-public class MazeControl {
+public class MazeControl implements Serializable {
     private Maze maze;
     private int width;
     private int height;
@@ -136,7 +138,7 @@ public class MazeControl {
         Position p = null;
         for(int i = 0 ; i < height ; i++){
             for(int j = 0 ;  j < width ; j++){
-                if(maze.get(i, j).getSymbol() == 'P')
+                if(maze.get(i, j) instanceof PacMan)
                     p = new Position(i, j);
             }
         }
@@ -146,11 +148,11 @@ public class MazeControl {
     public void remove(int x, int y) {
         for(int i = 0 ; i < height ; i++){
             for(int j = 0 ; j < width ; j++){
-                if((maze.get(i, j).getSymbol() == 'W')){
+                if((maze.get(i, j) instanceof WarpZone)){
                     maze.set(i, j, new WarpZone());
-                }else if(maze.get(i, j).getSymbol() == 'Y'){
+                }else if(maze.get(i, j) instanceof GhostGate){
                     maze.set(i, j, new GhostGate());
-                }else if((i == x &&  j == y ) && (maze.get(i, j).getSymbol() != 'W') && (maze.get(i, j).getSymbol() != 'Y')) {
+                }else if((i == x &&  j == y ) && !(maze.get(i, j) instanceof WarpZone) && !(maze.get(i, j) instanceof GhostGate)) {
                     maze.set(i, j, new EmptyZone());
                 }
             }
@@ -161,42 +163,39 @@ public class MazeControl {
         int count = 0;
         for(int i = 0 ; i < height ; i++){
             for(int j = 0 ; j < width ; j++){
-                if(maze.get(i, j).getSymbol() == ' '){
+                if(maze.get(i, j) instanceof EmptyZone){
                     count++;
                 }
             }
         }
-        if(count >= totalPoints)
-            return true;
-        else
-            return false;
+        return count >= totalPoints;
     }
 
     public boolean checkIfWall(int x, int y) {
-        return ((maze.get(x,y).getSymbol()) == 'x');
+        return maze.get(x,y) instanceof Wall;
     }
 
     public boolean checkIfPoint(int x, int y){
-        return maze.get(x,y).getSymbol() == 'o';
+        return maze.get(x,y) instanceof Point;
     }
 
     public boolean checkIfFruit(int x, int y){
-        return maze.get(x,y).getSymbol() == 'F';
+        return maze.get(x,y) instanceof Fruit;
     }
 
     public boolean checkIfPower(int x, int y){
-        return maze.get(x,y).getSymbol() == 'O';
+        return maze.get(x,y) instanceof PowerPoint;
     }
 
     public boolean checkIfWarp(int x, int y){
-        return maze.get(x,y).getSymbol() == 'W';
+        return maze.get(x,y) instanceof WarpZone;
     }
 
     public boolean chekIfGhost(int x, int y){
-        return ((maze.get(x, y).getSymbol() == 'B')
-                || (maze.get(x, y).getSymbol() == 'I')
-                || (maze.get(x, y).getSymbol() == 'K')
-                || (maze.get(x, y).getSymbol() == 'C'));
+        return ((maze.get(x, y) instanceof Blinky)
+                || (maze.get(x, y) instanceof Pinky)
+                || (maze.get(x, y) instanceof Clyde)
+                || (maze.get(x, y) instanceof Inky));
     }
 
     public char [][] getMazeControl(){
@@ -224,7 +223,7 @@ public class MazeControl {
     }
 
     public boolean checkIfWallGhost(int x, int y) {
-        if(maze.get(x, y).getSymbol() == 'W' || maze.get(x, y).getSymbol() == 'x')
+        if(maze.get(x, y) instanceof WarpZone || maze.get(x, y) instanceof Wall)
             return true;
         else
             return false;

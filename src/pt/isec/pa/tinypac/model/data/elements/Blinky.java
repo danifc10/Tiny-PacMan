@@ -4,11 +4,12 @@ import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
 import pt.isec.pa.tinypac.model.data.maze.MazeControl;
 import pt.isec.pa.tinypac.utils.Position;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Blinky extends Ghost implements IMazeElement{
+public class Blinky extends Ghost implements IMazeElement, Serializable {
     private static final char symbol = 'B';
     Random random = new Random();
     private IMazeElement symbolRemove =null;

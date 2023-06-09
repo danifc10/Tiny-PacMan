@@ -5,14 +5,17 @@ import pt.isec.pa.tinypac.gameengine.IGameEngine;
 import pt.isec.pa.tinypac.model.data.GameData;
 import pt.isec.pa.tinypac.model.fsm.states.InitialState;
 
+import java.io.*;
+
 public class GameContext {
+    public static final String file = "files\\game.bin";
     private GameData gameData;
     private IGameStates currentState;
     private IGameEngine gameEngine;
 
     public GameContext(){
         this.gameEngine =  new GameEngine();
-        gameData = new GameData();
+        load();
         this.currentState = new InitialState(this,gameData, gameEngine);
     }
 
@@ -26,8 +29,7 @@ public class GameContext {
 
     // tranciçoes
     public boolean startGame(){
-        System.out.println("context start");
-        currentState.startGame();
+
         return true;
     }
     public void setPacManNewDirection(int readDirection) {
@@ -68,7 +70,6 @@ public class GameContext {
         return gameData.getPacManLife();
     }
 
-
     public void evolve() {
         currentState.evolve();
     }
@@ -79,5 +80,35 @@ public class GameContext {
 
     public int getTime() {
         return gameData.getTime();
+    }
+
+    public void save() {
+        try(FileOutputStream fs = new FileOutputStream(file);
+            ObjectOutputStream oos = new ObjectOutputStream(fs)){
+            oos.writeObject(gameData);
+            oos.close();
+            fs.close();
+            System.out.println("Jogo gravado com sucesso.");
+        }catch (IOException e){
+            System.out.println("Erro ao guardar jogo");
+        }
+    }
+
+    public void load(){
+        File file2 = new File(file);
+        try(FileInputStream fs = new FileInputStream(file2);
+            ObjectInputStream ois = new ObjectInputStream(fs)){
+            gameData = (GameData) ois.readObject();
+            ois.close();
+            fs.close();
+            System.out.println("Jogo restaurado com sucesso.");
+        }catch (Exception e){
+            // e.printStackTrace();
+            System.out.println("Erro ao abrir ficheiro um novo jogo vai ser criado");
+            this.gameData = new GameData();
+        }finally {
+            file2.delete();
+        }
+
     }
 }

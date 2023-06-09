@@ -4,11 +4,12 @@ import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
 import pt.isec.pa.tinypac.model.data.maze.MazeControl;
 import pt.isec.pa.tinypac.utils.Position;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Clyde extends Ghost implements IMazeElement{
+public class Clyde extends Ghost implements IMazeElement, Serializable {
     Random random = new Random();
     private IMazeElement symbolRemove =null;
     private static final char symbol = 'C';

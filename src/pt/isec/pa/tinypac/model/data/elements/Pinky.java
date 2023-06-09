@@ -4,9 +4,10 @@ import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
 import pt.isec.pa.tinypac.model.data.maze.MazeControl;
 import pt.isec.pa.tinypac.utils.Position;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Pinky extends Ghost implements IMazeElement{
+public class Pinky extends Ghost implements IMazeElement, Serializable {
     private static final char symbol = 'K';
     private IMazeElement symbolRemove =null;
     private int nextCornerX ;
