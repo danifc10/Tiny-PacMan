@@ -4,6 +4,7 @@ import pt.isec.pa.tinypac.gameengine.GameEngine;
 import pt.isec.pa.tinypac.gameengine.IGameEngine;
 import pt.isec.pa.tinypac.model.data.GameData;
 import pt.isec.pa.tinypac.model.fsm.states.InitialState;
+import pt.isec.pa.tinypac.utils.Direction;
 
 import java.io.*;
 
@@ -29,27 +30,15 @@ public class GameContext {
 
     // tranciçoes
     public boolean startGame(){
-
+        //gameData.initGame();
+        //load();
         return true;
     }
-    public void setPacManNewDirection(int readDirection) {
+    public void setPacManNewDirection(Direction readDirection) {
         currentState.changeDirection(readDirection);
     }
     public boolean pauseGame(){return currentState.pauseGame();}
     public boolean resumeGame(){return currentState.resumeGame();}
-
-    public boolean ghostCollision() {
-        return currentState.ghostCollision();
-    }
-    public boolean restart() {
-        return currentState.restart();
-    }
-    public boolean levelUp() {
-        return currentState.levelUp();
-    }
-    public boolean endVulnerableTime(){
-        return currentState.endVulnerableTime();
-    }
 
     // dados
     public int getPoints(){

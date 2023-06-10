@@ -9,9 +9,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import pt.isec.pa.tinypac.GameManager;
+import pt.isec.pa.tinypac.model.Score;
 import pt.isec.pa.tinypac.model.fsm.GameStates;
 import pt.isec.pa.tinypac.ui.gui.InfoPanel;
 import pt.isec.pa.tinypac.ui.gui.resources.ImageManager;
+
+import java.util.List;
 
 public class InitialUI extends BorderPane {
     private static final int CELL_SIZE = 16;
@@ -76,27 +79,22 @@ public class InitialUI extends BorderPane {
         top5Pane = new VBox();
         top5Pane.setPadding(new Insets(10));
         top5Pane.setSpacing(10);
+        List<Score> scores = gameManager.getTop5();
 
-        Label titleLabel = new Label("Top 5 Players");
-        titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white");
-
-        Label player1Label = new Label("1. John");
-        Label player2Label = new Label("2. Sarah");
-        Label player3Label = new Label("3. Mike");
-        Label player4Label = new Label("4. Emily");
-        Label player5Label = new Label("5. Alex");
-        player1Label.setStyle(" -fx-text-fill: white");
-        player2Label.setStyle(" -fx-text-fill: white");
-        player3Label.setStyle(" -fx-text-fill: white");
-        player4Label.setStyle(" -fx-text-fill: white");
-        player5Label.setStyle(" -fx-text-fill: white");
+        for(int i = 0 ; i < scores.size() ; i++){
+            String name = scores.get(i).getName();
+            int points = scores.get(i).getPoints();
+            Label playerLabel = new Label( name + "  " + points);
+            playerLabel.setStyle("-fx-text-fill: white");
+            top5Pane.getChildren().add(playerLabel);
+        }
 
         btnReturn = new Button("Back");
         btnReturn.setMinWidth(100);
         btnReturn.setOnAction(e -> createViews());
         top5Pane.setAlignment(Pos.CENTER);
         top5Pane.setSpacing(10);
-        top5Pane.getChildren().addAll(titleLabel, player1Label, player2Label, player3Label, player4Label, player5Label, btnReturn);
+        top5Pane.getChildren().addAll(btnReturn);
         this.setCenter(top5Pane);
     }
 

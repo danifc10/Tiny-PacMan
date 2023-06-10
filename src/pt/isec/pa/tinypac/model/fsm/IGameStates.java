@@ -1,5 +1,7 @@
 package pt.isec.pa.tinypac.model.fsm;
 
+import pt.isec.pa.tinypac.utils.Direction;
+
 public interface IGameStates {
       GameStates getState();
 
@@ -18,7 +20,7 @@ public interface IGameStates {
       boolean endGame(); // no GAME_OVER e no WIN
       boolean pauseGame();
       boolean resumeGame();
-      void changeDirection(int direction);
+      void changeDirection(Direction direction);
 
     void evolve();
 }

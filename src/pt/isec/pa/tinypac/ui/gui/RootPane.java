@@ -7,6 +7,7 @@ import pt.isec.pa.tinypac.model.fsm.GameStates;
 import pt.isec.pa.tinypac.ui.gui.resources.CSSManager;
 import pt.isec.pa.tinypac.ui.gui.resources.ImageManager;
 import pt.isec.pa.tinypac.ui.gui.uistates.*;
+import pt.isec.pa.tinypac.utils.Direction;
 
 public class RootPane extends BorderPane {
     GameManager gameManager;
@@ -50,13 +51,13 @@ public class RootPane extends BorderPane {
         this.setOnKeyPressed(event -> {
             KeyCode keyCode = event.getCode();
             if (keyCode == KeyCode.UP) {
-                gameManager.changePacManDirection(3);
+                gameManager.changePacManDirection(Direction.UP);
             } else if (keyCode == KeyCode.DOWN) {
-                gameManager.changePacManDirection(4);
+                gameManager.changePacManDirection(Direction.DOWN);
             } else if (keyCode == KeyCode.LEFT) {
-                gameManager.changePacManDirection(2);
+                gameManager.changePacManDirection(Direction.LEFT);
             } else if (keyCode == KeyCode.RIGHT) {
-                gameManager.changePacManDirection(1);
+                gameManager.changePacManDirection(Direction.RIGHT);
             } else if (keyCode == KeyCode.SPACE || keyCode == KeyCode.ESCAPE) {
                 if(gameManager.getState() != GameStates.PAUSE)
                     gameManager.pause();

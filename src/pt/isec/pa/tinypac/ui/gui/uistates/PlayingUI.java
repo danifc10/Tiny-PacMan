@@ -11,7 +11,6 @@ import pt.isec.pa.tinypac.model.fsm.GameStates;
 import pt.isec.pa.tinypac.ui.gui.InfoPanel;
 
 public class PlayingUI extends BorderPane {
-    private static final int CELL_SIZE = 16;
     GameManager gameManager;
     MazeUI mazeUI;
 

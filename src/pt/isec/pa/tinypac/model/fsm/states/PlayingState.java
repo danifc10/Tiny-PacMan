@@ -4,10 +4,14 @@ import pt.isec.pa.tinypac.gameengine.IGameEngine;
 import pt.isec.pa.tinypac.model.data.GameData;
 import pt.isec.pa.tinypac.model.data.PowerPoint;
 import pt.isec.pa.tinypac.model.data.elements.Blinky;
+import pt.isec.pa.tinypac.model.data.elements.Clyde;
+import pt.isec.pa.tinypac.model.data.elements.Inky;
+import pt.isec.pa.tinypac.model.data.elements.Pinky;
 import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
 import pt.isec.pa.tinypac.model.fsm.GameAdapter;
 import pt.isec.pa.tinypac.model.fsm.GameContext;
 import pt.isec.pa.tinypac.model.fsm.GameStates;
+import pt.isec.pa.tinypac.utils.Direction;
 
 public class PlayingState extends GameAdapter {
     public PlayingState(GameContext context, GameData gameData, IGameEngine gameEngine) {
@@ -15,7 +19,7 @@ public class PlayingState extends GameAdapter {
     }
 
     @Override
-    public void changeDirection(int direction) {
+    public void changeDirection(Direction direction) {
         gameData.setPacManDirection(direction);
     }
 
@@ -29,7 +33,7 @@ public class PlayingState extends GameAdapter {
         IMazeElement eaten = gameData.movePacMan();
         if(eaten instanceof PowerPoint)
             changeState(GameStates.VULNERABLE);
-        else if(eaten instanceof Blinky) { // devia ser GHOST
+        else if(eaten instanceof Blinky || eaten instanceof Clyde || eaten instanceof Pinky || eaten instanceof Inky) {
             if(gameData.getPacManLife() > 0) {
                 gameData.setLife();
                 gameData.initGame();
@@ -38,14 +42,13 @@ public class PlayingState extends GameAdapter {
                 changeState(GameStates.GAME_OVER);
         }
         if(gameData.moveGhosts()) {
-            if (gameData.getPacManLife() > 0) {
-                gameData.setLife();
-                gameData.initGame();
+            if (gameData.getPacManLife() > 0 ) {
+                gameData.gameOver();
                 changeState(GameStates.INITIAL);
             } else
                 changeState(GameStates.GAME_OVER);
         }
-        if(gameData.checkIfWin()) {
+        if(gameData.checkIfWin() || gameData.getNumGhosts() <= 0) {
             gameData.levelUp();
             changeState(GameStates.INITIAL);
         }

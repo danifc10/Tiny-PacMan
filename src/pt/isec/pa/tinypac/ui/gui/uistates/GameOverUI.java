@@ -14,6 +14,7 @@ import pt.isec.pa.tinypac.model.fsm.GameStates;
 public class GameOverUI extends BorderPane {
     GameManager gameManager;
     Button btnEnter;
+    TextField nameField;
 
     public GameOverUI(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -28,7 +29,7 @@ public class GameOverUI extends BorderPane {
         Label nameLabel = new Label("Player Name:");
         nameLabel.setStyle(" -fx-text-fill: white; ");
         // Criar um campo de texto para o jogador inserir seu nome
-        TextField nameField = new TextField();
+        nameField = new TextField();
         nameField.setMaxWidth(300);
         nameField.setMaxHeight(100);
         btnEnter = new Button("Enter");
@@ -36,8 +37,8 @@ public class GameOverUI extends BorderPane {
         // Criar um layout VBox para organizar os componentes
         VBox vBox = new VBox(10); // 10 é o espaçamento vertical entre os componentes
         vBox.setPadding(new Insets(10)); // Definir o espaçamento interno do VBox
-        vBox.getChildren().addAll(nameLabel, nameField); // Adicionar a Label e o TextField ao VBox
-        vBox.setAlignment(Pos.TOP_CENTER);
+        vBox.getChildren().addAll(nameLabel, nameField, btnEnter); // Adicionar a Label e o TextField ao VBox
+        vBox.setAlignment(Pos.CENTER);
         vBox.setSpacing(10);
         this.setCenter(vBox);
     }
@@ -46,7 +47,7 @@ public class GameOverUI extends BorderPane {
         gameManager.addPropertyChangeListener(evt -> { update(); });
         btnEnter.setOnAction(evt->{
             // register Top5
-            gameManager.registerPoints();
+            gameManager.registerPoints(nameField.getText());
             Platform.exit();
         });
     }

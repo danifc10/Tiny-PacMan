@@ -5,6 +5,7 @@ import pt.isec.pa.tinypac.model.data.GameData;
 import pt.isec.pa.tinypac.model.fsm.GameAdapter;
 import pt.isec.pa.tinypac.model.fsm.GameContext;
 import pt.isec.pa.tinypac.model.fsm.GameStates;
+import pt.isec.pa.tinypac.utils.Direction;
 
 public class InitialState extends GameAdapter {
     private int startTime;
@@ -15,7 +16,7 @@ public class InitialState extends GameAdapter {
     }
 
     @Override
-    public void changeDirection(int direction) {
+    public void changeDirection(Direction direction) {
         gameData.setPacManDirection(direction);
         aux = 1;
     }

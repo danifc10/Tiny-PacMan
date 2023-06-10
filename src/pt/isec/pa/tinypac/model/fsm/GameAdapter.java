@@ -5,6 +5,7 @@ import pt.isec.pa.tinypac.model.data.GameData;
 import pt.isec.pa.tinypac.model.data.maze.MazeControl;
 import pt.isec.pa.tinypac.model.data.elements.Ghost;
 import pt.isec.pa.tinypac.model.data.elements.PacMan;
+import pt.isec.pa.tinypac.utils.Direction;
 
 public class GameAdapter implements IGameStates{
     protected GameContext context;
@@ -104,7 +105,7 @@ public class GameAdapter implements IGameStates{
     }
 
     @Override
-    public void changeDirection(int direction) {
+    public void changeDirection(Direction direction) {
         return;
     }
 

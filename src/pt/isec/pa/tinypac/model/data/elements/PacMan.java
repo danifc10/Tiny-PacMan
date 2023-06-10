@@ -1,7 +1,11 @@
 package pt.isec.pa.tinypac.model.data.elements;
 
+import pt.isec.pa.tinypac.model.data.GhostGate;
+import pt.isec.pa.tinypac.model.data.Wall;
+import pt.isec.pa.tinypac.model.data.WarpZone;
 import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
 import pt.isec.pa.tinypac.model.data.maze.MazeControl;
+import pt.isec.pa.tinypac.utils.Direction;
 
 import java.io.Serializable;
 
@@ -11,12 +15,12 @@ public class PacMan implements IMazeElement , Serializable {
     private int y; // col
     private int lastX;
     private int lastY;
-    private int direction; // direção atual
+    private Direction direction; // direção atual
     private MazeControl maze;
 
     public PacMan(){};
 
-    public PacMan(int x, int y, int direction, MazeControl maze) {
+    public PacMan(int x, int y, Direction direction, MazeControl maze) {
         this.x = x;
         this.y = y;
         this.direction = direction;
@@ -28,7 +32,7 @@ public class PacMan implements IMazeElement , Serializable {
     }
 
     public boolean canMove(int x, int y){
-        return !maze.checkIfWall(x, y) && maze.getXY(x, y).getSymbol() != 'Y';
+        return !(maze.getXY(x, y) instanceof Wall) && !(maze.getXY(x, y) instanceof GhostGate);
     }
 
     public void move() {
@@ -36,22 +40,10 @@ public class PacMan implements IMazeElement , Serializable {
         lastY = getY();
 
         switch (direction) {
-            case 1 -> {
-                this.y++;
-            }//RIGHT
-
-            case 2 -> {
-                this.y--;
-            }//LEFT
-
-            case 3 -> {
-                this.x--;
-            }// UP
-
-            case 4 -> {
-                this.x++;
-            }// DOWN
-
+            case RIGHT -> this.y++;
+            case LEFT -> this.y--;
+            case UP -> this.x--;
+            case DOWN -> this.x++;
         }
     }
 
@@ -59,7 +51,7 @@ public class PacMan implements IMazeElement , Serializable {
         maze.remove(this.x, this.y);
         for(int i = 0; i < maze.getHeight() ; i++){
             for(int j = 0; j < maze.getWidth() ; j++){
-                if((j != y && i == x ) && (maze.getXY(i,j).getSymbol() == 'W')){
+                if((j != y && i == x ) && (maze.getXY(i,j) instanceof WarpZone)){
                     setY(j);
                     setX(i);
                 }
@@ -84,11 +76,11 @@ public class PacMan implements IMazeElement , Serializable {
         this.y = y;
     }
 
-    public int getDirection() {
+    public Direction getDirection() {
         return direction;
     }
 
-    public void setDirection(int direction) {
+    public void setDirection(Direction direction) {
         this.direction = direction;
     }
 

@@ -6,7 +6,7 @@ public class Score implements Serializable {
     private String name;
     private int points;
 
-    public void Score(String name, int points){
+    public Score(String name, int points){
         this.name = name;
         this.points = points;
     }

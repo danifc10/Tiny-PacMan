@@ -88,5 +88,6 @@ public class InfoPanel extends HBox {
         lblLevel.setStyle(" -fx-text-fill: white");
         hbLevel.getChildren().add(lblLevel);
 
+
     }
 }

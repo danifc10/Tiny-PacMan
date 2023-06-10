@@ -14,5 +14,5 @@ xxxxxxoxxoxyyyyyyyxoxxoxxxxxx
 xWooooooooxyyyyyyyxooooooooWx
 xxoxxxxxxoxyyyyyyyxoxxxxxxoxx
 xxoxxxxxxoxxxxxxxxxoxxxxxxoxx
-xxoooooooooooFoooooooooooooxx
+xxooOooooooooFoooooooooOoooxx
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
