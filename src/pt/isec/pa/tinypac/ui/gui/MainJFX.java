@@ -24,6 +24,7 @@ public class MainJFX extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         newStageForTesting(stage,"PAC-MAN");
+        //newStageForTesting(new Stage(),"PAC-MAN");
     }
 
     private void newStageForTesting(Stage stage, String title) {

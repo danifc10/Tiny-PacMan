@@ -30,8 +30,7 @@ public class GameContext {
 
     // tranciçoes
     public boolean startGame(){
-        //gameData.initGame();
-        //load();
+        gameData.initGame();
         return true;
     }
     public void setPacManNewDirection(Direction readDirection) {

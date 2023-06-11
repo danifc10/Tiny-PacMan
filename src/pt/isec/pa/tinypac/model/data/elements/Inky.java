@@ -2,6 +2,7 @@ package pt.isec.pa.tinypac.model.data.elements;
 
 import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
 import pt.isec.pa.tinypac.model.data.maze.MazeControl;
+import pt.isec.pa.tinypac.utils.Direction;
 import pt.isec.pa.tinypac.utils.Position;
 
 import java.io.Serializable;
@@ -16,16 +17,14 @@ public class Inky extends Ghost implements IMazeElement, Serializable {
     private double distanceThreshold;
 
     private int[][] corners; // coordenadas dos cantos do labirinto
-    private final int[] dx = {-1, 1, 0, 0}; // movimento de X para cada direção
-    private final int[] dy = {0, 0, 1, -1}; // movimento de Y para cada direção
+
 
     public Inky(){};
 
-    public Inky(int x, int y, int direction, MazeControl maze, int speed) {
+    public Inky(int x, int y, Direction direction, MazeControl maze, int speed) {
         super(x, y, direction, maze, speed);
-        this.direction = 2;
+        this.direction = Direction.RIGHT;
         this.corners = new int[][]{
-                {maze.getGhostGate().getX(),maze.getGhostGate().getY()},
                 {maze.getHeight(), maze.getWidth()},
                 {maze.getHeight(), 0} ,
                 {0, maze.getWidth()},
@@ -33,8 +32,8 @@ public class Inky extends Ghost implements IMazeElement, Serializable {
         };
         this.cornerIndex = 0;
         this.distanceThreshold = maze.getHeight() * 0.15;
-        this.nextCornerX = maze.getGhostGate().getX();
-        this.nextCornerY = maze.getGhostGate().getY();
+        this.nextCornerX = corners[cornerIndex][0]; // Coordenada X do próximo canto de destino
+        this.nextCornerY = corners[cornerIndex][1]; // Coordenada Y do próximo canto de destino
         this.roadMade = new ArrayList<>();
         this.isOut = false;
     }
@@ -47,8 +46,8 @@ public class Inky extends Ghost implements IMazeElement, Serializable {
 
     public void move() {
         if(!isOut){
-            this.nextCornerX = maze.getGhostGate().getX();
-            this.nextCornerY = maze.getGhostGate().getY();
+            getOut();
+            return;
         }
         int lastX = x;
         int lastY = y;
@@ -72,46 +71,35 @@ public class Inky extends Ghost implements IMazeElement, Serializable {
             nextCornerY = corners[cornerIndex][1];
         }
 
-        // para sair da jaula
-        if(cornerIndex == 0  && nextCornerX == maze.getGhostGate().getX()){
-            if(this.maze.getXY(x, y + 1).getSymbol() == 'Y'){
-                direction = 2;
-            }else if(this.maze.getXY(x, y -1 ).getSymbol() == 'Y'){
-                direction = 3;
-            }else if(this.maze.getXY(x - 1, y).getSymbol() == 'Y'){
-                direction = 0;
-            }else if(this.maze.getXY(x + 1, y).getSymbol() == 'Y'){
-                direction = 1;
-            }
-        }
 
         // Verifica se pode seguir na direção atual
-        int nextX = x + dx[direction];
-        int nextY = y + dy[direction];
+        Position currentPosition = new Position(this.x, this.y);
+        Position newPos = getNextPosition(currentPosition, direction);
 
-        if (!maze.checkIfWallGhost(nextX, nextY)) {
-            x = nextX;
-            y = nextY;
+        if (!maze.checkIfWallGhost(newPos.getX(), newPos.getY())) {
+            x = newPos.getX();
+            y = newPos.getY();
         } else {
             int minDist = Integer.MAX_VALUE;
-            int bestDirection = -1;
-            for (int d = 0; d < 4; d++) {
-                int newX = x + dx[d];
-                int newY = y + dy[d];
+            Direction bestDirection = null;
+            for (Direction d : Direction.values()) {
+                currentPosition  = new Position(this.x ,this.y);
+                newPos = getNextPosition(currentPosition, d);
 
-                if (!maze.checkIfWallGhost(newX, newY)) {
-                    int distToCorner = (int) distanceToTarget(newX, newY, nextCornerX, nextCornerY);
-                    if (distToCorner < minDist && d != getOpositeDirection(direction)) {
+                if (!maze.checkIfWallGhost(newPos.getX(), newPos.getY())) {
+                    int distToCorner = (int) distanceToTarget(newPos.getX(), newPos.getY(), nextCornerX, nextCornerY);
+                    if (distToCorner < minDist && d != Direction.opositeDirection(direction)) {
                         minDist = distToCorner;
                         bestDirection = d;
                     }
                 }
             }
 
-            if (bestDirection != -1 ) {
+            if (bestDirection != null ) {
                 direction = bestDirection;
-                x += dx[direction];
-                y += dy[direction];
+                currentPosition = getNextPosition(currentPosition, direction);
+                x = currentPosition.getX();
+                y = currentPosition.getY();
             }
         }
 
@@ -127,20 +115,6 @@ public class Inky extends Ghost implements IMazeElement, Serializable {
         symbolRemove = maze.getXY(x, y);
         this.maze.setXY(x,y,new Inky());
         road_index++;
-    }
-
-    private int getOpositeDirection(int direction) {
-        switch (direction){
-            case 0:
-                return 1;
-            case 1:
-                return 0;
-            case 2:
-                return 3;
-            case 3:
-                return 2;
-        }
-        return 0;
     }
 
     @Override

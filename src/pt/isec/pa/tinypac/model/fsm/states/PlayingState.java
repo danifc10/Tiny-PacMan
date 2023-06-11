@@ -35,8 +35,7 @@ public class PlayingState extends GameAdapter {
             changeState(GameStates.VULNERABLE);
         else if(eaten instanceof Blinky || eaten instanceof Clyde || eaten instanceof Pinky || eaten instanceof Inky) {
             if(gameData.getPacManLife() > 0) {
-                gameData.setLife();
-                gameData.initGame();
+                gameData.gameOver();
                 changeState(GameStates.INITIAL);
             }else
                 changeState(GameStates.GAME_OVER);
@@ -49,8 +48,14 @@ public class PlayingState extends GameAdapter {
                 changeState(GameStates.GAME_OVER);
         }
         if(gameData.checkIfWin() || gameData.getNumGhosts() <= 0) {
-            gameData.levelUp();
-            changeState(GameStates.INITIAL);
+            System.out.println("nivel completo");
+            if(gameData.getLevel() < 20) {
+                gameData.levelUp();
+                changeState(GameStates.INITIAL);
+            }else{
+                System.out.println(" a mudar");
+                changeState(GameStates.WIN);
+            }
         }
     }
 

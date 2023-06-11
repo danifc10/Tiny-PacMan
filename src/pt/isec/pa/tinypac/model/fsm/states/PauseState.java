@@ -22,7 +22,7 @@ public class PauseState extends GameAdapter {
     }
 
     @Override
-    public boolean resumeGame(){
+    public boolean pauseGame(){
         changeState(GameStates.PLAYING);
         return true;
     }

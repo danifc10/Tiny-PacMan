@@ -17,8 +17,8 @@ public class WinState extends GameAdapter {
     }
 
     @Override
-    public boolean levelUp() {
-        changeState(GameStates.INITIAL);
-        return true;
+    public void evolve() {
+
     }
+
 }

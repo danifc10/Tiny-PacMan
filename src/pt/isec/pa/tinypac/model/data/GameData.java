@@ -16,7 +16,7 @@ public class GameData implements Serializable {
     private Ghost [] ghosts;
     private List<Position> positions;
     private int totalPoints = 0;
-    private int level = 1;
+    private int level = 20;
     private int countFruitPoints = 0;
     private int countPoints = 0;
     private int time = 0;
@@ -26,12 +26,15 @@ public class GameData implements Serializable {
     private int speed = 0;
     private boolean stopTimer;
     private int countGhostsPoints = 0;
+    private int pacManFood = 0;
 
     public GameData() {
-        initGame();
+        //initGame();
     }
 
     public void initGame() {
+        pacManFood = 0;
+        countPoints = 0;
         numOfGhosts = 4;
         countGhostsPoints = 0;
         time = 0;
@@ -39,10 +42,10 @@ public class GameData implements Serializable {
         positions = mazeControl.getGhostStartPositions();
         pacMan = new PacMan(mazeControl.getPacManStart().getX(), mazeControl.getPacManStart().getY(), Direction.RIGHT, mazeControl);
         ghosts = new Ghost[]{
-                new Blinky( positions.get(0).getX(), positions.get(0).getY(), 2,  mazeControl, speed++),
-                new Pinky(positions.get(1).getX(), positions.get(1).getY(), 2,  mazeControl, speed++),
-                new Inky(positions.get(2).getX(), positions.get(2).getY(), 1,  mazeControl, speed++),
-                new Clyde(positions.get(3).getX(), positions.get(3).getY(), 2, mazeControl, speed++)
+                new Blinky( positions.get(0).getX(), positions.get(0).getY(), Direction.UP,  mazeControl, speed++),
+                new Pinky(positions.get(1).getX(), positions.get(1).getY(), Direction.RIGHT,  mazeControl, speed++),
+                new Inky(positions.get(2).getX(), positions.get(2).getY(), Direction.LEFT,  mazeControl, speed++),
+                new Clyde(positions.get(3).getX(), positions.get(3).getY(), Direction.DOWN, mazeControl, speed++)
         };
     }
 
@@ -113,7 +116,7 @@ public class GameData implements Serializable {
                 if (ghost.getX() == pacMan.getX() && ghost.getY() == pacMan.getY()){
                     lastGhostX = ghost.getX();
                     lastGhostY = ghost.getY();
-                    System.out.println("comido no ghost");
+                    System.out.println("comido no ghost x" + lastGhostY + " y:" + lastGhostY);
                     eatGhost();
                 }
             }
@@ -127,7 +130,7 @@ public class GameData implements Serializable {
             if(pacMan.canMove(pacMan.getX(), pacMan.getY() + 1))
                 pacMan.setDirection(Direction.RIGHT);
         }else if(direction == Direction.LEFT){
-            if(pacMan.canMove(pacMan.getX(), pacMan.getY() - 1))
+           if(pacMan.canMove(pacMan.getX(), pacMan.getY() - 1))
                 pacMan.setDirection(Direction.LEFT);
         }else if(direction == Direction.UP){
             if(pacMan.canMove(pacMan.getX() - 1, pacMan.getY()))
@@ -189,8 +192,9 @@ public class GameData implements Serializable {
             }
         }
     }
+
     public boolean canMove(int x, int y) {
-        return !mazeControl.checkIfWall(x, y) && mazeControl.getXY(x, y).getSymbol() != 'Y';
+        return (!mazeControl.checkIfWall(x, y) && !(mazeControl.getXY(x, y) instanceof GhostGate));
     }
     public IMazeElement checks(int x, int y) {
         IMazeElement element = mazeControl.getXY(x, y);
@@ -201,23 +205,37 @@ public class GameData implements Serializable {
                 countPoints = 0;
             }
             totalPoints++;
+            pacManFood++;
         } else if (element instanceof Fruit) {
             countFruitPoints++;
             totalPoints+= (25*countFruitPoints);
+            pacManFood++;
         } else if (element instanceof PowerPoint) {
             totalPoints+=10;
+            pacManFood++;
         } else if (element instanceof WarpZone) {
             pacMan.checkIfWarp(x, y);
-        }else if(element instanceof Blinky || element instanceof Pinky || element instanceof Clyde || element instanceof Inky){
-            eatGhost();
+        }else if(element instanceof Blinky || element instanceof Clyde || element instanceof Pinky || element instanceof Inky){
+            System.out.println("COMI FANTASMA X:" + pacMan.getX() + " y" + pacMan.getY());
+            for (Ghost ghost : ghosts) {
+                if(!ghost.isDead()) {
+                    System.out.println("X:" + ghost.getLastX() + " y" + ghost.getLastY());
+                    if (ghost.getX() == pacMan.getX() && ghost.getY() == pacMan.getY()) {
+                        lastGhostX = ghost.getX();
+                        lastGhostY = ghost.getY();
+                        System.out.println("comido no pacman x" + lastGhostY + " y:" + lastGhostY);
+                        eatGhost();
+                    }
+                }
+            }
         }
         return element;
     }
 
-
     // like a transition but not a really one
     public boolean checkIfWin(){
-        return mazeControl.checkWin();
+        System.out.println("pacman:" + pacManFood + " TOTAL: " +mazeControl.getTotalPoints());
+        return pacManFood >= (mazeControl.getTotalPoints() - 2);
     }
     public void levelUp() {
         stopTimer = true;
@@ -234,4 +252,5 @@ public class GameData implements Serializable {
         totalPoints = 0;
         initGame();
     }
+
 }

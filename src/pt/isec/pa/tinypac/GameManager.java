@@ -129,5 +129,15 @@ public class GameManager implements IGameEngineEvolve {
     public List<Score> getTop5(){
         return top5.getScores();
     }
+
+    public boolean canReachTop5() {
+        return top5.canAddScore(getPoints());
+    }
+
+    public void restart() {
+        fsm = new GameContext();
+        top5 = new Top5();
+        fsm.startGame();
+    }
 }
 

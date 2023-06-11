@@ -36,7 +36,7 @@ public class PauseUI extends BorderPane {
     private void registerHandlers() {
         gameManager.addPropertyChangeListener(evt -> { update(); });
         btnResume.setOnAction( event -> {
-            gameManager.resume();
+            gameManager.pause();
         });
         btnExit.setOnAction( event -> {
             Platform.exit();

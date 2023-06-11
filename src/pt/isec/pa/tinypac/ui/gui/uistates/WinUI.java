@@ -1,16 +1,18 @@
 package pt.isec.pa.tinypac.ui.gui.uistates;
 
 import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import pt.isec.pa.tinypac.GameManager;
 import pt.isec.pa.tinypac.model.fsm.GameStates;
 
 public class WinUI extends BorderPane {
     GameManager gameManager;
-    Button btnStart,btnExit;
+    Button btnExit;
 
     public WinUI(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -21,21 +23,22 @@ public class WinUI extends BorderPane {
     }
 
     private void createViews() {
-        btnStart = new Button("Start");
-        btnStart.setMinWidth(100);
-        btnExit  = new Button("Exit");
+        Label lbl = new Label("You complete all levels!   Congratulations!");
+        lbl.setStyle(" -fx-text-fill: white; -fx-font-family: 'Showcard Gothic'; -fx-font-size: 40px");
+
+        btnExit = new Button("Exit");
         btnExit.setMinWidth(100);
-        HBox hBox = new HBox(btnStart,btnExit);
-        hBox.setAlignment(Pos.CENTER);
-        hBox.setSpacing(10);
-        this.setCenter(hBox);
+        VBox vBox = new VBox(10);
+        vBox.setPadding(new Insets(10));
+        vBox.getChildren().addAll(lbl, btnExit);
+        vBox.setAlignment(Pos.CENTER);
+        vBox.setSpacing(10);
+        this.setCenter(vBox);
     }
 
     private void registerHandlers() {
         gameManager.addPropertyChangeListener(evt -> { update(); });
-        btnStart.setOnAction( event -> {
-            gameManager.start();
-        });
+
         btnExit.setOnAction( event -> {
             Platform.exit();
         });

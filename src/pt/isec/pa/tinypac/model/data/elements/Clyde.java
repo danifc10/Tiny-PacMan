@@ -1,12 +1,13 @@
 package pt.isec.pa.tinypac.model.data.elements;
 
+import pt.isec.pa.tinypac.model.data.Point;
 import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
 import pt.isec.pa.tinypac.model.data.maze.MazeControl;
+import pt.isec.pa.tinypac.utils.Direction;
 import pt.isec.pa.tinypac.utils.Position;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class Clyde extends Ghost implements IMazeElement, Serializable {
@@ -14,7 +15,7 @@ public class Clyde extends Ghost implements IMazeElement, Serializable {
     private IMazeElement symbolRemove =null;
     private static final char symbol = 'C';
 
-    public Clyde(int x, int y, int direction, MazeControl maze, int speed) {
+    public Clyde(int x, int y, Direction direction, MazeControl maze, int speed) {
         super(x, y, direction, maze, speed);
         this.roadMade = new ArrayList<>();
         this.isOut = false;
@@ -29,7 +30,7 @@ public class Clyde extends Ghost implements IMazeElement, Serializable {
 
     @Override
     public void move() {
-        if(!isOut) {
+        if(!isOut){
             getOut();
             return;
         }
@@ -43,59 +44,34 @@ public class Clyde extends Ghost implements IMazeElement, Serializable {
             return;
         }
 
-        if (direction == 0) {
-            nextX--;
-        } else if (direction == 1) {
-            nextX++;
-        } else if (direction == 2) {
-            nextY++;
-        } else if (direction == 3) {
-            nextY--;
+        switch (direction){
+            case UP -> nextX--;
+            case DOWN -> nextX++;
+            case LEFT -> nextY--;
+            case RIGHT -> nextY++;
         }
 
         if( maze.checkIfWallGhost(nextX, nextY) || maze.getXY(nextX, nextY).getSymbol() == 'Y'){ // verifica se a próxima célula é uma parede ou cruzamento
             // escolhe uma nova direção válida
-            List<Integer> possibleDirections = new ArrayList<>();
-            int i = 0;
-            for(int d = 0 ; d < 4; d++){
-                if(d != direction && d != getOpositeDirection(direction)){
-                    if(isDirectionValid(x, y, d)) {
-                        possibleDirections.add(i, d);
-                        i++;
-                    }
-                }
-            }
-
-            if(i == 0){
-                direction = getOpositeDirection(direction);
-            }else if(i == 1) {
-                direction = possibleDirections.get(0);
-            }else{
-                int index;
-
-                do{
-                    index = random.nextInt(possibleDirections.size());
-                }while( index == getOpositeDirection(direction));
-                direction = possibleDirections.get(index);
-            }
+            Position pos = new Position(x, y);
+            direction = getValidDirection(pos, direction);
         }
 
         lastX = x;
         lastY = y;
 
-        if (direction == 0) {
-            x--;
-        } else if (direction == 1) {
-            x++;
-        } else if (direction == 2) {
-            y++;
-        } else if (direction == 3) {
-            y--;
+        // move o fantasma na direção atual
+        switch (direction){
+            case UP -> x--;
+            case DOWN -> x++;
+            case LEFT -> y--;
+            case RIGHT -> y++;
         }
 
         if(road_index < 0 ) {
             road_index = 0;
         }
+
 
         roadMade.add(road_index, new Position(x, y));
         maze.remove(lastX, lastY);
@@ -172,18 +148,18 @@ public class Clyde extends Ghost implements IMazeElement, Serializable {
         int pacManX = maze.getPacManPosition().getX(), pacManY = maze.getPacManPosition().getY();
         if( pacManX == x){
             if( this.y <pacManY){
-                if(isDirectionValid(x, y, 2))
+                if(isDirectionValid(x, y, Direction.RIGHT))
                     this.y++;
             }else {
-                if (isDirectionValid(x, y, 3))
+                if (isDirectionValid(x, y, Direction.LEFT))
                     this.y--;
             }
         }else if(pacManY == y){
             if( this.x < pacManX){
-                if(isDirectionValid(x, y, 1))
+                if(isDirectionValid(x, y, Direction.DOWN))
                     this.x++;
             }else {
-                if (isDirectionValid(x, y, 0))
+                if (isDirectionValid(x, y, Direction.UP))
                     this.x--;
             }
         }
@@ -194,8 +170,11 @@ public class Clyde extends Ghost implements IMazeElement, Serializable {
 
         roadMade.add(road_index, new Position(x, y));
         maze.remove(lastX, lastY);
+
         if(symbolRemove != null && lastX != 0 && symbolRemove.getSymbol() != 'I' && symbolRemove.getSymbol() != 'B' && symbolRemove.getSymbol() != 'K') {
             maze.setXY(lastX, lastY, symbolRemove);
+        }else{
+            maze.setXY(lastX, lastY,new Point());
         }
 
         symbolRemove = maze.getXY(x, y);
@@ -203,104 +182,16 @@ public class Clyde extends Ghost implements IMazeElement, Serializable {
         road_index++;
     }
 
-    public boolean getOut() {
-        while(!isOut){
-            int nextX = x;
-            int nextY = y;
 
-            if(this.maze.getXY(x, y + 1).getSymbol() == 'Y'){
-                direction = 2;
-            }else if(this.maze.getXY(x, y -1 ).getSymbol() == 'Y'){
-                direction = 3;
-            }else if(this.maze.getXY(x - 1, y).getSymbol() == 'Y'){
-                direction = 0;
-            }else if(this.maze.getXY(x + 1, y).getSymbol() == 'Y'){
-                direction = 1;
-            }
-
-            if (direction == 0) {
-                nextX--;
-            } else if (direction == 1) {
-                nextX++;
-            } else if (direction == 2) {
-                nextY++;
-            } else if (direction == 3) {
-                nextY--;
-            }
-            int newdirection;
-            if(!maze.checkIfWall(nextX, nextY)){
-                lastX = x;
-                lastY = y;
-                x = nextX;
-                y = nextY;
-            }else{
-                do{
-                    newdirection = random.nextInt(0,4);
-
-                    if (direction == 0) {
-                        nextX--;
-                    } else if (direction == 1) {
-                        nextX++;
-                    } else if (direction == 2) {
-                        nextY++;
-                    } else if (direction == 3) {
-                        nextY--;
-                    }
-                }while(direction == newdirection || maze.checkIfWall(nextX, nextY));
-                lastX = x;
-                lastY = y;
-                x = nextX;
-                y = nextY;
-            }
-
-            if(road_index < 0) {
-                road_index = 0;
-            }
-
-            roadMade.add(road_index, new Position(x, y));
-            maze.remove(lastX, lastY);
-            if(symbolRemove != null && lastX != 0 && symbolRemove.getSymbol() != 'I' && symbolRemove.getSymbol() != 'B' && symbolRemove.getSymbol() != 'K') {
-                maze.setXY(lastX, lastY, symbolRemove);
-            }
-
-            symbolRemove = maze.getXY(x, y);
-            this.maze.setXY(x,y,new Clyde());
-            if(x < maze.getGhostGate().getX()) {
-                isOut = true;
-            }
-            road_index++;
-        }
-        direction = 2;
-
-        return false;
-    }
-
-    private int getOpositeDirection(int direction) {
-        switch (direction){
-            case 0:
-                return 1;
-            case 1:
-                return 0;
-            case 2:
-                return 3;
-            case 3:
-                return 2;
-        }
-        return 0;
-    }
-
-    private boolean isDirectionValid( int x, int y, int direction) {
+    private boolean isDirectionValid( int x, int y, Direction direction) {
         int nextX = x;
         int nextY = y;
 
-        if (direction == 0) {
-            --nextX;
-        } else if (direction == 1) {
-            ++nextX;
-        } else if (direction == 2) {
-            ++nextY;
-        } else if (direction == 3) {
-            --nextY;
+        switch (direction){
+            case UP -> nextX--;
+            case DOWN -> nextX++;
+            case LEFT -> nextY--;
+            case RIGHT -> nextY++;
         }
 
         // verifica se a próxima célula é uma parede

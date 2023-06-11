@@ -61,8 +61,6 @@ public class RootPane extends BorderPane {
             } else if (keyCode == KeyCode.SPACE || keyCode == KeyCode.ESCAPE) {
                 if(gameManager.getState() != GameStates.PAUSE)
                     gameManager.pause();
-                else
-                    gameManager.resume();
             }
         });
     }

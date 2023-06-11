@@ -60,15 +60,15 @@ public class InfoPanel extends HBox {
 
         hbPoints.getChildren().clear();
         int points = gameManager.getPoints();
-        Label lblPoints = new Label("Points: " + points);
-        lblPoints.setStyle(" -fx-text-fill: white; ");
+        Label lblPoints = new Label("SCORE  " + points);
+        lblPoints.setStyle(" -fx-text-fill: white; -fx-font-family: 'Showcard Gothic'");
         hbPoints.getChildren().add(lblPoints);
 
 
         hbTime.getChildren().clear();
         int time = gameManager.getTime();
-        Label lblTime = new Label("Time: " + time);
-        lblTime.setStyle(" -fx-text-fill: white; ");
+        Label lblTime = new Label("TIME  " + time);
+        lblTime.setStyle(" -fx-text-fill: white; -fx-font-family: 'Showcard Gothic'");
         hbTime.getChildren().add(lblTime);
 
 
@@ -84,8 +84,8 @@ public class InfoPanel extends HBox {
 
         hbLevel.getChildren().clear();
         int level = gameManager.getLevel();
-        Label lblLevel = new Label("Level: "+ level);
-        lblLevel.setStyle(" -fx-text-fill: white");
+        Label lblLevel = new Label("LEVEL  "+ level);
+        lblLevel.setStyle(" -fx-text-fill: white;-fx-font-family: 'Showcard Gothic'");
         hbLevel.getChildren().add(lblLevel);
 
 

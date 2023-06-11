@@ -13,7 +13,7 @@ import pt.isec.pa.tinypac.model.fsm.GameStates;
 
 public class GameOverUI extends BorderPane {
     GameManager gameManager;
-    Button btnEnter;
+    Button btnEnter, btnExit, btnPlay;
     TextField nameField;
 
     public GameOverUI(GameManager gameManager) {
@@ -58,6 +58,31 @@ public class GameOverUI extends BorderPane {
             return;
         }
         this.setVisible(true);
+        if(!gameManager.canReachTop5())
+            showGameOver();
 
+    }
+
+    private void showGameOver() {
+        Label lbl = new Label("Game Over");
+        lbl.setStyle(" -fx-text-fill: white; -fx-font-family: 'Showcard Gothic'; -fx-font-size: 100px");
+        btnExit = new Button("Exit");
+        btnExit.setMinWidth(100);
+        btnPlay = new Button("Play Again");
+        btnPlay.setMinWidth(100);
+        VBox vBox = new VBox(10);
+        vBox.setPadding(new Insets(10));
+        vBox.getChildren().addAll(lbl, btnExit, btnPlay);
+        vBox.setAlignment(Pos.CENTER);
+        vBox.setSpacing(10);
+        this.setCenter(vBox);
+
+        btnExit.setOnAction(e->{
+            Platform.exit();
+        });
+
+        btnPlay.setOnAction(e->{
+            gameManager.restart();
+        });
     }
 }

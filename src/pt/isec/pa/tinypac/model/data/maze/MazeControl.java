@@ -96,7 +96,6 @@ public class MazeControl implements Serializable {
             System.out.println("O arquivo não foi encontrado.");
             e.printStackTrace();
         }
-        System.out.println("total: " + totalPoints);
     }
 
     public void putLevelsFile(){
@@ -146,29 +145,17 @@ public class MazeControl implements Serializable {
     }
 
     public void remove(int x, int y) {
-        for(int i = 0 ; i < height ; i++){
-            for(int j = 0 ; j < width ; j++){
-                if((maze.get(i, j) instanceof WarpZone)){
-                    maze.set(i, j, new WarpZone());
-                }else if(maze.get(i, j) instanceof GhostGate){
-                    maze.set(i, j, new GhostGate());
-                }else if((i == x &&  j == y ) && !(maze.get(i, j) instanceof WarpZone) && !(maze.get(i, j) instanceof GhostGate)) {
-                    maze.set(i, j, new EmptyZone());
-                }
-            }
-        }
-    }
-
-    public boolean checkWin() {
-        int count = 0;
-        for(int i = 0 ; i < height ; i++){
-            for(int j = 0 ; j < width ; j++){
-                if(maze.get(i, j) instanceof EmptyZone){
-                    count++;
-                }
-            }
-        }
-        return count >= totalPoints;
+        IMazeElement e = maze.get(x, y);
+        if (e instanceof Point)
+            maze.set(x, y, new Point());
+        else if (e instanceof PowerPoint)
+            maze.set(x, y, new PowerPoint());
+        else if (e instanceof Fruit)
+            maze.set(x, y, new Fruit());
+        else if (e instanceof WarpZone)
+            maze.set(x, y, new WarpZone());
+        else
+            maze.set(x, y, new EmptyZone());
     }
 
     public boolean checkIfWall(int x, int y) {
@@ -227,6 +214,15 @@ public class MazeControl implements Serializable {
             return true;
         else
             return false;
+    }
+
+    public boolean checkIfWalk(int x, int y){
+        return(
+                !((maze.get(x,y) instanceof Wall)) &&
+                !((maze.get(x,y) instanceof WarpZone)) &&
+                !((maze.get(x, y) instanceof GhostGate)) &&
+                !((maze.get(x, y) instanceof GhostSpot))
+        );
     }
 
     public void removeGhost(int x, int y) {
