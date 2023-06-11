@@ -14,15 +14,13 @@ public class GameData implements Serializable {
     private MazeControl mazeControl;
     private PacMan pacMan;
     private Ghost [] ghosts;
-    private List<Position> positions;
     private int totalPoints = 0;
-    private int level = 20;
+    private int level = 1;
     private int countFruitPoints = 0;
     private int countPoints = 0;
     private int time = 0;
     private int pacManLife = 3;
     private int numOfGhosts = 4;
-    private int lastGhostX , lastGhostY;
     private int speed = 0;
     private boolean stopTimer;
     private int countGhostsPoints = 0;
@@ -39,7 +37,7 @@ public class GameData implements Serializable {
         countGhostsPoints = 0;
         time = 0;
         mazeControl = new MazeControl(level);
-        positions = mazeControl.getGhostStartPositions();
+        List<Position> positions = mazeControl.getGhostStartPositions();
         pacMan = new PacMan(mazeControl.getPacManStart().getX(), mazeControl.getPacManStart().getY(), Direction.RIGHT, mazeControl);
         ghosts = new Ghost[]{
                 new Blinky( positions.get(0).getX(), positions.get(0).getY(), Direction.UP,  mazeControl, speed++),
@@ -68,10 +66,6 @@ public class GameData implements Serializable {
     public int getPacManLife() {
         return pacManLife;
     }
-    public void setLife() {
-        stopTimer = true;
-        pacManLife--;
-    }
     public void timer() {
         if(!stopTimer)
             time++;
@@ -79,8 +73,16 @@ public class GameData implements Serializable {
     public int getTime(){
         return time;
     }
+    public int getNumGhosts() {
+        return numOfGhosts;
+    }
 
     // ghosts things
+    public void setGhostsPoints(){
+        countGhostsPoints++;
+        this.numOfGhosts--;
+        totalPoints = totalPoints + (50 * countGhostsPoints);
+    }
     public void setVulnerable() {
         for(Ghost g : ghosts){
             g.setVulnerable(true);
@@ -114,10 +116,9 @@ public class GameData implements Serializable {
             if(!ghost.isDead()) {
                 ghost.vulnerableMove();
                 if (ghost.getX() == pacMan.getX() && ghost.getY() == pacMan.getY()){
-                    lastGhostX = ghost.getX();
-                    lastGhostY = ghost.getY();
-                    System.out.println("comido no ghost x" + lastGhostY + " y:" + lastGhostY);
-                    eatGhost();
+                    ghost.setDead(true);
+                    mazeControl.removeGhost(ghost.getX(), ghost.getY());
+                    setGhostsPoints();
                 }
             }
         }
@@ -147,48 +148,47 @@ public class GameData implements Serializable {
 
         IMazeElement eatElement = null;
         switch (pacMan.getDirection()) {
-            case LEFT:
+            case LEFT -> {
                 if (y > 0 && canMove(x, y - 1)) {
                     eatElement = checks(x, y - 1);
                     pacMan.setDirection(Direction.LEFT);
                     pacMan.move();
                 }
-                break;
-            case RIGHT:
+            }
+            case RIGHT -> {
                 if (y < mazeControl.getWidth() && canMove(x, y + 1)) {
                     eatElement = checks(x, y + 1);
                     pacMan.setDirection(Direction.RIGHT);
                     pacMan.move();
                 }
-                break;
-            case UP:
+            }
+            case UP -> {
                 if (x > 0 && canMove(x - 1, y)) {
                     eatElement = checks(x - 1, y);
                     pacMan.setDirection(Direction.UP);
                     pacMan.move();
                 }
-                break;
-            case DOWN:
+            }
+            case DOWN -> {
                 if (x < mazeControl.getHeight() && canMove(x + 1, y)) {
                     eatElement = checks(x + 1, y);
                     pacMan.setDirection(Direction.DOWN);
                     pacMan.move();
                 }
-                break;
+            }
         }
 
         mazeControl.setXY(pacMan.getX(), pacMan.getY(), new PacMan());
         mazeControl.remove(pacMan.getLastX(), pacMan.getLastY());
         return eatElement;
     }
-    public void eatGhost() {
-        countGhostsPoints++;
-        this.numOfGhosts--;
-        totalPoints = totalPoints + (50 * countGhostsPoints);
+
+    public void eatGhost(IMazeElement element) {
         for(Ghost g : ghosts){
-            if((g.getX() == lastGhostX && g.getY() == lastGhostY )) {
+            if(g.getSymbol() == element.getSymbol() || (g.getX() == pacMan.getX() && g.getY() == pacMan.getY())){
                 g.setDead(true);
-                mazeControl.removeGhost(g.getLastX(), g.getLastY());
+                mazeControl.remove(g.getLastX(), g.getLastY());
+                setGhostsPoints();
             }
         }
     }
@@ -196,6 +196,7 @@ public class GameData implements Serializable {
     public boolean canMove(int x, int y) {
         return (!mazeControl.checkIfWall(x, y) && !(mazeControl.getXY(x, y) instanceof GhostGate));
     }
+
     public IMazeElement checks(int x, int y) {
         IMazeElement element = mazeControl.getXY(x, y);
         if (element instanceof Point) {
@@ -215,41 +216,23 @@ public class GameData implements Serializable {
             pacManFood++;
         } else if (element instanceof WarpZone) {
             pacMan.checkIfWarp(x, y);
-        }else if(element instanceof Blinky || element instanceof Clyde || element instanceof Pinky || element instanceof Inky){
-            System.out.println("COMI FANTASMA X:" + pacMan.getX() + " y" + pacMan.getY());
-            for (Ghost ghost : ghosts) {
-                if(!ghost.isDead()) {
-                    System.out.println("X:" + ghost.getLastX() + " y" + ghost.getLastY());
-                    if (ghost.getX() == pacMan.getX() && ghost.getY() == pacMan.getY()) {
-                        lastGhostX = ghost.getX();
-                        lastGhostY = ghost.getY();
-                        System.out.println("comido no pacman x" + lastGhostY + " y:" + lastGhostY);
-                        eatGhost();
-                    }
-                }
-            }
         }
         return element;
     }
 
     // like a transition but not a really one
     public boolean checkIfWin(){
-        System.out.println("pacman:" + pacManFood + " TOTAL: " +mazeControl.getTotalPoints());
         return pacManFood >= (mazeControl.getTotalPoints() - 2);
     }
     public void levelUp() {
+        pacManLife = 3;
         stopTimer = true;
         level++;
         initGame();
     }
-
-    public int getNumGhosts() {
-        return numOfGhosts;
-    }
-
     public void gameOver() {
-        setLife();
-        totalPoints = 0;
+        stopTimer = true;
+        pacManLife--;
         initGame();
     }
 

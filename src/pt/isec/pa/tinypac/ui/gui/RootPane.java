@@ -42,6 +42,7 @@ public class RootPane extends BorderPane {
                         )
                 )
         );
+
         this.setCenter(stackPane);
     }
 
@@ -66,6 +67,7 @@ public class RootPane extends BorderPane {
     }
 
     private void update() {
+
         this.setRight(null);
         this.setBottom(null);
     }

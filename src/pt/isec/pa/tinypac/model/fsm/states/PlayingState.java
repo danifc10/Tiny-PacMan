@@ -31,6 +31,8 @@ public class PlayingState extends GameAdapter {
 
     public void evolve(){
         IMazeElement eaten = gameData.movePacMan();
+
+        // se comer powerDot ou se colidir com um fantasma
         if(eaten instanceof PowerPoint)
             changeState(GameStates.VULNERABLE);
         else if(eaten instanceof Blinky || eaten instanceof Clyde || eaten instanceof Pinky || eaten instanceof Inky) {
@@ -40,6 +42,8 @@ public class PlayingState extends GameAdapter {
             }else
                 changeState(GameStates.GAME_OVER);
         }
+
+        // Se algum fantasma comer o pacman retorna true
         if(gameData.moveGhosts()) {
             if (gameData.getPacManLife() > 0 ) {
                 gameData.gameOver();
@@ -47,13 +51,13 @@ public class PlayingState extends GameAdapter {
             } else
                 changeState(GameStates.GAME_OVER);
         }
+
+        // se o jogo tiver ganho (se nao houver mais pontos para comer ) ou se já nao houver fantasmas
         if(gameData.checkIfWin() || gameData.getNumGhosts() <= 0) {
-            System.out.println("nivel completo");
             if(gameData.getLevel() < 20) {
                 gameData.levelUp();
                 changeState(GameStates.INITIAL);
             }else{
-                System.out.println(" a mudar");
                 changeState(GameStates.WIN);
             }
         }

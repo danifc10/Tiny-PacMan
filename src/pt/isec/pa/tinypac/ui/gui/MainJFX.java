@@ -8,6 +8,7 @@ import pt.isec.pa.tinypac.GameManager;
 import pt.isec.pa.tinypac.Main;
 import pt.isec.pa.tinypac.gameengine.GameEngine;
 
+
 public class MainJFX extends Application {
     GameManager gameManager;
     GameEngine gameEngine;
@@ -24,7 +25,7 @@ public class MainJFX extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         newStageForTesting(stage,"PAC-MAN");
-        //newStageForTesting(new Stage(),"PAC-MAN");
+      //  newStageForTesting(new Stage(),"PAC-MAN");
     }
 
     private void newStageForTesting(Stage stage, String title) {
