@@ -3,13 +3,19 @@ package pt.isec.pa.tinypac.model.data;
 import pt.isec.pa.tinypac.model.data.elements.*;
 import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
 import pt.isec.pa.tinypac.model.data.maze.MazeControl;
+import pt.isec.pa.tinypac.model.fsm.GameStates;
 import pt.isec.pa.tinypac.utils.Direction;
 import pt.isec.pa.tinypac.utils.Position;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * class where all the data is managed
+ * @author Daniela Correia
+ * @version 1.0.0
+ *
+ */
 public class GameData implements Serializable {
     private MazeControl mazeControl;
     private PacMan pacMan;
@@ -25,11 +31,21 @@ public class GameData implements Serializable {
     private boolean stopTimer;
     private int countGhostsPoints = 0;
     private int pacManFood = 0;
+    private GameStates LastPauseState = null;
 
+    /**
+     * Default constructor
+     * <p>
+     *
+     */
     public GameData() {
         //initGame();
     }
 
+    /**
+     * Start all the variables and objects for the game start
+     *
+     */
     public void initGame() {
         pacManFood = 0;
         countPoints = 0;
@@ -40,54 +56,90 @@ public class GameData implements Serializable {
         List<Position> positions = mazeControl.getGhostStartPositions();
         pacMan = new PacMan(mazeControl.getPacManStart().getX(), mazeControl.getPacManStart().getY(), Direction.RIGHT, mazeControl);
         ghosts = new Ghost[]{
-                new Blinky( positions.get(0).getX(), positions.get(0).getY(), Direction.UP,  mazeControl, speed++),
-                new Pinky(positions.get(1).getX(), positions.get(1).getY(), Direction.RIGHT,  mazeControl, speed++),
-                new Inky(positions.get(2).getX(), positions.get(2).getY(), Direction.LEFT,  mazeControl, speed++),
-                new Clyde(positions.get(3).getX(), positions.get(3).getY(), Direction.DOWN, mazeControl, speed++)
+                new Blinky( positions.get(0).getX(), positions.get(0).getY(), null,  mazeControl, speed++),
+                new Pinky(positions.get(1).getX(), positions.get(1).getY(), null,  mazeControl, speed++),
+                new Inky(positions.get(2).getX(), positions.get(2).getY(), null,  mazeControl, speed++),
+                new Clyde(positions.get(3).getX(), positions.get(3).getY(), null, mazeControl, speed++)
         };
     }
 
     // getter and setters to data
-    public void setPoints(int i) {
-        totalPoints = i;
-    }
+
+    /**
+     * Get game points
+     * @return totalPoints - int with the total of the points
+     */
     public int getPoints() {
         return  totalPoints;
     }
+    /**
+     * Get level
+     * @return level - level of this game (int)
+     */
     public int getLevel() {
         return level;
     }
-    public void setLevel(int i) {
-        level = i;
-    }
+    /**
+     * Get maze
+     * @return char[][] - maze
+     */
     public char[][] getMaze() {
         return mazeControl.getMazeControl();
     }
+    /**
+     * Get pacman life
+     * @return pacManLife - integer pacman life
+     */
     public int getPacManLife() {
         return pacManLife;
     }
+    /**
+     * Counter for time
+     *
+     */
     public void timer() {
         if(!stopTimer)
             time++;
     }
+    /**
+     * Get time
+     * @return time - integer time
+     */
     public int getTime(){
         return time;
     }
+    /**
+     * Get number of ghosts alive
+     * @return numOfGhosts - integer for number of ghosts alive
+     */
     public int getNumGhosts() {
         return numOfGhosts;
     }
 
     // ghosts things
+
+    /**
+     * Set points when eat a ghost
+     *
+     */
     public void setGhostsPoints(){
         countGhostsPoints++;
         this.numOfGhosts--;
         totalPoints = totalPoints + (50 * countGhostsPoints);
     }
+    /**
+     * Set true the vulnerability of ghosts
+     *
+     */
     public void setVulnerable() {
         for(Ghost g : ghosts){
             g.setVulnerable(true);
         }
     }
+    /**
+     * Set false the vulnerability of ghosts
+     *
+     */
     public void endVulnerable() {
         for (Ghost g : ghosts) {
             g.setVulnerable(false);
@@ -95,11 +147,20 @@ public class GameData implements Serializable {
             g.road_index =0;
         }
     }
+    /**
+     * Set ghosts out of the jail
+     *
+     */
     public void setGhostsFree() {
         for(Ghost g: ghosts){
             g.move();
         }
     }
+    /**
+     * Normal ghost move and check if pacman is here
+     *@return true - if eat the pacman
+     *        false - if not eat the pacman
+     */
     public boolean moveGhosts() {
         for (Ghost ghost : ghosts) {
             if(!ghost.isDead()) {
@@ -111,6 +172,10 @@ public class GameData implements Serializable {
         }
         return false;
     }
+    /**
+     * Vulnerable ghost move and check if pacman is here
+     *
+     */
     public void vulnerableMoveGhosts(){
         for (Ghost ghost : ghosts) {
             if(!ghost.isDead()) {
@@ -125,6 +190,11 @@ public class GameData implements Serializable {
     }
 
     // pacman things
+
+    /**
+     * Set new pacman direction
+     * @param direction - Direction for new pacman Direction
+     */
     public void setPacManDirection(Direction direction) {
         stopTimer = false;
         if(direction == Direction.RIGHT){
@@ -142,6 +212,10 @@ public class GameData implements Serializable {
         }
     }
 
+    /**
+     * Normal pacman move and all the checks
+     * @return eatenElement - IMazeElement that represent the last element thtat pacman eat
+     */
     public IMazeElement movePacMan() {
         int x = pacMan.getX();
         int y = pacMan.getY();
@@ -183,6 +257,10 @@ public class GameData implements Serializable {
         return eatElement;
     }
 
+    /**
+     * When PacMan eat a Ghost
+     *
+     */
     public void eatGhost(IMazeElement element) {
         for(Ghost g : ghosts){
             if(g.getSymbol() == element.getSymbol() || (g.getX() == pacMan.getX() && g.getY() == pacMan.getY())){
@@ -193,10 +271,20 @@ public class GameData implements Serializable {
         }
     }
 
+    /**
+     * Verification for PacMan move
+     * @param x, y - next PacMan position
+     * @return boolean - true if can move, false if can't
+     */
     public boolean canMove(int x, int y) {
         return (!mazeControl.checkIfWall(x, y) && !(mazeControl.getXY(x, y) instanceof GhostGate));
     }
 
+    /**
+     * Verification for PacMan move
+     * @param x, y - next PacMan position
+     * @return element - element eaten by PacMan
+     */
     public IMazeElement checks(int x, int y) {
         IMazeElement element = mazeControl.getXY(x, y);
         if (element instanceof Point) {
@@ -221,19 +309,39 @@ public class GameData implements Serializable {
     }
 
     // like a transition but not a really one
+
+    /**
+     * Verification for win
+     *
+     * @return boolean - true if won, false if not
+     */
     public boolean checkIfWin(){
-        return pacManFood >= (mazeControl.getTotalPoints() - 2);
+        return pacManFood >= mazeControl.getTotalPoints();
     }
+
+    /**
+     * When levels up, set life pacman and init the new level
+     */
     public void levelUp() {
         pacManLife = 3;
         stopTimer = true;
         level++;
         initGame();
     }
+    /**
+     * When game Over , set pacman life and restart the level
+     */
     public void gameOver() {
         stopTimer = true;
         pacManLife--;
         initGame();
     }
 
+    public void setStateOfPause(GameStates state) {
+        LastPauseState = state;
+    }
+
+    public GameStates getLastPauseState(){
+        return LastPauseState;
+    }
 }

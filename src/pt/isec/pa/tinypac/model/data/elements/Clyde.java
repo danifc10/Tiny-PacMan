@@ -1,5 +1,6 @@
 package pt.isec.pa.tinypac.model.data.elements;
 
+import pt.isec.pa.tinypac.model.data.GhostGate;
 import pt.isec.pa.tinypac.model.data.Point;
 import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
 import pt.isec.pa.tinypac.model.data.maze.MazeControl;
@@ -8,11 +9,8 @@ import pt.isec.pa.tinypac.utils.Position;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Clyde extends Ghost implements IMazeElement, Serializable {
-    Random random = new Random();
-    private IMazeElement symbolRemove =null;
     private static final char symbol = 'C';
 
     public Clyde(int x, int y, Direction direction, MazeControl maze, int speed) {
@@ -20,8 +18,6 @@ public class Clyde extends Ghost implements IMazeElement, Serializable {
         this.roadMade = new ArrayList<>();
         this.isOut = false;
     }
-
-    public Clyde(){};
 
     @Override
     public char getSymbol() {
@@ -51,7 +47,7 @@ public class Clyde extends Ghost implements IMazeElement, Serializable {
             case RIGHT -> nextY++;
         }
 
-        if( maze.checkIfWallGhost(nextX, nextY) || maze.getXY(nextX, nextY).getSymbol() == 'Y'){ // verifica se a próxima célula é uma parede ou cruzamento
+        if( maze.checkIfWallGhost(nextX, nextY) || maze.getXY(nextX, nextY) instanceof GhostGate){ // verifica se a próxima célula é uma parede ou cruzamento
             // escolhe uma nova direção válida
             Position pos = new Position(x, y);
             direction = getValidDirection(pos, direction);
@@ -71,8 +67,6 @@ public class Clyde extends Ghost implements IMazeElement, Serializable {
         if(road_index < 0 ) {
             road_index = 0;
         }
-
-
         roadMade.add(road_index, new Position(x, y));
         maze.remove(lastX, lastY);
         if(symbolRemove != null && lastX != 0 && symbolRemove.getSymbol() != 'I' && symbolRemove.getSymbol() != 'B' && symbolRemove.getSymbol() != 'K') {
@@ -80,25 +74,8 @@ public class Clyde extends Ghost implements IMazeElement, Serializable {
         }
 
         symbolRemove = maze.getXY(x, y);
-        this.maze.setXY(x,y,new Clyde());
+        this.maze.setXY(x,y,this);
         road_index++;
-    }
-
-    @Override
-    public void vulnerableMove() {
-        --road_index;
-        if(road_index >= 0) {
-            this.lastX = x;
-            this.lastY = y;
-            this.x = roadMade.get(road_index).getX();
-            this.y = roadMade.get(road_index).getY();
-            maze.remove(lastX, lastY);
-            if(symbolRemove != null && lastX != 0 && symbolRemove.getSymbol() != 'I' && symbolRemove.getSymbol() != 'B' && symbolRemove.getSymbol() != 'K' && symbolRemove.getSymbol() != 'C') {
-                maze.setXY(lastX, lastY, symbolRemove);
-            }
-            symbolRemove = maze.getXY(x, y);
-            this.maze.setXY(x, y, new Clyde());
-        }
     }
 
     private boolean checkIfPacman(int x, int y) {
@@ -133,16 +110,13 @@ public class Clyde extends Ghost implements IMazeElement, Serializable {
                         count++;
             }
 
-            if(count != 0)
-                return false;
-            else
-                return true;
+            return count == 0;
         }
 
         return false;
     }
 
-    public void followPacMan(){
+    private void followPacMan(){
         lastX = x;
         lastY = y;
         int pacManX = maze.getPacManPosition().getX(), pacManY = maze.getPacManPosition().getY();
@@ -178,7 +152,7 @@ public class Clyde extends Ghost implements IMazeElement, Serializable {
         }
 
         symbolRemove = maze.getXY(x, y);
-        this.maze.setXY(x,y,new Clyde());
+        this.maze.setXY(x,y,this);
         road_index++;
     }
 
@@ -195,7 +169,7 @@ public class Clyde extends Ghost implements IMazeElement, Serializable {
         }
 
         // verifica se a próxima célula é uma parede
-        if(maze.checkIfWallGhost(nextX, nextY) || maze.getXY(nextX, nextY).getSymbol() == 'Y')
+        if(maze.checkIfWallGhost(nextX, nextY) || maze.getXY(nextX, nextY) instanceof GhostGate)
             return false;
         else
             return true;

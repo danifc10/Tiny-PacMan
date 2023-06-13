@@ -8,8 +8,7 @@ import pt.isec.pa.tinypac.model.fsm.GameStates;
 import pt.isec.pa.tinypac.utils.Direction;
 
 public class InitialState extends GameAdapter {
-    private int startTime;
-    private int aux = 0;
+    private int aux;
     public InitialState(GameContext context, GameData gameData, IGameEngine gameEngine) {
         super(context,gameData, gameEngine);
         aux = 0;

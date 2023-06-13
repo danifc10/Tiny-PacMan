@@ -8,6 +8,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 import pt.isec.pa.tinypac.GameManager;
 import pt.isec.pa.tinypac.model.fsm.GameStates;
 import pt.isec.pa.tinypac.ui.gui.InfoPanel;
@@ -27,10 +28,12 @@ public class PlayingUI extends BorderPane  {
     }
 
     private void createViews() {
-        String soundPath = "src/pt/isec/pa/tinypac/ui/gui/resources/sounds/pacman_chomp.wav";
+        String soundPath = "src/pt/isec/pa/tinypac/ui/gui/resources/sounds/pacman_playing.m4a";
         Media media = new Media(new File(soundPath).toURI().toString().toString());
         mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setStartTime(Duration.ZERO);
         mediaPlayer.setAutoPlay(true);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         setFocusTraversable(true);
         this.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
         this.getChildren().clear();
@@ -42,16 +45,18 @@ public class PlayingUI extends BorderPane  {
 
     private void registerHandlers() {
         gameManager.addPropertyChangeListener(evt -> { update(); });
-
     }
 
     private void update() {
-
         if (gameManager.getState() != GameStates.PLAYING) {
             this.setVisible(false);
             mediaPlayer.stop();
             return;
+        }else if(gameManager.getState() == GameStates.PLAYING){
+            mediaPlayer.play();
+            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            this.setVisible(true);
         }
-        this.setVisible(true);
+
     }
 }

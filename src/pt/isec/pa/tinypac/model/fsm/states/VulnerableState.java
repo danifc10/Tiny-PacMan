@@ -14,7 +14,7 @@ import pt.isec.pa.tinypac.model.fsm.GameStates;
 import pt.isec.pa.tinypac.utils.Direction;
 
 public class VulnerableState extends GameAdapter {
-    private int vulnerableTime = (40 -gameData.getLevel()) ; // diminui conforme aumenta de nivel
+    private int vulnerableTime = (60 - gameData.getLevel() - (gameData.getLevel() * 2)); // diminui 3 segundos conforme aumenta de nivel
 
     public VulnerableState(GameContext context, GameData gameData, IGameEngine gameEngine) {
         super(context, gameData, gameEngine);
@@ -27,6 +27,7 @@ public class VulnerableState extends GameAdapter {
 
     @Override
     public boolean pauseGame() {
+        gameData.setStateOfPause(GameStates.VULNERABLE);
         changeState(GameStates.PAUSE);
         return true;
     }
@@ -45,7 +46,6 @@ public class VulnerableState extends GameAdapter {
         if(eaten instanceof PowerPoint)
             vulnerableTime = vulnerableTime * 2;
         else if(eaten instanceof Blinky || eaten instanceof Clyde || eaten instanceof Pinky || eaten instanceof Inky){
-            System.out.println("no pacman");
             gameData.eatGhost(eaten);
         }
 

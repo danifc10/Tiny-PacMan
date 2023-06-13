@@ -8,6 +8,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import pt.isec.pa.tinypac.GameManager;
 import pt.isec.pa.tinypac.model.fsm.GameStates;
 
@@ -15,6 +17,8 @@ public class GameOverUI extends BorderPane {
     GameManager gameManager;
     Button btnEnter, btnExit, btnPlay;
     TextField nameField;
+    MediaPlayer mediaPlayer;
+    Media media;
 
     public GameOverUI(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -25,6 +29,7 @@ public class GameOverUI extends BorderPane {
     }
 
     private void createViews() {
+
         // Criar uma Label para exibir o texto "Player Name"
         Label nameLabel = new Label("Player Name:");
         nameLabel.setStyle(" -fx-text-fill: white; ");
@@ -56,11 +61,12 @@ public class GameOverUI extends BorderPane {
         if (gameManager.getState() != GameStates.GAME_OVER) {
             this.setVisible(false);
             return;
+        }else if(gameManager.getState() == GameStates.GAME_OVER){
+            this.setVisible(true);
         }
-        this.setVisible(true);
+
         if(!gameManager.canReachTop5())
             showGameOver();
-
     }
 
     private void showGameOver() {

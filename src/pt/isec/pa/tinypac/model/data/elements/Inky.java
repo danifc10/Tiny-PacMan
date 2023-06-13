@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 public class Inky extends Ghost implements IMazeElement, Serializable {
     private static final char symbol = 'I';
-    private IMazeElement symbolRemove = null;
     private int nextCornerX ;
     private int nextCornerY ;
     private int cornerIndex;
@@ -18,8 +17,6 @@ public class Inky extends Ghost implements IMazeElement, Serializable {
 
     private int[][] corners; // coordenadas dos cantos do labirinto
 
-
-    public Inky(){};
 
     public Inky(int x, int y, Direction direction, MazeControl maze, int speed) {
         super(x, y, direction, maze, speed);
@@ -109,11 +106,11 @@ public class Inky extends Ghost implements IMazeElement, Serializable {
 
         roadMade.add(road_index, new Position(x, y));
         maze.remove(lastX, lastY);
-        if(symbolRemove != null && lastX != 0 && symbolRemove.getSymbol() != 'I' && symbolRemove.getSymbol() != 'B' && symbolRemove.getSymbol() != 'K' && symbolRemove.getSymbol() != 'C') {
+        if(symbolRemove != null && lastX != 0 && symbolRemove.getSymbol() != 'C' && symbolRemove.getSymbol() != 'B' && symbolRemove.getSymbol() != 'K') {
             maze.setXY(lastX, lastY, symbolRemove);
         }
         symbolRemove = maze.getXY(x, y);
-        this.maze.setXY(x,y,new Inky());
+        this.maze.setXY(x,y,this);
         road_index++;
     }
 
@@ -121,23 +118,4 @@ public class Inky extends Ghost implements IMazeElement, Serializable {
     public char getSymbol() {
         return symbol;
     }
-
-    @Override
-    public void vulnerableMove() {
-        --road_index;
-        if(road_index >= 0) {
-            this.lastX = x;
-            this.lastY = y;
-            this.x = roadMade.get(road_index).getX();
-            this.y = roadMade.get(road_index).getY();
-
-            maze.remove(lastX, lastY);
-            if(symbolRemove != null && lastX != 0 && symbolRemove.getSymbol() != 'I' && symbolRemove.getSymbol() != 'B' && symbolRemove.getSymbol() != 'K' && symbolRemove.getSymbol() != 'C') {
-                maze.setXY(lastX, lastY, symbolRemove);
-            }
-            symbolRemove = maze.getXY(x, y);
-            this.maze.setXY(x, y, new Inky());
-        }
-    }
-
 }

@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 public class Pinky extends Ghost implements IMazeElement, Serializable {
     private static final char symbol = 'K';
-    private IMazeElement symbolRemove =null;
     private int nextCornerX ;
     private int nextCornerY ;
     private int cornerIndex;
@@ -34,7 +33,6 @@ public class Pinky extends Ghost implements IMazeElement, Serializable {
         this.isOut = false;
     }
 
-    public Pinky(){};
 
     private double distanceToTarget(int x1, int y1, int x2, int y2) {
         int dx = x1 - x2;
@@ -115,25 +113,6 @@ public class Pinky extends Ghost implements IMazeElement, Serializable {
         this.maze.setXY(x,y,this);
         road_index++;
     }
-
-    @Override
-    public void vulnerableMove() {
-        --road_index;
-        if(road_index >= 0) {
-            this.lastX = x;
-            this.lastY = y;
-
-            this.x = roadMade.get(road_index).getX();
-            this.y = roadMade.get(road_index).getY();
-            maze.remove(lastX, lastY);
-            if(symbolRemove != null && lastX != 0 && symbolRemove.getSymbol() != 'I' && symbolRemove.getSymbol() != 'B' && symbolRemove.getSymbol() != 'K' && symbolRemove.getSymbol() != 'C') {
-                maze.setXY(lastX, lastY, symbolRemove);
-            }
-            symbolRemove = maze.getXY(x, y);
-            this.maze.setXY(x, y, new Pinky());
-        }
-    }
-
 
     @Override
     public char getSymbol() {

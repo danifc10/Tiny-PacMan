@@ -17,11 +17,10 @@ public abstract class Ghost implements IMazeElement {
     protected boolean isDead; // se o fantasma está morto ou não
     protected MazeControl maze;
     protected boolean isOut;  // se esta na jaula ou nao
-    public List<Position> roadMade;
+    public List<Position> roadMade; // caminho percorrido pelo fantasma
+    protected IMazeElement symbolRemove = null;
     public int road_index = 0;
     protected int speed;
-
-    public Ghost(){};
 
     public Ghost(int x, int y, Direction direction, MazeControl maze, int speed){
         this.x = x;
@@ -46,8 +45,6 @@ public abstract class Ghost implements IMazeElement {
     }
 
     public abstract void move();
-
-    public abstract void vulnerableMove();
 
     public int getX() {
         return x;
@@ -91,7 +88,7 @@ public abstract class Ghost implements IMazeElement {
         lastX = x;
         lastY = y;
 
-        IMazeElement symbolRemove = maze.getXY(x, y);
+        symbolRemove = maze.getXY(x, y);
         maze.remove(lastX, lastY);
         if(symbolRemove != null && lastX != 0 && symbolRemove.getSymbol() != 'I' && symbolRemove.getSymbol() != 'B' && symbolRemove.getSymbol() != 'K' && symbolRemove.getSymbol() != 'C') {
             maze.setXY(lastX, lastY, symbolRemove);
@@ -99,6 +96,24 @@ public abstract class Ghost implements IMazeElement {
         this.maze.setXY(x, y, this);
 
         isOut = true;
+    }
+
+    public void vulnerableMove(){
+        --road_index;
+        if(road_index >= 0) {
+            this.lastX = x;
+            this.lastY = y;
+
+            this.x = roadMade.get(road_index).getX();
+            this.y = roadMade.get(road_index).getY();
+            maze.remove(lastX, lastY);
+            if(symbolRemove != null && lastX != 0 && symbolRemove.getSymbol() != 'I' && symbolRemove.getSymbol() != 'B' && symbolRemove.getSymbol() != 'K' && symbolRemove.getSymbol() != 'C') {
+                maze.setXY(lastX, lastY, symbolRemove);
+            }
+            symbolRemove = maze.getXY(x, y);
+            this.maze.setXY(x, y, this);
+        }
+
     }
 
     public Direction getValidDirection(Position portal, Direction direction) {

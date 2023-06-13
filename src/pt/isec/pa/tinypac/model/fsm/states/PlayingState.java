@@ -25,6 +25,7 @@ public class PlayingState extends GameAdapter {
 
     @Override
     public boolean pauseGame() {
+        gameData.setStateOfPause(GameStates.PLAYING);
         changeState(GameStates.PAUSE);
         return true;
     }

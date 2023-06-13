@@ -162,29 +162,6 @@ public class MazeControl implements Serializable {
         return maze.get(x,y) instanceof Wall;
     }
 
-    public boolean checkIfPoint(int x, int y){
-        return maze.get(x,y) instanceof Point;
-    }
-
-    public boolean checkIfFruit(int x, int y){
-        return maze.get(x,y) instanceof Fruit;
-    }
-
-    public boolean checkIfPower(int x, int y){
-        return maze.get(x,y) instanceof PowerPoint;
-    }
-
-    public boolean checkIfWarp(int x, int y){
-        return maze.get(x,y) instanceof WarpZone;
-    }
-
-    public boolean chekIfGhost(int x, int y){
-        return ((maze.get(x, y) instanceof Blinky)
-                || (maze.get(x, y) instanceof Pinky)
-                || (maze.get(x, y) instanceof Clyde)
-                || (maze.get(x, y) instanceof Inky));
-    }
-
     public char [][] getMazeControl(){
         return maze.getMaze();
     }
@@ -210,10 +187,7 @@ public class MazeControl implements Serializable {
     }
 
     public boolean checkIfWallGhost(int x, int y) {
-        if(maze.get(x, y) instanceof WarpZone || maze.get(x, y) instanceof Wall)
-            return true;
-        else
-            return false;
+        return maze.get(x, y) instanceof WarpZone || maze.get(x, y) instanceof Wall;
     }
 
     public boolean checkIfWalk(int x, int y){

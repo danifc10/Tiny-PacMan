@@ -13,7 +13,12 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.*;
 import java.util.List;
-
+/**
+ * class where all the data as connected and manage
+ * @author Daniela Correia
+ * @version 1.0.0
+ *
+ */
 public class GameManager implements IGameEngineEvolve {
     public static final String file = "files\\game.dat";
     public static final String TOP5_FILE = "files\\scores.bin";

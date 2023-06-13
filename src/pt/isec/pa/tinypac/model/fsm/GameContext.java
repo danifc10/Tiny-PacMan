@@ -43,14 +43,8 @@ public class GameContext {
     public int getPoints(){
         return gameData.getPoints();
     }
-    public void setPoints(int num){
-        gameData.setPoints(num);
-    }
     public int getLevel(){
         return gameData.getLevel();
-    }
-    public void setLevel(int i) {
-        gameData.setLevel(i);
     }
     public char[][] getMaze(){ return gameData.getMaze();}
 
