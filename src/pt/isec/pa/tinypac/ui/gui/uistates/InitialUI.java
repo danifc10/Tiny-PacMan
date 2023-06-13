@@ -43,6 +43,7 @@ public class InitialUI extends BorderPane {
         btnStart.setOnAction( event -> {
             this.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
             this.getChildren().clear();
+
             gameManager.start();
             mazeUI = new MazeUI(gameManager);
             this.setCenter(mazeUI);

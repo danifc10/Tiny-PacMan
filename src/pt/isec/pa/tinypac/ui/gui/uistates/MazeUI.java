@@ -58,7 +58,7 @@ public class MazeUI extends TilePane {
     }
 
     private Image getImageForCell(char cell) {
-        String imageName;
+        String imageName = null;
         switch (cell) {
             case 'K':
                 if(gameManager.getState() == GameStates.VULNERABLE)

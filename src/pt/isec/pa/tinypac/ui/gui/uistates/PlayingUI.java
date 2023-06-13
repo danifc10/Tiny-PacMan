@@ -51,7 +51,6 @@ public class PlayingUI extends BorderPane  {
         if (gameManager.getState() != GameStates.PLAYING) {
             this.setVisible(false);
             mediaPlayer.stop();
-            return;
         }else if(gameManager.getState() == GameStates.PLAYING){
             mediaPlayer.play();
             mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);

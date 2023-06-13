@@ -9,7 +9,7 @@ import pt.isec.pa.tinypac.utils.Direction;
 import java.io.*;
 
 public class GameContext {
-    public static final String file = "files\\game.bin";
+    private static final String file = "files\\game.bin";
     private GameData gameData;
     private IGameStates currentState;
     private IGameEngine gameEngine;
@@ -29,10 +29,6 @@ public class GameContext {
     }
 
     // tranciçoes
-    public boolean startGame(){
-        gameData.initGame();
-        return true;
-    }
     public void setPacManNewDirection(Direction readDirection) {
         currentState.changeDirection(readDirection);
     }
@@ -63,34 +59,38 @@ public class GameContext {
     public int getTime() {
         return gameData.getTime();
     }
-
     public void save() {
-        try(FileOutputStream fs = new FileOutputStream(file);
-            ObjectOutputStream oos = new ObjectOutputStream(fs)){
+        try (FileOutputStream fs = new FileOutputStream(file);
+             ObjectOutputStream oos = new ObjectOutputStream(fs)) {
             oos.writeObject(gameData);
-            oos.close();
-            fs.close();
             System.out.println("Jogo gravado com sucesso.");
-        }catch (IOException e){
-            System.out.println("Erro ao guardar jogo");
+        } catch (IOException e) {
+            System.out.println("Erro ao guardar jogo: " + e.getMessage());
         }
     }
 
-    public void load(){
+    public void load() {
         File file2 = new File(file);
-        try(FileInputStream fs = new FileInputStream(file2);
-            ObjectInputStream ois = new ObjectInputStream(fs)){
-            gameData = (GameData) ois.readObject();
-            ois.close();
-            fs.close();
-            System.out.println("Jogo restaurado com sucesso.");
-        }catch (Exception e){
-            // e.printStackTrace();
-            System.out.println("Erro ao abrir ficheiro um novo jogo vai ser criado");
+        if (file2.exists()) {
+            try (FileInputStream fs = new FileInputStream(file2);
+                 ObjectInputStream ois = new ObjectInputStream(fs)) {
+                this.gameData = (GameData) ois.readObject();
+                System.out.println("Jogo restaurado com sucesso.");
+            } catch (Exception e) {
+                System.out.println("Erro ao abrir ficheiro: " + e.getMessage());
+                this.gameData = new GameData();
+            } finally {
+                file2.delete();
+            }
+        } else {
+            System.out.println("Ficheiro de jogo não encontrado. Um novo jogo será criado.");
             this.gameData = new GameData();
-        }finally {
-            file2.delete();
         }
+    }
 
+
+
+    public Direction getPacManDirection() {
+        return gameData.getPacManDirection();
     }
 }

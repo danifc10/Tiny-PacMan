@@ -17,9 +17,9 @@ import java.util.List;
  *
  */
 public class GameData implements Serializable {
-    private MazeControl mazeControl;
-    private PacMan pacMan;
-    private Ghost [] ghosts;
+    MazeControl mazeControl;
+    PacMan pacMan;
+    Ghost [] ghosts;
     private int totalPoints = 0;
     private int level = 1;
     private int countFruitPoints = 0;
@@ -39,7 +39,7 @@ public class GameData implements Serializable {
      *
      */
     public GameData() {
-        //initGame();
+        initGame();
     }
 
     /**
@@ -54,7 +54,7 @@ public class GameData implements Serializable {
         time = 0;
         mazeControl = new MazeControl(level);
         List<Position> positions = mazeControl.getGhostStartPositions();
-        pacMan = new PacMan(mazeControl.getPacManStart().getX(), mazeControl.getPacManStart().getY(), Direction.RIGHT, mazeControl);
+        pacMan = new PacMan(mazeControl.getPacManStart().getX(), mazeControl.getPacManStart().getY(), null,  mazeControl);
         ghosts = new Ghost[]{
                 new Blinky( positions.get(0).getX(), positions.get(0).getY(), null,  mazeControl, speed++),
                 new Pinky(positions.get(1).getX(), positions.get(1).getY(), null,  mazeControl, speed++),
@@ -316,6 +316,7 @@ public class GameData implements Serializable {
      * @return boolean - true if won, false if not
      */
     public boolean checkIfWin(){
+        System.out.println("comidos:" + pacManFood  + " total" + mazeControl.getTotalPoints());
         return pacManFood >= mazeControl.getTotalPoints();
     }
 
@@ -343,5 +344,9 @@ public class GameData implements Serializable {
 
     public GameStates getLastPauseState(){
         return LastPauseState;
+    }
+
+    public Direction getPacManDirection() {
+        return pacMan.getDirection();
     }
 }

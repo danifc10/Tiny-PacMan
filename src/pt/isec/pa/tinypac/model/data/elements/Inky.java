@@ -17,7 +17,6 @@ public class Inky extends Ghost implements IMazeElement, Serializable {
 
     private int[][] corners; // coordenadas dos cantos do labirinto
 
-
     public Inky(int x, int y, Direction direction, MazeControl maze, int speed) {
         super(x, y, direction, maze, speed);
         this.direction = Direction.RIGHT;

@@ -20,7 +20,7 @@ import java.util.List;
  *
  */
 public class GameManager implements IGameEngineEvolve {
-    public static final String file = "files\\game.dat";
+
     public static final String TOP5_FILE = "files\\scores.bin";
     private Top5 top5;
     private GameContext fsm;
@@ -38,7 +38,6 @@ public class GameManager implements IGameEngineEvolve {
     }
 
     public void start() {
-        fsm.startGame();
         pcs.firePropertyChange(null,null,null);
     }
 
@@ -74,10 +73,6 @@ public class GameManager implements IGameEngineEvolve {
 
     public void pause() {
         fsm.pauseGame();
-    }
-
-    public void resume() {
-        fsm.resumeGame();
     }
 
     @Override
@@ -118,14 +113,6 @@ public class GameManager implements IGameEngineEvolve {
         return fsm.getTime();
     }
 
-    public void saveGame(){
-        fsm.save();
-    }
-
-    public void loadGame(){
-        fsm.load();
-    }
-
     public void registerPoints(String name) {
         top5.addScore(name, getPoints());
         saveToFile(TOP5_FILE);
@@ -142,7 +129,18 @@ public class GameManager implements IGameEngineEvolve {
     public void restart() {
         fsm = new GameContext();
         top5 = new Top5();
-        fsm.startGame();
+    }
+
+    public Direction getPacManDirection() {
+        return fsm.getPacManDirection();
+    }
+
+    public void save(){
+        fsm.save();
+    }
+
+    public void load(){
+        fsm.load();
     }
 }
 

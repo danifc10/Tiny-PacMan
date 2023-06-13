@@ -42,7 +42,7 @@ public class PauseUI extends BorderPane {
             Platform.exit();
         });
         btnSave.setOnAction(event->{
-            gameManager.saveGame();
+            gameManager.save();
         });
     }
 

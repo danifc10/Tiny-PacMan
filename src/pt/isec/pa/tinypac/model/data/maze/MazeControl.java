@@ -1,13 +1,10 @@
 package pt.isec.pa.tinypac.model.data.maze;
 
 import pt.isec.pa.tinypac.model.data.*;
-import pt.isec.pa.tinypac.model.data.elements.*;
+import pt.isec.pa.tinypac.model.data.elements.PacMan;
 import pt.isec.pa.tinypac.utils.Position;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
 import java.util.*;
 
 public class MazeControl implements Serializable {
