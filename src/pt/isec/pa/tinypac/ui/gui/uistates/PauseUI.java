@@ -22,10 +22,13 @@ public class PauseUI extends BorderPane {
 
     private void createViews() {
         btnSave = new Button("Save");
+        btnSave.setStyle(" -fx-text-fill: blue;-fx-font-family: 'Showcard Gothic'");
         btnSave.setMinWidth(100);
         btnResume = new Button("Resume");
+        btnResume.setStyle(" -fx-text-fill: orange;-fx-font-family: 'Showcard Gothic'");
         btnResume.setMinWidth(100);
         btnExit  = new Button("Exit");
+        btnExit.setStyle(" -fx-text-fill: red;-fx-font-family: 'Showcard Gothic'");
         btnExit.setMinWidth(100);
         HBox hBox = new HBox(btnResume,btnSave,btnExit);
         hBox.setAlignment(Pos.CENTER);
@@ -43,6 +46,7 @@ public class PauseUI extends BorderPane {
         });
         btnSave.setOnAction(event->{
             gameManager.save();
+            Platform.exit();
         });
     }
 

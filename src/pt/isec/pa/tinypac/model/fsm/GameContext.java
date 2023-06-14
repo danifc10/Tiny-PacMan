@@ -33,7 +33,6 @@ public class GameContext {
         currentState.changeDirection(readDirection);
     }
     public boolean pauseGame(){return currentState.pauseGame();}
-    public boolean resumeGame(){return currentState.resumeGame();}
 
     // dados
     public int getPoints(){
@@ -88,9 +87,11 @@ public class GameContext {
         }
     }
 
-
-
     public Direction getPacManDirection() {
         return gameData.getPacManDirection();
+    }
+
+    public int getNGhosts() {
+        return gameData.getNumOfGhosts();
     }
 }

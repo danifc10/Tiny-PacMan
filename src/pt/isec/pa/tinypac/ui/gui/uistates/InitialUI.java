@@ -37,9 +37,9 @@ public class InitialUI extends BorderPane {
         update();
     }
 
-
     private void registerHandlers() {
         gameManager.addPropertyChangeListener(evt -> { update(); });
+
         btnStart.setOnAction( event -> {
             this.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
             this.getChildren().clear();
@@ -67,13 +67,13 @@ public class InitialUI extends BorderPane {
         setFocusTraversable(true);
         btnStart = new Button("Start");
         btnStart.setMinWidth(100);
-
+        btnStart.setStyle("-fx-font-family: 'Showcard Gothic'; -fx-text-fill: blue");
         btnTop5  = new Button("Top5");
         btnTop5.setMinWidth(100);
-
+        btnTop5.setStyle("-fx-font-family: 'Showcard Gothic'; -fx-text-fill: #ff5900");
         btnExit  = new Button("Exit");
         btnExit.setMinWidth(100);
-
+        btnExit.setStyle("-fx-font-family: 'Showcard Gothic'; -fx-text-fill: red");
         VBox hBox = new VBox(btnStart, btnTop5,btnExit);
         hBox.setAlignment(Pos.CENTER);
         hBox.setSpacing(10);
@@ -92,12 +92,13 @@ public class InitialUI extends BorderPane {
         for(int i = 0 ; i < scores.size() ; i++){
             String name = scores.get(i).getName();
             int points = scores.get(i).getPoints();
-            Label playerLabel = new Label( name + "  " + points);
-            playerLabel.setStyle("-fx-text-fill: white");
+            Label playerLabel = new Label( (i+1) + ". "+name + "  " + points);
+            playerLabel.setStyle("-fx-text-fill: white; -fx-font-family: 'Showcard Gothic';");
             top5Pane.getChildren().add(playerLabel);
         }
 
         btnReturn = new Button("Back");
+        btnReturn.setStyle(" -fx-background-color: white; -fx-text-fill: red;-fx-font-family: 'Showcard Gothic';");
         btnReturn.setMinWidth(100);
         btnReturn.setOnAction(e -> initialMenu());
         top5Pane.setAlignment(Pos.CENTER);

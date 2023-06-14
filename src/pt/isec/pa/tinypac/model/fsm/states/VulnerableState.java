@@ -14,7 +14,7 @@ import pt.isec.pa.tinypac.model.fsm.GameStates;
 import pt.isec.pa.tinypac.utils.Direction;
 
 public class VulnerableState extends GameAdapter {
-    private int vulnerableTime = (60 - gameData.getLevel() - (gameData.getLevel() * 2)); // diminui 3 segundos conforme aumenta de nivel
+    private int vulnerableTime = (60 - (gameData.getLevel() * 2));
 
     public VulnerableState(GameContext context, GameData gameData, IGameEngine gameEngine) {
         super(context, gameData, gameEngine);

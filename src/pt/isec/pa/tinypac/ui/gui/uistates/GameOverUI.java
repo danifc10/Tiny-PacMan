@@ -6,12 +6,12 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import pt.isec.pa.tinypac.GameManager;
 import pt.isec.pa.tinypac.model.fsm.GameStates;
+import pt.isec.pa.tinypac.ui.gui.resources.ImageManager;
 
 public class GameOverUI extends BorderPane {
     GameManager gameManager;
@@ -29,7 +29,6 @@ public class GameOverUI extends BorderPane {
     }
 
     private void createViews() {
-
         // Criar uma Label para exibir o texto "Player Name"
         Label nameLabel = new Label("Player Name:");
         nameLabel.setStyle(" -fx-text-fill: white; ");
@@ -38,6 +37,7 @@ public class GameOverUI extends BorderPane {
         nameField.setMaxWidth(300);
         nameField.setMaxHeight(100);
         btnEnter = new Button("Enter");
+        btnEnter.setStyle("-fx-font-family: 'Showcard Gothic'");
         btnEnter.setMinWidth(100);
         // Criar um layout VBox para organizar os componentes
         VBox vBox = new VBox(10); // 10 é o espaçamento vertical entre os componentes
@@ -70,18 +70,28 @@ public class GameOverUI extends BorderPane {
     }
 
     private void showGameOver() {
-        Label lbl = new Label("Game Over");
-        lbl.setStyle(" -fx-text-fill: white; -fx-font-family: 'Showcard Gothic'; -fx-font-size: 100px");
+        this.setBackground(
+                new Background(
+                        new BackgroundImage(
+                                ImageManager.getImage("gameOver.png"),
+                                BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
+                                BackgroundPosition.CENTER,
+                                new BackgroundSize(1,1,true,true,true,false)
+                        )
+                ));
+
         btnExit = new Button("Exit");
         btnExit.setMinWidth(100);
+        btnExit.setStyle("-fx-background-color: white; -fx-text-fill: red; -fx-font-family: 'Showcard Gothic';");
         btnPlay = new Button("Play Again");
         btnPlay.setMinWidth(100);
-        VBox vBox = new VBox(10);
-        vBox.setPadding(new Insets(10));
-        vBox.getChildren().addAll(lbl, btnExit, btnPlay);
-        vBox.setAlignment(Pos.CENTER);
-        vBox.setSpacing(10);
-        this.setCenter(vBox);
+        btnPlay.setStyle(" -fx-background-color: white; -fx-text-fill: blue;-fx-font-family: 'Showcard Gothic';");
+        HBox hBox = new HBox(10);
+        hBox.setPadding(new Insets(10));
+        hBox.getChildren().addAll( btnExit, btnPlay);
+        hBox.setAlignment(Pos.BOTTOM_CENTER);
+        hBox.setSpacing(10);
+        this.setCenter(hBox);
 
         btnExit.setOnAction(e->{
             Platform.exit();

@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
 import pt.isec.pa.tinypac.GameManager;
 import pt.isec.pa.tinypac.model.fsm.GameStates;
 import pt.isec.pa.tinypac.ui.gui.resources.ImageManager;
+import pt.isec.pa.tinypac.utils.Direction;
 
 public class MazeUI extends TilePane {
     private static final int CELL_SIZE = 16;
@@ -79,7 +80,14 @@ public class MazeUI extends TilePane {
                     imageName = "clyde.png";
                 break;
             case 'P':
-                imageName = "pacman.png";
+                if(gameManager.getPacManDirection() == Direction.UP)
+                    imageName = "pacmanU.png";
+                else if(gameManager.getPacManDirection() == Direction.DOWN)
+                    imageName ="pacmanD.png";
+                else if(gameManager.getPacManDirection() == Direction.LEFT)
+                    imageName = "pacmanL.png";
+                else
+                    imageName = "pacmanR.png";
                 break;
             case 'I':
                 if(gameManager.getState() == GameStates.VULNERABLE)

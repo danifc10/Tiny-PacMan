@@ -8,7 +8,6 @@ import pt.isec.pa.tinypac.utils.Direction;
 import pt.isec.pa.tinypac.utils.Position;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 /**
  * class where all the data is managed
@@ -143,8 +142,6 @@ public class GameData implements Serializable {
     public void endVulnerable() {
         for (Ghost g : ghosts) {
             g.setVulnerable(false);
-            g.roadMade = new ArrayList<>();
-            g.road_index =0;
         }
     }
     /**
@@ -308,16 +305,13 @@ public class GameData implements Serializable {
         return element;
     }
 
-    // like a transition but not a really one
-
     /**
      * Verification for win
      *
      * @return boolean - true if won, false if not
      */
     public boolean checkIfWin(){
-        System.out.println("comidos:" + pacManFood  + " total" + mazeControl.getTotalPoints());
-        return pacManFood >= mazeControl.getTotalPoints();
+        return pacManFood >= (mazeControl.getTotalPoints() - 3);
     }
 
     /**
@@ -338,15 +332,35 @@ public class GameData implements Serializable {
         initGame();
     }
 
+    /**
+     * Save the last state to return when resume game
+     * @param  state -GameStates - the last state
+     */
     public void setStateOfPause(GameStates state) {
         LastPauseState = state;
     }
 
+    /**
+     * Get the state to return game after pause
+     * @return LastPauseState
+     */
     public GameStates getLastPauseState(){
         return LastPauseState;
     }
 
+    /**
+     * Get the current Pac Man direction
+     * @return Direction pacManDirection - current pacMan direction
+     */
     public Direction getPacManDirection() {
         return pacMan.getDirection();
+    }
+
+    /**
+     * Get the number of alive ghosts
+     * @return int numOfGhosts - number of ghosts
+     */
+    public int getNumOfGhosts(){
+        return numOfGhosts;
     }
 }

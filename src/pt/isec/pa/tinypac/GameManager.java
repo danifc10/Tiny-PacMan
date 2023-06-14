@@ -14,7 +14,7 @@ import java.beans.PropertyChangeSupport;
 import java.io.*;
 import java.util.List;
 /**
- * class where all the data as connected and manage
+ * class that manage the all game
  * @author Daniela Correia
  * @version 1.0.0
  *
@@ -28,7 +28,7 @@ public class GameManager implements IGameEngineEvolve {
     private boolean activateTimer = false;
 
     public GameManager() {
-        loadFromFile(TOP5_FILE);
+        loadTop5(TOP5_FILE);
         fsm = new GameContext();
         pcs = new PropertyChangeSupport(this);
     }
@@ -41,7 +41,7 @@ public class GameManager implements IGameEngineEvolve {
         pcs.firePropertyChange(null,null,null);
     }
 
-    public void loadFromFile(String fileName) {
+    public void loadTop5(String fileName) {
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName))) {
             System.out.println("Top 5 loaded successfully.");
             this.top5 = (Top5) inputStream.readObject();
@@ -51,18 +51,13 @@ public class GameManager implements IGameEngineEvolve {
         }
     }
 
-    public void saveToFile(String fileName) {
+    public void saveTop5(String fileName) {
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileName))) {
             outputStream.writeObject(top5);
             System.out.println("Top 5 saved successfully.");
         } catch (IOException e) {
             System.out.println("Error saving Top 5: " + e.getMessage());
         }
-    }
-
-    public void end() {
-        //fsm.endGame();
-        pcs.firePropertyChange(null,null,null);
     }
 
     // transitions
@@ -115,7 +110,7 @@ public class GameManager implements IGameEngineEvolve {
 
     public void registerPoints(String name) {
         top5.addScore(name, getPoints());
-        saveToFile(TOP5_FILE);
+        saveTop5(TOP5_FILE);
     }
 
     public List<Score> getTop5(){
@@ -139,8 +134,8 @@ public class GameManager implements IGameEngineEvolve {
         fsm.save();
     }
 
-    public void load(){
-        fsm.load();
+    public int getNumGhosts(){
+        return fsm.getNGhosts();
     }
 }
 
