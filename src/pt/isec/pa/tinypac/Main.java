@@ -7,7 +7,7 @@ import pt.isec.pa.tinypac.ui.gui.MainJFX;
  * <p>
  * The first class of this project
  *
- * @ author Daniela Correia
+ * @author Daniela Correia
  *
  */
 public class Main {

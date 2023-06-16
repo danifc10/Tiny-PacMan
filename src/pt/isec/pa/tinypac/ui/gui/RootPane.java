@@ -8,7 +8,12 @@ import pt.isec.pa.tinypac.ui.gui.resources.CSSManager;
 import pt.isec.pa.tinypac.ui.gui.resources.ImageManager;
 import pt.isec.pa.tinypac.ui.gui.uistates.*;
 import pt.isec.pa.tinypac.utils.Direction;
-
+/**
+ * RootPane class
+ *
+ * @author Daniela Correia
+ *
+ */
 public class RootPane extends BorderPane {
     GameManager gameManager;
 

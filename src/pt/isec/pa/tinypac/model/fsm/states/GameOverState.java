@@ -5,8 +5,18 @@ import pt.isec.pa.tinypac.model.data.GameData;
 import pt.isec.pa.tinypac.model.fsm.GameAdapter;
 import pt.isec.pa.tinypac.model.fsm.GameContext;
 import pt.isec.pa.tinypac.model.fsm.GameStates;
-
+/**
+ * class for game over state
+ * @author Daniela Correia
+ * @version 1.0.0
+ *
+ */
 public class GameOverState extends GameAdapter {
+    /**
+     * Default constructor
+     * @param (context, gameData, gameEngine) same as adapter
+     *
+     */
     public GameOverState(GameContext context, GameData gameData,IGameEngine gameEngine) {
         super(context, gameData, gameEngine);
     }
@@ -16,9 +26,4 @@ public class GameOverState extends GameAdapter {
         return GameStates.GAME_OVER;
     }
 
-    @Override
-    public boolean restart() {
-        changeState(GameStates.INITIAL);
-        return false;
-    }
 }

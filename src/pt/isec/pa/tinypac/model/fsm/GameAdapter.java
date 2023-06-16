@@ -2,115 +2,82 @@ package pt.isec.pa.tinypac.model.fsm;
 
 import pt.isec.pa.tinypac.gameengine.IGameEngine;
 import pt.isec.pa.tinypac.model.data.GameData;
-import pt.isec.pa.tinypac.model.data.elements.Ghost;
-import pt.isec.pa.tinypac.model.data.elements.PacMan;
 import pt.isec.pa.tinypac.model.data.maze.MazeControl;
 import pt.isec.pa.tinypac.utils.Direction;
-
-public class GameAdapter implements IGameStates{
+/**
+ * adapter for the fsm
+ * @author Daniela Correia
+ * @version 1.0.0
+ *
+ */
+public abstract class GameAdapter implements IGameStates{
+    /**
+     * Reference to GameContext
+     */
     protected GameContext context;
+    /**
+     * Reference to GameData
+     */
     protected GameData gameData;
-    protected Ghost [] ghosts;
+    /**
+     * Reference to MazeControl
+     */
     protected MazeControl maze;
-    protected PacMan pacMan;
+    /**
+     * Reference to IGameEngine
+     */
     protected IGameEngine gameEngine;
 
+    /**
+     * Default constructor
+     * @param (context, gameData, gameEngine) all the params that adapter needs
+     *
+     */
     protected GameAdapter(GameContext context, GameData gameData, IGameEngine gameEngine){
         this.context = context;
         this.gameData = gameData;
         this.gameEngine = gameEngine;
     }
 
+    /**
+     * change state function
+     * @param  newState new state to change
+     *
+     */
     protected void changeState(GameStates newState) {
         context.changeState(newState.createState(context,gameData, gameEngine));
     }
 
-    public void checks(){};
-
-    public void setMaze(MazeControl maze){this.maze = maze;}
-
+    /**
+     * Get current state
+     * @return  null
+     */
     @Override
     public GameStates getState() {
         return null;
     }
 
-    @Override
-    public boolean endVulnerableTime() {
-        return false;
-    }
-
-    @Override
-    public boolean setGhostsFree() {
-        return false;
-    }
-
-    @Override
-    public boolean startGame() {
-        return false;
-    }
-
-    @Override
-    public boolean eatPoint() {
-        return true;
-    }
-
-    @Override
-    public boolean eatFruit() {
-        return true;
-    }
-
-    @Override
-    public boolean eatPower() {
-        return true;
-    }
-
-    @Override
-    public boolean eatGhost() {
-        return true;
-    }
-
-    @Override
-    public boolean ifEatAll() {
-        return false;
-    }
-
-    @Override
-    public boolean ghostCollision() {
-        return false;
-    }
-
-    @Override
-    public boolean restart() {
-        return false;
-    }
-
-    @Override
-    public boolean levelUp() {
-        return false;
-    }
-
-    @Override
-    public boolean endGame() {
-        return false;
-    }
-
+    /**
+     * Transition to pause game
+     * @return  false
+     */
     @Override
     public boolean pauseGame() {
         return false;
     }
 
-    @Override
-    public boolean resumeGame() {
-        return false;
-    }
-
+    /**
+     * Transition to change PacMan direction
+     *
+     */
     @Override
     public void changeDirection(Direction direction) {
-        return;
+
     }
 
     @Override
     public void evolve() {
 
     }
+
 }

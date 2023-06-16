@@ -2,7 +2,9 @@ package pt.isec.pa.tinypac.ui.gui.uistates;
 
 import javafx.application.Platform;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import pt.isec.pa.tinypac.GameManager;
@@ -22,13 +24,13 @@ public class PauseUI extends BorderPane {
 
     private void createViews() {
         btnSave = new Button("Save");
-        btnSave.setStyle(" -fx-text-fill: blue;-fx-font-family: 'Showcard Gothic'");
+        btnSave.setStyle(" -fx-text-fill: blue;");
         btnSave.setMinWidth(100);
         btnResume = new Button("Resume");
-        btnResume.setStyle(" -fx-text-fill: orange;-fx-font-family: 'Showcard Gothic'");
+        btnResume.setStyle(" -fx-text-fill: orange;");
         btnResume.setMinWidth(100);
         btnExit  = new Button("Exit");
-        btnExit.setStyle(" -fx-text-fill: red;-fx-font-family: 'Showcard Gothic'");
+        btnExit.setStyle(" -fx-text-fill: red;");
         btnExit.setMinWidth(100);
         HBox hBox = new HBox(btnResume,btnSave,btnExit);
         hBox.setAlignment(Pos.CENTER);
@@ -42,11 +44,35 @@ public class PauseUI extends BorderPane {
             gameManager.pause();
         });
         btnExit.setOnAction( event -> {
-            Platform.exit();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("EXIT");
+            alert.setHeaderText("Do you want to exit?");
+
+            ButtonType btnYes = new ButtonType("YES");
+            ButtonType btnNo = new ButtonType("NO");
+
+            alert.getButtonTypes().setAll(btnYes, btnNo);
+
+            alert.showAndWait().ifPresent(e -> {
+                if (e == btnYes) {
+                    Platform.exit();
+                }
+            });
+
         });
         btnSave.setOnAction(event->{
-            gameManager.save();
-            Platform.exit();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            if(gameManager.save()) {
+                alert.setTitle("Congratulations");
+                alert.setHeaderText("Your changes have been successfully saved!");
+            }
+            ButtonType btnOK = new ButtonType("OK");
+            alert.getButtonTypes().setAll(btnOK);
+            alert.showAndWait().ifPresent(e -> {
+                if (e == btnOK) {
+                    Platform.exit();
+                }
+            });
         });
     }
 

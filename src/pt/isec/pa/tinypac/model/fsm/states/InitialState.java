@@ -6,9 +6,19 @@ import pt.isec.pa.tinypac.model.fsm.GameAdapter;
 import pt.isec.pa.tinypac.model.fsm.GameContext;
 import pt.isec.pa.tinypac.model.fsm.GameStates;
 import pt.isec.pa.tinypac.utils.Direction;
-
+/**
+ * class for initial state
+ * @author Daniela Correia
+ * @version 1.0.0
+ *
+ */
 public class InitialState extends GameAdapter {
     private int aux;
+    /**
+     * Default constructor
+     * @param (context, gameData, gameEngine) same as adapter
+     *
+     */
     public InitialState(GameContext context, GameData gameData, IGameEngine gameEngine) {
         super(context,gameData, gameEngine);
         aux = 0;

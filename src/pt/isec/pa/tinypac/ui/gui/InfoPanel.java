@@ -8,11 +8,19 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import pt.isec.pa.tinypac.GameManager;
 import pt.isec.pa.tinypac.ui.gui.resources.ImageManager;
-
+/**
+ * class for the UI of info panel
+ * @author Daniela Correia
+ * @version 1.0.0
+ */
 public class InfoPanel extends HBox {
     GameManager gameManager;
     HBox hbInfo;
 
+    /**
+     * Default constructor
+     * @param gameManager class GameManager
+     */
     public InfoPanel(GameManager gameManager) {
         this.gameManager = gameManager;
 
@@ -45,26 +53,22 @@ public class InfoPanel extends HBox {
         int points = gameManager.getPoints();
         Label lblPoints = new Label("SCORE");
         Label lblPoints2 = new Label(" "+ points);
-        lblPoints.setStyle(" -fx-text-fill: white; -fx-font-family: 'Showcard Gothic';-fx-font-size: 20px");
-        lblPoints2.setStyle(" -fx-text-fill: orange; -fx-font-family: 'Showcard Gothic';-fx-font-size: 20px");
+        lblPoints2.setStyle(" -fx-text-fill: orange;");
 
         int time = gameManager.getTime();
         Label lblTime = new Label("TIME");
         Label lblTime2 = new Label(" " + time);
-        lblTime.setStyle(" -fx-text-fill: white; -fx-font-family: 'Showcard Gothic';-fx-font-size: 20px");
-        lblTime2.setStyle(" -fx-text-fill: red; -fx-font-family: 'Showcard Gothic';-fx-font-size: 20px");
+        lblTime2.setStyle(" -fx-text-fill: red;");
 
         int level = gameManager.getLevel();
         Label lblLevel = new Label("LEVEL");
         Label lblLevel2 = new Label(" "+level);
-        lblLevel.setStyle(" -fx-text-fill: white;-fx-font-family: 'Showcard Gothic';-fx-font-size: 20px");
-        lblLevel2.setStyle(" -fx-text-fill: yellow;-fx-font-family: 'Showcard Gothic'; -fx-font-size: 20px");
+        lblLevel2.setStyle(" -fx-text-fill: yellow;");
 
         int numGhosts = gameManager.getNumGhosts();
         Label lblGhost = new Label("Ghosts");
         Label lblGhost2 = new Label(" " + numGhosts);
-        lblGhost.setStyle(" -fx-text-fill: white;-fx-font-family: 'Showcard Gothic' ;-fx-font-size: 20px");
-        lblGhost2.setStyle(" -fx-text-fill: #00b9ff;-fx-font-family: 'Showcard Gothic' ; -fx-font-size: 20px");
+        lblGhost2.setStyle(" -fx-text-fill: #00b9ff;");
 
         hbInfo.getChildren().addAll(lblPoints,lblPoints2, lblTime, lblTime2,lblLevel, lblLevel2,lblGhost, lblGhost2);
 

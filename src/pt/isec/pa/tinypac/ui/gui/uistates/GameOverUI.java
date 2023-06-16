@@ -3,9 +3,7 @@ package pt.isec.pa.tinypac.ui.gui.uistates;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -82,10 +80,10 @@ public class GameOverUI extends BorderPane {
 
         btnExit = new Button("Exit");
         btnExit.setMinWidth(100);
-        btnExit.setStyle("-fx-background-color: white; -fx-text-fill: red; -fx-font-family: 'Showcard Gothic';");
+        btnExit.setStyle(" -fx-text-fill: red");
         btnPlay = new Button("Play Again");
         btnPlay.setMinWidth(100);
-        btnPlay.setStyle(" -fx-background-color: white; -fx-text-fill: blue;-fx-font-family: 'Showcard Gothic';");
+        btnPlay.setStyle("-fx-text-fill: blue;");
         HBox hBox = new HBox(10);
         hBox.setPadding(new Insets(10));
         hBox.getChildren().addAll( btnExit, btnPlay);
@@ -94,7 +92,20 @@ public class GameOverUI extends BorderPane {
         this.setCenter(hBox);
 
         btnExit.setOnAction(e->{
-            Platform.exit();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("EXIT");
+            alert.setHeaderText("Do you want to exit?");
+
+            ButtonType btnYes = new ButtonType("YES");
+            ButtonType btnNo = new ButtonType("NO");
+
+            alert.getButtonTypes().setAll(btnYes, btnNo);
+
+            alert.showAndWait().ifPresent(event -> {
+                if (event == btnYes) {
+                    Platform.exit();
+                }
+            });
         });
 
         btnPlay.setOnAction(e->{

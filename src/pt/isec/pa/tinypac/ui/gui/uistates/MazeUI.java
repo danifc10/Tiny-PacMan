@@ -13,7 +13,11 @@ import pt.isec.pa.tinypac.GameManager;
 import pt.isec.pa.tinypac.model.fsm.GameStates;
 import pt.isec.pa.tinypac.ui.gui.resources.ImageManager;
 import pt.isec.pa.tinypac.utils.Direction;
-
+/**
+ * class for the UI of maze
+ * @author Daniela Correia
+ * @version 1.0.0
+ */
 public class MazeUI extends TilePane {
     private static final int CELL_SIZE = 16;
     GameManager gameManager;
@@ -105,7 +109,7 @@ public class MazeUI extends TilePane {
                 imageName = "powerDot.png";
                 break;
             case 'M':
-                imageName = "pacman.png";
+                imageName = "pacmanR.png";
                 break;
             case 'W':
                 imageName = "warp.png";

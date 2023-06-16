@@ -1,4 +1,4 @@
-package pt.isec.pa.tinypac.model.data.elements;
+package pt.isec.pa.tinypac.model.data.elements.ghosts;
 
 import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
 import pt.isec.pa.tinypac.model.data.maze.MazeControl;
@@ -9,20 +9,57 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
+/**
+ * class representing the Ghosts
+ * @author Daniela Correia
+ * @version 1.0.0
+ *
+ */
 public abstract class Ghost implements IMazeElement , Serializable {
+    /**
+     * Reference to current position
+     */
     protected int x, y; // posição do fantasma no labirinto
+    /**
+     * Reference to the last position
+     */
     protected int lastX, lastY;
+    /**
+     * Reference to the current direction
+     */
     protected Direction direction; // direção atual do fantasma
+    /**
+     * Boolean if is vulnerable or not
+     */
     protected boolean vulnerable; // se o fantasma está vulnerável ou não
+    /**
+     * Boolean if is dead or not
+     */
     protected boolean isDead; // se o fantasma está morto ou não
     protected MazeControl maze;
+    /**
+     * Boolean if is out of the jail or not
+     */
     protected boolean isOut;  // se esta na jaula ou nao
+    /**
+     * Array list for the ghost path
+     */
     public List<Position> roadMade; // caminho percorrido pelo fantasma
     protected IMazeElement symbolRemove = null;
+    /**
+     * Reference to index for the array roadMade
+     */
     public int road_index = 0;
+    /**
+     * Reference to the speed
+     */
     protected int speed;
 
+    /**
+     * Default ghost constructor
+     * @param (x, y, direction, maze, speed) all the ghost properties
+     *
+     */
     public Ghost(int x, int y, Direction direction, MazeControl maze, int speed){
         this.x = x;
         this.y = y;
@@ -33,52 +70,85 @@ public abstract class Ghost implements IMazeElement , Serializable {
         this.speed = speed;
     }
 
-    public void setMaze(MazeControl maze){
-        this.maze = maze;
-    }
-
+    /**
+     * Get last row
+     * @return lastX last row
+     */
     public int getLastX() {
         return lastX;
     }
-
+    /**
+     * Get last collumn
+     * @return lastY last collumn
+     */
     public int getLastY() {
         return lastY;
     }
-
+    /**
+     * Ghost move
+     */
     public abstract void move();
-
+    /**
+     * Get current row
+     * @return x current row
+     */
     public int getX() {
         return x;
     }
-
+    /**
+     * Set new row
+     * @param  x new row
+     */
     public void setX(int x) {
         this.x = x;
     }
-
+    /**
+     * Get current collumn
+     * @return y current collumn
+     */
     public int getY() {
         return y;
     }
-
+    /**
+     * Set new collumn
+     * @param  y new collumn
+     */
     public void setY(int y) {
         this.y = y;
     }
-
+    /**
+     * Get current direction
+     * @return direction
+     */
     public int getDirection() {
         return 0;
     }
-
+    /**
+     * When gosts are vulnerable or not
+     * @param vulnerable true if will be vulnerable false if not
+     */
     public void setVulnerable(boolean vulnerable) {
         this.vulnerable = vulnerable;
     }
-
+    /**
+     * Confirm is a ghost is dead
+     * @return isDead true if is dead and false if not
+     */
     public boolean isDead() {
         return isDead;
     }
-
+    /**
+     * "kill" a ghost
+     * @param  dead if true ghost die
+     */
     public void setDead(boolean dead) {
         isDead = dead;
     }
 
+    /**
+     * Functio to get out of jail
+     *
+     */
     public void getOut() {
         Position portal = new Position(maze.getGhostGate().getX(), maze.getGhostGate().getY());
 
@@ -99,6 +169,10 @@ public abstract class Ghost implements IMazeElement , Serializable {
         isOut = true;
     }
 
+    /**
+     * Vulnerable ghost move
+     *
+     */
     public void vulnerableMove(){
         --road_index;
         if(road_index >= 0) {
@@ -117,11 +191,15 @@ public abstract class Ghost implements IMazeElement , Serializable {
 
     }
 
-    public Direction getValidDirection(Position portal, Direction direction) {
+    /**
+     * Get a valid direction to the ghost gate
+     * @return direction
+     */
+    public Direction getValidDirection(Position ghostGate, Direction direction) {
         List<Direction> validDirections = new ArrayList<>();
 
         for(Direction dir: Direction.values()){
-            Position nextPosition = getNextPosition(portal, dir);
+            Position nextPosition = getNextPosition(ghostGate, dir);
             if(maze.checkIfWalk(nextPosition.getX(), nextPosition.getY())){
                 validDirections.add(dir);
             }
@@ -140,6 +218,10 @@ public abstract class Ghost implements IMazeElement , Serializable {
         return null;
     }
 
+    /**
+     * Get a valid nextPosition
+     * @return nextPosition a new Position
+     */
     public Position getNextPosition(Position currentPosition, Direction direction){
         int nextX = currentPosition.getX();
         int nextY = currentPosition.getY();

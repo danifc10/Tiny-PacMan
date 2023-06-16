@@ -1,19 +1,32 @@
-package pt.isec.pa.tinypac.model;
+package pt.isec.pa.tinypac.utils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+/**
+ * class representing the top5
+ * @author Daniela Correia
+ * @version 1.0.0
+ *
+ */
 public class Top5 implements Serializable {
 
     private static final int MAX_SCORES = 5;
     private List<Score> scores;
 
+    /**
+     * Default constructor
+     *
+     */
     public Top5() {
         scores = new ArrayList<>();
     }
 
+    /**
+     * Add a new score
+     * @param (name, score) player name and points
+     */
     public void addScore(String name, int score) {
         Score newScore = new Score(name, score);
         int minScore = Integer.MAX_VALUE;
@@ -41,10 +54,19 @@ public class Top5 implements Serializable {
         }
     }
 
+    /**
+     * Get all the scores
+     * @return scores array list with all scores
+     */
     public List<Score> getScores() {
         return scores;
     }
 
+    /**
+     * If can add the score or not
+     * @param (points) player points
+     * @return true if can add and false if can't
+     */
     public boolean canAddScore(int points) {
         int minScore = Integer.MAX_VALUE;
         if (scores.size() == MAX_SCORES) {

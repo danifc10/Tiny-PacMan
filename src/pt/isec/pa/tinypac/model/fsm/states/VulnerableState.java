@@ -2,20 +2,30 @@ package pt.isec.pa.tinypac.model.fsm.states;
 
 import pt.isec.pa.tinypac.gameengine.IGameEngine;
 import pt.isec.pa.tinypac.model.data.GameData;
-import pt.isec.pa.tinypac.model.data.PowerPoint;
-import pt.isec.pa.tinypac.model.data.elements.Blinky;
-import pt.isec.pa.tinypac.model.data.elements.Clyde;
-import pt.isec.pa.tinypac.model.data.elements.Inky;
-import pt.isec.pa.tinypac.model.data.elements.Pinky;
+import pt.isec.pa.tinypac.model.data.elements.PowerPoint;
+import pt.isec.pa.tinypac.model.data.elements.ghosts.Blinky;
+import pt.isec.pa.tinypac.model.data.elements.ghosts.Clyde;
+import pt.isec.pa.tinypac.model.data.elements.ghosts.Inky;
+import pt.isec.pa.tinypac.model.data.elements.ghosts.Pinky;
 import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
 import pt.isec.pa.tinypac.model.fsm.GameAdapter;
 import pt.isec.pa.tinypac.model.fsm.GameContext;
 import pt.isec.pa.tinypac.model.fsm.GameStates;
 import pt.isec.pa.tinypac.utils.Direction;
-
+/**
+ * class for vulnerable state
+ * @author Daniela Correia
+ * @version 1.0.0
+ *
+ */
 public class VulnerableState extends GameAdapter {
     private int vulnerableTime = (60 - (gameData.getLevel() * 2));
 
+    /**
+     * Default constructor
+     * @param (context, gameData, gameEngine) same as adapter
+     *
+     */
     public VulnerableState(GameContext context, GameData gameData, IGameEngine gameEngine) {
         super(context, gameData, gameEngine);
     }

@@ -1,6 +1,7 @@
 package pt.isec.pa.tinypac.model.data;
 
 import pt.isec.pa.tinypac.model.data.elements.*;
+import pt.isec.pa.tinypac.model.data.elements.ghosts.*;
 import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
 import pt.isec.pa.tinypac.model.data.maze.MazeControl;
 import pt.isec.pa.tinypac.model.fsm.GameStates;
@@ -18,11 +19,11 @@ import java.util.List;
 public class GameData implements Serializable {
     MazeControl mazeControl;
     PacMan pacMan;
-    Ghost [] ghosts;
+    Ghost[] ghosts;
     private int totalPoints = 0;
     private int level = 1;
     private int countFruitPoints = 0;
-    private int countPoints = 0;
+    private int countPoints = 0; // when 20 set new fruit
     private int time = 0;
     private int pacManLife = 3;
     private int numOfGhosts = 4;
@@ -61,8 +62,6 @@ public class GameData implements Serializable {
                 new Clyde(positions.get(3).getX(), positions.get(3).getY(), null, mazeControl, speed++)
         };
     }
-
-    // getter and setters to data
 
     /**
      * Get game points
@@ -249,8 +248,6 @@ public class GameData implements Serializable {
             }
         }
 
-        mazeControl.setXY(pacMan.getX(), pacMan.getY(), new PacMan());
-        mazeControl.remove(pacMan.getLastX(), pacMan.getLastY());
         return eatElement;
     }
 
@@ -293,6 +290,7 @@ public class GameData implements Serializable {
             totalPoints++;
             pacManFood++;
         } else if (element instanceof Fruit) {
+            countPoints = 0;
             countFruitPoints++;
             totalPoints+= (25*countFruitPoints);
             pacManFood++;
@@ -311,7 +309,10 @@ public class GameData implements Serializable {
      * @return boolean - true if won, false if not
      */
     public boolean checkIfWin(){
-        return pacManFood >= (mazeControl.getTotalPoints() - 3);
+        System.out.println("empty: " + mazeControl.checkWin() + " totalPoints: " + mazeControl.getTotalPoints());
+        //return pacManFood >= (mazeControl.getTotalPoints() - 2);
+
+        return( mazeControl.checkWin() + numOfGhosts) == mazeControl.getTotalPoints();
     }
 
     /**

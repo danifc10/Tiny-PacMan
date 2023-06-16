@@ -1,4 +1,4 @@
-package pt.isec.pa.tinypac.model.data.elements;
+package pt.isec.pa.tinypac.model.data.elements.ghosts;
 
 import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
 import pt.isec.pa.tinypac.model.data.maze.MazeControl;
@@ -7,12 +7,20 @@ import pt.isec.pa.tinypac.utils.Position;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Random;
-
+/**
+ * class representing the Blinky Ghost
+ * @author Daniela Correia
+ * @version 1.0.0
+ *
+ */
 public class Blinky extends Ghost implements IMazeElement, Serializable {
     private static final char symbol = 'B';
-    Random random = new Random();
 
+    /**
+     * Default ghost constructor
+     * @param (x, y, direction, maze, speed) all the ghost properties
+     *
+     */
     public Blinky(int x, int y, Direction direction, MazeControl maze, int speed) {
         super(x, y, direction, maze, speed);
         this.roadMade = new ArrayList<>();
@@ -24,6 +32,10 @@ public class Blinky extends Ghost implements IMazeElement, Serializable {
         return symbol;
     }
 
+    /**
+     * Movement of Blinky
+     *
+     */
     @Override
     public void move() {
 

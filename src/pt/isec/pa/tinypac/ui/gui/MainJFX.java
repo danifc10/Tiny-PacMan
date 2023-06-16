@@ -8,7 +8,12 @@ import pt.isec.pa.tinypac.GameManager;
 import pt.isec.pa.tinypac.Main;
 import pt.isec.pa.tinypac.gameengine.GameEngine;
 
-
+/**
+ * Main java FX class
+ *
+ * @author Daniela Correia
+ *
+ */
 public class MainJFX extends Application {
     GameManager gameManager;
     GameEngine gameEngine;

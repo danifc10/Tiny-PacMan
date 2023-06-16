@@ -1,7 +1,7 @@
-package pt.isec.pa.tinypac.model.data.elements;
+package pt.isec.pa.tinypac.model.data.elements.ghosts;
 
-import pt.isec.pa.tinypac.model.data.GhostGate;
-import pt.isec.pa.tinypac.model.data.Point;
+import pt.isec.pa.tinypac.model.data.elements.GhostGate;
+import pt.isec.pa.tinypac.model.data.elements.Point;
 import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
 import pt.isec.pa.tinypac.model.data.maze.MazeControl;
 import pt.isec.pa.tinypac.utils.Direction;
@@ -9,10 +9,20 @@ import pt.isec.pa.tinypac.utils.Position;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
+/**
+ * class representing the Clyde Ghost
+ * @author Daniela Correia
+ * @version 1.0.0
+ *
+ */
 public class Clyde extends Ghost implements IMazeElement, Serializable {
     private static final char symbol = 'C';
 
+    /**
+     * Default ghost constructor
+     * @param (x, y, direction, maze, speed) all the ghost properties
+     *
+     */
     public Clyde(int x, int y, Direction direction, MazeControl maze, int speed) {
         super(x, y, direction, maze, speed);
         this.roadMade = new ArrayList<>();
@@ -24,6 +34,10 @@ public class Clyde extends Ghost implements IMazeElement, Serializable {
         return symbol;
     }
 
+    /**
+     * Movement of Clyde
+     *
+     */
     @Override
     public void move() {
         if(!isOut){
@@ -116,6 +130,10 @@ public class Clyde extends Ghost implements IMazeElement, Serializable {
         return false;
     }
 
+    /**
+     * function to clyde follow PacMan
+     *
+     */
     private void followPacMan(){
         lastX = x;
         lastY = y;
@@ -156,7 +174,12 @@ public class Clyde extends Ghost implements IMazeElement, Serializable {
         road_index++;
     }
 
-
+    /**
+     * Confirm is next direction is valid
+     * @param (x,y, direciton) next Position and direction
+     * @return true/false
+     *
+     */
     private boolean isDirectionValid( int x, int y, Direction direction) {
         int nextX = x;
         int nextY = y;

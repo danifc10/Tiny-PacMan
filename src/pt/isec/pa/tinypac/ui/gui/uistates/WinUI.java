@@ -38,7 +38,7 @@ public class WinUI extends BorderPane {
                 )
         );
         btnExit = new Button("Exit");
-        btnExit.setStyle(" -fx-background-color: white; -fx-text-fill: RED; -fx-font-family: 'Showcard Gothic';");
+        btnExit.setStyle("-fx-text-fill: RED;");
         btnExit.setMinWidth(100);
         VBox vBox = new VBox(10);
         vBox.setPadding(new Insets(10));
@@ -65,13 +65,11 @@ public class WinUI extends BorderPane {
     private void showTop5(){
         // Criar uma Label para exibir o texto "Player Name"
         Label nameLabel = new Label("Player Name:");
-        nameLabel.setStyle(" -fx-text-fill: white; ");
         // Criar um campo de texto para o jogador inserir seu nome
         nameField = new TextField();
         nameField.setMaxWidth(300);
         nameField.setMaxHeight(100);
         btnEnter = new Button("Enter");
-        btnEnter.setStyle("-fx-font-family: 'Showcard Gothic'");
         btnEnter.setMinWidth(100);
         // Criar um layout VBox para organizar os componentes
         VBox vBox1 = new VBox(10); // 10 é o espaçamento vertical entre os componentes

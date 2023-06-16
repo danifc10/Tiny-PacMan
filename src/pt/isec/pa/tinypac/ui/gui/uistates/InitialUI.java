@@ -3,7 +3,9 @@ package pt.isec.pa.tinypac.ui.gui.uistates;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
@@ -11,9 +13,9 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import pt.isec.pa.tinypac.GameManager;
-import pt.isec.pa.tinypac.model.Score;
 import pt.isec.pa.tinypac.model.fsm.GameStates;
 import pt.isec.pa.tinypac.ui.gui.InfoPanel;
+import pt.isec.pa.tinypac.utils.Score;
 
 import java.io.File;
 import java.util.List;
@@ -51,7 +53,21 @@ public class InitialUI extends BorderPane {
         });
 
         btnExit.setOnAction( event -> {
-            Platform.exit();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("EXIT");
+            alert.setHeaderText("Do you want to exit?");
+
+            ButtonType btnYes = new ButtonType("YES");
+            ButtonType btnNo = new ButtonType("NO");
+
+            alert.getButtonTypes().setAll(btnYes, btnNo);
+
+            alert.showAndWait().ifPresent(e -> {
+                if (e == btnYes) {
+                    Platform.exit();
+                }
+            });
+
         });
 
         btnTop5.setOnAction(event->{
@@ -67,13 +83,13 @@ public class InitialUI extends BorderPane {
         setFocusTraversable(true);
         btnStart = new Button("Start");
         btnStart.setMinWidth(100);
-        btnStart.setStyle("-fx-font-family: 'Showcard Gothic'; -fx-text-fill: blue");
+        btnStart.setStyle("-fx-text-fill: blue");
         btnTop5  = new Button("Top5");
         btnTop5.setMinWidth(100);
-        btnTop5.setStyle("-fx-font-family: 'Showcard Gothic'; -fx-text-fill: #ff5900");
+        btnTop5.setStyle(" -fx-text-fill: #ff5900");
         btnExit  = new Button("Exit");
         btnExit.setMinWidth(100);
-        btnExit.setStyle("-fx-font-family: 'Showcard Gothic'; -fx-text-fill: red");
+        btnExit.setStyle("-fx-text-fill: red");
         VBox hBox = new VBox(btnStart, btnTop5,btnExit);
         hBox.setAlignment(Pos.CENTER);
         hBox.setSpacing(10);
@@ -93,12 +109,11 @@ public class InitialUI extends BorderPane {
             String name = scores.get(i).getName();
             int points = scores.get(i).getPoints();
             Label playerLabel = new Label( (i+1) + ". "+name + "  " + points);
-            playerLabel.setStyle("-fx-text-fill: white; -fx-font-family: 'Showcard Gothic';");
             top5Pane.getChildren().add(playerLabel);
         }
 
         btnReturn = new Button("Back");
-        btnReturn.setStyle(" -fx-background-color: white; -fx-text-fill: red;-fx-font-family: 'Showcard Gothic';");
+        btnReturn.setStyle(" -fx-text-fill: red;");
         btnReturn.setMinWidth(100);
         btnReturn.setOnAction(e -> initialMenu());
         top5Pane.setAlignment(Pos.CENTER);
