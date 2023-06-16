@@ -9,11 +9,19 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import pt.isec.pa.tinypac.GameManager;
 import pt.isec.pa.tinypac.model.fsm.GameStates;
-
+/**
+ * class for pause UI
+ * @author Daniela Correia
+ * @version 1.0.0
+ */
 public class PauseUI extends BorderPane {
     GameManager gameManager;
     Button btnResume,btnExit, btnSave;
 
+    /**
+     * Default constructor
+     * @param gameManager reference to gameManager
+     */
     public PauseUI(GameManager gameManager) {
         this.gameManager = gameManager;
 

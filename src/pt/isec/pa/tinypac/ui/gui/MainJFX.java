@@ -12,12 +12,16 @@ import pt.isec.pa.tinypac.gameengine.GameEngine;
  * Main java FX class
  *
  * @author Daniela Correia
- *
+ * @version 1.0.0
  */
 public class MainJFX extends Application {
     GameManager gameManager;
     GameEngine gameEngine;
 
+    /**
+     * First function called
+     *
+     */
     @Override
     public void init() throws Exception {
         super.init();
@@ -27,12 +31,19 @@ public class MainJFX extends Application {
         gameEngine.start(200);
     }
 
+    /**
+     * Start a new window
+     */
     @Override
     public void start(Stage stage) throws Exception {
         newStageForTesting(stage,"PAC-MAN");
        // newStageForTesting(new Stage(),"PAC-MAN");
     }
 
+    /**
+     * Create a new stage
+     * @param (stage, title) stage e nome da janela
+     */
     private void newStageForTesting(Stage stage, String title) {
         RootPane root = new RootPane(gameManager);
         Scene scene = new Scene(root,1000,600);

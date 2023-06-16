@@ -14,12 +14,20 @@ import pt.isec.pa.tinypac.model.fsm.GameStates;
 import pt.isec.pa.tinypac.ui.gui.InfoPanel;
 
 import java.io.File;
-
+/**
+ * class for vulnerable UI
+ * @author Daniela Correia
+ * @version 1.0.0
+ */
 public class VulnerableUI extends BorderPane {
     GameManager gameManager;
     MazeUI mazeUI;
     MediaPlayer mediaPlayer;
 
+    /**
+     * Default constructor
+     * @param gameManager reference to gameManager
+     */
     public VulnerableUI(GameManager gameManager) {
         this.gameManager = gameManager;
         createViews();

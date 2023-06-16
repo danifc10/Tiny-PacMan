@@ -8,28 +8,29 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
-import javafx.util.Duration;
 import pt.isec.pa.tinypac.GameManager;
 import pt.isec.pa.tinypac.model.fsm.GameStates;
 import pt.isec.pa.tinypac.ui.gui.InfoPanel;
 import pt.isec.pa.tinypac.utils.Score;
 
-import java.io.File;
 import java.util.List;
-
+/**
+ * class for the Initial UI
+ * @author Daniela Correia
+ * @version 1.0.0
+ *
+ */
 public class InitialUI extends BorderPane {
     GameManager gameManager;
     Button btnStart,btnExit, btnTop5,  btnReturn;
     VBox top5Pane;
     MazeUI mazeUI;
-    MediaPlayer mediaPlayer;
 
-    String soundPath = "src/pt/isec/pa/tinypac/ui/gui/resources/sounds/pacman_beginning.mp3";
-    Media media = new Media(new File(soundPath).toURI().toString().toString());
-
+    /**
+     * Default constructor
+     * @param gameManager reference to gameManager
+     */
     public InitialUI(GameManager gameManager) {
         this.gameManager = gameManager;
 
@@ -76,10 +77,6 @@ public class InitialUI extends BorderPane {
     }
 
     private void initialMenu(){
-
-        mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setStartTime(Duration.ZERO);
-
         setFocusTraversable(true);
         btnStart = new Button("Start");
         btnStart.setMinWidth(100);
@@ -123,11 +120,8 @@ public class InitialUI extends BorderPane {
     }
 
     private void update() {
-        mediaPlayer.setAutoPlay(true);
-        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         if (gameManager.getState() != GameStates.INITIAL) {
             this.setVisible(false);
-            mediaPlayer.stop();
             return;
         }
         this.setVisible(true);

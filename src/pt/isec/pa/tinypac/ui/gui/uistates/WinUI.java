@@ -10,12 +10,20 @@ import javafx.scene.layout.*;
 import pt.isec.pa.tinypac.GameManager;
 import pt.isec.pa.tinypac.model.fsm.GameStates;
 import pt.isec.pa.tinypac.ui.gui.resources.ImageManager;
-
+/**
+ * class for win UI
+ * @author Daniela Correia
+ * @version 1.0.0
+ */
 public class WinUI extends BorderPane {
     GameManager gameManager;
     Button btnExit, btnEnter;
     TextField nameField;
 
+    /**
+     * Default constructor
+     * @param gameManager reference to gameManager
+     */
     public WinUI(GameManager gameManager) {
         this.gameManager = gameManager;
 

@@ -5,19 +5,24 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import pt.isec.pa.tinypac.GameManager;
 import pt.isec.pa.tinypac.model.fsm.GameStates;
 import pt.isec.pa.tinypac.ui.gui.resources.ImageManager;
-
+/**
+ * class for the Game over UI
+ * @author Daniela Correia
+ * @version 1.0.0
+ *
+ */
 public class GameOverUI extends BorderPane {
     GameManager gameManager;
     Button btnEnter, btnExit, btnPlay;
     TextField nameField;
-    MediaPlayer mediaPlayer;
-    Media media;
 
+    /**
+     * Default constructor
+     * @param gameManager reference to gameManager
+     */
     public GameOverUI(GameManager gameManager) {
         this.gameManager = gameManager;
 

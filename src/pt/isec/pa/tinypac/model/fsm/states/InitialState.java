@@ -42,6 +42,13 @@ public class InitialState extends GameAdapter {
     }
 
     @Override
+    public boolean pauseGame() {
+        gameData.setStateOfPause(GameStates.INITIAL);
+        changeState(GameStates.PAUSE);
+        return true;
+    }
+
+    @Override
     public GameStates getState() {
         return GameStates.INITIAL;
     }

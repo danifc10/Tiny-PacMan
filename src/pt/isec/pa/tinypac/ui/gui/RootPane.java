@@ -12,11 +12,15 @@ import pt.isec.pa.tinypac.utils.Direction;
  * RootPane class
  *
  * @author Daniela Correia
- *
+ * @version 1.0.0
  */
 public class RootPane extends BorderPane {
     GameManager gameManager;
 
+    /**
+     * Default constructor
+     * @param gameManager reference to gameManager
+     */
     public RootPane(GameManager gameManager) {
         this.gameManager = gameManager;
         createViews();
@@ -35,7 +39,7 @@ public class RootPane extends BorderPane {
                 new VulnerableUI(gameManager),
                 new GameOverUI(gameManager),
                 new WinUI(gameManager)
-        ); /// mencionar a possibilidade de apenas ir criando quando muda de estado
+        );
 
         stackPane.setBackground(
                 new Background(
@@ -72,7 +76,6 @@ public class RootPane extends BorderPane {
     }
 
     private void update() {
-
         this.setRight(null);
         this.setBottom(null);
     }

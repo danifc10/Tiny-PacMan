@@ -14,7 +14,7 @@ import pt.isec.pa.tinypac.model.fsm.GameStates;
 import pt.isec.pa.tinypac.ui.gui.resources.ImageManager;
 import pt.isec.pa.tinypac.utils.Direction;
 /**
- * class for the UI of maze
+ * class for display the maze
  * @author Daniela Correia
  * @version 1.0.0
  */
@@ -22,6 +22,10 @@ public class MazeUI extends TilePane {
     private static final int CELL_SIZE = 16;
     GameManager gameManager;
 
+    /**
+     * Default constructor
+     * @param gameManager reference to gameManager
+     */
     public MazeUI(GameManager gameManager){
         this.gameManager = gameManager;
 

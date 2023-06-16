@@ -109,7 +109,7 @@ public class GameUI  {
         // mostra pontos e outro info
         terminal.setCursorPosition(20, 45);
         terminal.setForegroundColor(TextColor.ANSI.GREEN_BRIGHT);
-        terminal.putString("POINTS:" + fsm.getPoint());
+        terminal.putString("POINTS:" + fsm.getPoints());
         terminal.setCursorPosition(20, 46);
         terminal.setForegroundColor(TextColor.ANSI.GREEN_BRIGHT);
         terminal.putString("LEVEL:" + fsm.getLevel());
@@ -234,6 +234,6 @@ public class GameUI  {
             throw new RuntimeException(e);
         }
     }
-*/
 
+*/
 }
