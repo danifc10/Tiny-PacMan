@@ -32,34 +32,31 @@ public class GameOverUI extends BorderPane {
     }
 
     private void createViews() {
-        do {
-            // Criar uma Label para exibir o texto "Player Name"
-            Label nameLabel = new Label("Player Name:");
-            // Criar um campo de texto para o jogador inserir seu nome
-            nameField = new TextField();
-            nameField.setMaxWidth(300);
-            nameField.setMaxHeight(100);
 
-            btnEnter = new Button("Enter");
-            btnEnter.setMinWidth(100);
-            // Criar um layout VBox para organizar os componentes
-            VBox vBox1 = new VBox(10); // 10 é o espaçamento vertical entre os componentes
-            vBox1.setPadding(new Insets(10)); // Definir o espaçamento interno do VBox
-            vBox1.getChildren().addAll(nameLabel, nameField, btnEnter); // Adicionar a Label e o TextField ao VBox
-            vBox1.setAlignment(Pos.CENTER);
-            vBox1.setSpacing(10);
-            this.setCenter(vBox1);
-        }while(!gameManager.checkName(nameField.getText()));
+        // Criar uma Label para exibir o texto "Player Name"
+        Label nameLabel = new Label("Player Name:");
+        // Criar um campo de texto para o jogador inserir seu nome
+        nameField = new TextField();
+        nameField.setMaxWidth(300);
+        nameField.setMaxHeight(100);
+        btnEnter = new Button("Enter");
+        btnEnter.setMinWidth(100);
+        // Criar um layout VBox para organizar os componentes
+        VBox vBox1 = new VBox(10); // 10 é o espaçamento vertical entre os componentes
+        vBox1.setPadding(new Insets(10)); // Definir o espaçamento interno do VBox
+        vBox1.getChildren().addAll(nameLabel, nameField, btnEnter); // Adicionar a Label e o TextField ao VBox
+        vBox1.setAlignment(Pos.CENTER);
+        vBox1.setSpacing(10);
+        this.setCenter(vBox1);
     }
 
     private void registerHandlers() {
         gameManager.addPropertyChangeListener(evt -> { update(); });
         btnEnter.setOnAction(evt->{
             // register Top5
-            if(gameManager.checkName(nameField.getText())) {
-                gameManager.registerPoints(nameField.getText());
-                Platform.exit();
-            }
+            gameManager.registerPoints(nameField.getText());
+            Platform.exit();
+
         });
     }
 

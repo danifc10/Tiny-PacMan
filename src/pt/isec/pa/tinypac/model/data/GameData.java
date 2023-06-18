@@ -21,7 +21,7 @@ public class GameData implements Serializable {
     PacMan pacMan;
     Ghost[] ghosts;
     private int totalPoints = 0;
-    private int level = 20;
+    private int level = 1;
     private int countFruitPoints = 0;
     private int countPoints = 0; // when 20 set new fruit
     private int time = 0;

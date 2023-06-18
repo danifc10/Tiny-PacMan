@@ -218,8 +218,5 @@ public class GameManager implements IGameEngineEvolve {
         return fsm.getNGhosts();
     }
 
-    public boolean checkName(String text) {
-        return top5.checkName(text);
-    }
 }
 
