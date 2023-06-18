@@ -217,5 +217,9 @@ public class GameManager implements IGameEngineEvolve {
     public int getNumGhosts(){
         return fsm.getNGhosts();
     }
+
+    public boolean checkName(String text) {
+        return top5.checkName(text);
+    }
 }
 

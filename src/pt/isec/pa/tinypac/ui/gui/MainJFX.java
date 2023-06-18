@@ -37,7 +37,7 @@ public class MainJFX extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         newStageForTesting(stage,"PAC-MAN");
-       // newStageForTesting(new Stage(),"PAC-MAN");
+       // newStageForTesting(new Stage(),"PAC-MAN2");
     }
 
     /**
@@ -51,7 +51,7 @@ public class MainJFX extends Application {
         stage.setTitle(title);
         stage.setMinWidth(400);
         stage.setMinHeight(400);
-        stage.setResizable(false); // nao permite alterar o tamanho da janela
+        stage.setResizable(false);
         stage.show();
     }
 }

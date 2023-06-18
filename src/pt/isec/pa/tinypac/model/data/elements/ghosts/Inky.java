@@ -1,6 +1,5 @@
 package pt.isec.pa.tinypac.model.data.elements.ghosts;
 
-import pt.isec.pa.tinypac.model.data.elements.ghosts.Ghost;
 import pt.isec.pa.tinypac.model.data.maze.IMazeElement;
 import pt.isec.pa.tinypac.model.data.maze.MazeControl;
 import pt.isec.pa.tinypac.utils.Direction;

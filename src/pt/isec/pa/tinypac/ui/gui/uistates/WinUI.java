@@ -3,9 +3,7 @@ package pt.isec.pa.tinypac.ui.gui.uistates;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import pt.isec.pa.tinypac.GameManager;
 import pt.isec.pa.tinypac.model.fsm.GameStates;
@@ -28,12 +26,46 @@ public class WinUI extends BorderPane {
         this.gameManager = gameManager;
 
         createViews();
-        showTop5();
         registerHandlers();
         update();
     }
 
     private void createViews() {
+        if(gameManager.canReachTop5()) {
+            do {
+                // Criar uma Label para exibir o texto "Player Name"
+                Label nameLabel = new Label("Player Name:");
+                // Criar um campo de texto para o jogador inserir seu nome
+                nameField = new TextField();
+                nameField.setMaxWidth(300);
+                nameField.setMaxHeight(100);
+
+                btnEnter = new Button("Enter");
+                btnEnter.setMinWidth(100);
+                // Criar um layout VBox para organizar os componentes
+                VBox vBox1 = new VBox(10); // 10 é o espaçamento vertical entre os componentes
+                vBox1.setPadding(new Insets(10)); // Definir o espaçamento interno do VBox
+                vBox1.getChildren().addAll(nameLabel, nameField, btnEnter); // Adicionar a Label e o TextField ao VBox
+                vBox1.setAlignment(Pos.CENTER);
+                vBox1.setSpacing(10);
+                this.setCenter(vBox1);
+            }while(!gameManager.checkName(nameField.getText()));
+        }
+    }
+
+    private void registerHandlers() {
+        gameManager.addPropertyChangeListener(evt -> { update(); });
+
+        btnEnter.setOnAction(evt->{
+            // register Top5
+            if(gameManager.checkName(nameField.getText())) {
+                gameManager.registerPoints(nameField.getText());
+                showWin();
+            }
+        });
+    }
+
+    private void showWin(){
         this.getChildren().clear();
         this.setBackground(
                 new Background(
@@ -54,48 +86,31 @@ public class WinUI extends BorderPane {
         vBox.setAlignment(Pos.BOTTOM_CENTER);
         vBox.setSpacing(10);
         this.setCenter(vBox);
-    }
 
-    private void registerHandlers() {
-        gameManager.addPropertyChangeListener(evt -> { update(); });
+        btnExit.setOnAction(e->{
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("EXIT");
+            alert.setHeaderText("Do you want to exit?");
 
-        btnExit.setOnAction( event -> {
-            Platform.exit();
+            ButtonType btnYes = new ButtonType("YES");
+            ButtonType btnNo = new ButtonType("NO");
+
+            alert.getButtonTypes().setAll(btnYes, btnNo);
+
+            alert.showAndWait().ifPresent(event -> {
+                if (event == btnYes) {
+                    Platform.exit();
+                }
+            });
         });
-
-        btnEnter.setOnAction(evt->{
-            // register Top5
-            gameManager.registerPoints(nameField.getText());
-            createViews();
-        });
-    }
-
-    private void showTop5(){
-        // Criar uma Label para exibir o texto "Player Name"
-        Label nameLabel = new Label("Player Name:");
-        // Criar um campo de texto para o jogador inserir seu nome
-        nameField = new TextField();
-        nameField.setMaxWidth(300);
-        nameField.setMaxHeight(100);
-        btnEnter = new Button("Enter");
-        btnEnter.setMinWidth(100);
-        // Criar um layout VBox para organizar os componentes
-        VBox vBox1 = new VBox(10); // 10 é o espaçamento vertical entre os componentes
-        vBox1.setPadding(new Insets(10)); // Definir o espaçamento interno do VBox
-        vBox1.getChildren().addAll(nameLabel, nameField, btnEnter); // Adicionar a Label e o TextField ao VBox
-        vBox1.setAlignment(Pos.CENTER);
-        vBox1.setSpacing(10);
-        this.setCenter(vBox1);
     }
 
     private void update() {
-        if(gameManager.canReachTop5()) {
-            showTop5();
-        }
-        if (gameManager.getState() != GameStates.WIN) {
+        if(!gameManager.canReachTop5())
+            showWin();
+        if (gameManager.getState() != GameStates.WIN)
             this.setVisible(false);
-            return;
-        }
-        this.setVisible(true);
+        else
+            this.setVisible(true);
     }
 }

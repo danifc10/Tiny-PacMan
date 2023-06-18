@@ -21,7 +21,7 @@ public class GameData implements Serializable {
     PacMan pacMan;
     Ghost[] ghosts;
     private int totalPoints = 0;
-    private int level = 1;
+    private int level = 20;
     private int countFruitPoints = 0;
     private int countPoints = 0; // when 20 set new fruit
     private int time = 0;
@@ -30,7 +30,7 @@ public class GameData implements Serializable {
     private int speed = 0;
     private boolean stopTimer;
     private int countGhostsPoints = 0;
-    private int pacManFood = 0;
+    private int pacManFood = 0; // o que o pacman vai comendo ao longo do jogo cada coisa é 1 valor
     private GameStates LastPauseState = null;
 
     /**
@@ -309,9 +309,6 @@ public class GameData implements Serializable {
      * @return boolean - true if won, false if not
      */
     public boolean checkIfWin(){
-        System.out.println("empty: " + mazeControl.checkWin() + " totalPoints: " + mazeControl.getTotalPoints());
-        //return pacManFood >= (mazeControl.getTotalPoints() - 2);
-
         return( mazeControl.checkWin() + numOfGhosts) == mazeControl.getTotalPoints();
     }
 

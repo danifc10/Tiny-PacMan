@@ -85,4 +85,12 @@ public class Top5 implements Serializable {
             return true;
         }
     }
+
+    public boolean checkName(String text) {
+        for(Score sc : scores){
+            if(sc.getName().equals(text))
+                return false;
+        }
+        return true;
+    }
 }

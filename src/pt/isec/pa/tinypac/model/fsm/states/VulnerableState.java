@@ -2,7 +2,6 @@ package pt.isec.pa.tinypac.model.fsm.states;
 
 import pt.isec.pa.tinypac.gameengine.IGameEngine;
 import pt.isec.pa.tinypac.model.data.GameData;
-import pt.isec.pa.tinypac.model.data.elements.PowerPoint;
 import pt.isec.pa.tinypac.model.data.elements.ghosts.Blinky;
 import pt.isec.pa.tinypac.model.data.elements.ghosts.Clyde;
 import pt.isec.pa.tinypac.model.data.elements.ghosts.Inky;
@@ -19,7 +18,7 @@ import pt.isec.pa.tinypac.utils.Direction;
  *
  */
 public class VulnerableState extends GameAdapter {
-    private int vulnerableTime = (60 - (gameData.getLevel() * 2));
+    private int vulnerableTime = (60 - (gameData.getLevel() * 2));  // diminui 2 segundos por nivel
 
     /**
      * Default constructor
@@ -51,11 +50,8 @@ public class VulnerableState extends GameAdapter {
             changeState(GameStates.PLAYING);
         }
 
-        // se comer powerDot dentro do vulneravel o tempo fica a dobrar
         IMazeElement eaten = gameData.movePacMan();
-        if(eaten instanceof PowerPoint)
-            vulnerableTime = vulnerableTime * 2;
-        else if(eaten instanceof Blinky || eaten instanceof Clyde || eaten instanceof Pinky || eaten instanceof Inky){
+        if(eaten instanceof Blinky || eaten instanceof Clyde || eaten instanceof Pinky || eaten instanceof Inky){
             gameData.eatGhost(eaten);
         }
 
