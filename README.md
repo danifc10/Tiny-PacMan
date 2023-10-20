@@ -1,2 +1,2 @@
 # Trabalho Prático Programação Avançada
-Trabalho Prático de Programação Avançada - 2ºAno Licenciatura em Engenharia Informática
+Practical work in Advanced Programming - 2nd Year Degree in Computer Engineering
